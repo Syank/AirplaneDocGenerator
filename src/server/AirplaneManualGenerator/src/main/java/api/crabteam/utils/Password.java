@@ -3,7 +3,11 @@ package api.crabteam.utils;
 import org.mindrot.jbcrypt.BCrypt;
 
 /**
- * A class to represent a password for an user, providing methods to handle it with it's encryption
+ * A class to represent a password for an user, providing methods to handle it with it's encryption by the jBCrypt library
+ * <p>
+ * This class did not store the real/readable password value, in other words, after the password be set with the method
+ * <i>setValue</i>, the class immediately encrypts it using the jBCrypt, so, when the method <i>getValue</i> be called, it
+ * will return the encrypted version of the password
  * 
  * @author Rafael Furtado
  */
