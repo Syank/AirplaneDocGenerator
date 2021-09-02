@@ -6,4 +6,4 @@ npm install
 
 # Para executar
 
-npm run start-app
+npm run dev
