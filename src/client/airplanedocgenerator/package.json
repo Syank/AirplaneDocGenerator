@@ -3,6 +3,7 @@
     "version": "0.1.0",
     "private": true,
     "dependencies": {
+        "@craco/craco": "^6.2.0",
         "@testing-library/jest-dom": "^5.11.4",
         "@testing-library/react": "^11.1.0",
         "@testing-library/user-event": "^12.1.10",
@@ -17,10 +18,11 @@
     },
     "scripts": {
         "dev": "concurrently \"npm start\" \"wait-on http://localhost:3000 && electron .\"",
-        "start": "react-scripts start",
+        "start": "craco start",
         "electron": "electron .",
-        "build": "react-scripts build",
-        "eject": "react-scripts eject"
+        "build": "craco build",
+        "eject": "craco eject",
+        "test": "craco start"
     },
     "eslintConfig": {
         "extends": [
@@ -39,5 +41,10 @@
             "last 1 firefox version",
             "last 1 safari version"
         ]
+    },
+    "devDependencies": {
+        "autoprefixer": "^9.8.6",
+        "postcss": "^7.0.36",
+        "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.2.9"
     }
 }
