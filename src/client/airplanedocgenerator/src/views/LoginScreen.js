@@ -36,7 +36,7 @@ class LoginScreen extends React.Component{
         this.userPasswordFormName = "userPassword";
 
         this.login = this.login.bind(this);
-        
+
     }
 
     /**
@@ -103,7 +103,7 @@ class LoginScreen extends React.Component{
         let backgroundImage = 
             <img src={aviao} alt="Avião" 
                 onDragStart={this.preventImageDrag} 
-                class="w-full h-full select-none absolute filter blur-blurLogin opacity-60"/>
+                className="w-full h-full select-none absolute filter blur-blurLogin opacity-60"/>
         
         return backgroundImage;
     }
@@ -116,12 +116,12 @@ class LoginScreen extends React.Component{
      */
     getLoginHeader(){
         let loginHeader =
-            <div class="flex flex-col items-center pt-8">
-                <img src={loginImg} alt="Login" class="w-20" onDragStart={this.preventImageDrag}/>
+            <div className="flex flex-col items-center pt-8">
+                <img src={loginImg} alt="Login" className="w-20" onDragStart={this.preventImageDrag}/>
 
-                <label class="mb-4 mt-4 text-accent text-2xl"><b>Login</b></label>
+                <label className="mb-4 mt-4 text-accent text-2xl"><b>Login</b></label>
 
-                <label class="text-center ml-2 mr-2">Insira seus dados para acessar a plataforma</label>
+                <label className="text-center ml-2 mr-2">Insira seus dados para acessar a plataforma</label>
             </div>
 
         return loginHeader;
@@ -135,16 +135,16 @@ class LoginScreen extends React.Component{
      */
     getLoginForm(){
         let loginForm = 
-            <form class="flex flex-col items-center mt-5" onSubmit={this.login}>
-                <div class="relative right-3">
+            <form className="flex flex-col items-center mt-5" onSubmit={this.login}>
+                <div className="relative right-3">
                     <FontAwesomeIcon icon={faUser} color={this.iconColor}/>
-                    <input id={this.userLoginInputId} type="text" name={this.userLoginFormName} class={this.inputStyle} placeholder="Usuário"/>
+                    <input id={this.userLoginInputId} type="text" name={this.userLoginFormName} className={this.inputStyle} placeholder="Usuário"/>
                 </div>
-                <div class="relative right-3">
+                <div className="relative right-3">
                     <FontAwesomeIcon icon={faKey} color={this.iconColor}/>
-                    <input id={this.userPasswordInputId} type="password" name={this.userPasswordFormName} class={"mb-5 mt-4 " + this.inputStyle} placeholder="Senha"/>
+                    <input id={this.userPasswordInputId} type="password" name={this.userPasswordFormName} className={"mb-5 mt-4 " + this.inputStyle} placeholder="Senha"/>
                 </div>
-                <button class="bg-green-500 text-white shadow-simpleShadow pb-2 pt-2 pl-10 pr-10 select-none hover:bg-green-400 active:bg-green-600 focus:bg-green-400 outline-none">Entrar</button>
+                <button className="bg-green-500 text-white shadow-simpleShadow pb-2 pt-2 pl-10 pr-10 select-none hover:bg-green-400 active:bg-green-600 focus:bg-green-400 outline-none">Entrar</button>
             </form>
 
         return loginForm;
@@ -158,11 +158,11 @@ class LoginScreen extends React.Component{
      */
     getLoginScreen(){
         let loginScreen =
-            <div id="contentDisplay" class="w-full h-full">
+            <div id="contentDisplay" className="w-full h-full">
                 {this.getBackgroundImage()}
 
-                <div id="loginScreen" class="w-full h-full flex flex-col items-center justify-center relative select-none">
-                    <div id="loginForm" class="w-loginFormW h-loginFormH bg-white shadow-loginFormShadow">
+                <div id="loginScreen" className="w-full h-full flex flex-col items-center justify-center relative select-none">
+                    <div id="loginForm" className="w-loginFormW h-loginFormH bg-white shadow-loginFormShadow">
                         {this.getLoginHeader()}
                         {this.getLoginForm()}
                     </div>

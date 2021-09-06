@@ -96,16 +96,16 @@ class TopBar extends React.Component{
      */
     getUserLoggedFunctions(){
         let userLoggedFunctions =
-        <div class="flex flex-row items-center h-full w-auto">
-            <div class={this.iconBoxStyle}
+        <div className="flex flex-row items-center h-full w-auto">
+            <div className={this.iconBoxStyle}
                 onClick={this.openTopBarMenu}>
                 {this.menuIcon}
             </div>
-            <div class={this.iconBoxStyle}
+            <div className={this.iconBoxStyle}
                 onClick={this.returnToHomePage}>
                 {this.homeIcon}
             </div>
-            <div class={this.iconBoxStyle}
+            <div className={this.iconBoxStyle}
                 onClick={this.returnToPreviousPage}>
                 {this.returnIcon}
             </div>
@@ -125,21 +125,21 @@ class TopBar extends React.Component{
         let userLogger = this.isUserLogged();
 
         let topBarBox = 
-            <div class="bg-topBar w-screen h-8 flex justify-between items-center shadow-topBarShadow">
-                <div class="h-full w-auto flex flex-row">
+            <div className="bg-topBar w-screen h-8 flex justify-between items-center shadow-topBarShadow">
+                <div className="h-full w-auto flex flex-row">
                 {// Caso tenha um usuário logado, chama a função que retorna os botões das funcionalidades extras
                     userLogger && 
                         this.getUserLoggedFunctions()
                 }
                 </div>
 
-                <div class="h-full w-auto flex flex-row">
-                    <div class={this.iconBoxStyle}
+                <div className="h-full w-auto flex flex-row">
+                    <div className={this.iconBoxStyle}
                         onClick={this.minimizeApplication}>
                         {this.closeIcon}
                     </div>
 
-                    <div class={this.iconBoxStyle}
+                    <div className={this.iconBoxStyle}
                         onClick={this.closeApplication}>
                         {this.minimizeIcon}
                     </div>
