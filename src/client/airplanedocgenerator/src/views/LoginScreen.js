@@ -10,6 +10,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 // Ícones do FontAwesome
 import { faUser } from '@fortawesome/free-solid-svg-icons'
 import { faKey } from '@fortawesome/free-solid-svg-icons'
+import Button from "../assets/components/Button";
 
 
 
@@ -144,7 +145,8 @@ class LoginScreen extends React.Component{
                     <FontAwesomeIcon icon={faKey} color={this.iconColor}/>
                     <input id={this.userPasswordInputId} type="password" name={this.userPasswordFormName} className={"mb-5 mt-4 " + this.inputStyle} placeholder="Senha"/>
                 </div>
-                <button className="bg-green-500 text-white shadow-simpleShadow pb-2 pt-2 pl-10 pr-10 select-none hover:bg-green-400 active:bg-green-600 focus:bg-green-400 outline-none">Entrar</button>
+                
+                <Button text="Entrar" type="confirm"></Button>
             </form>
 
         return loginForm;
