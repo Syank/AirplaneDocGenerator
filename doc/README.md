@@ -1,4 +1,5 @@
 ### Montando ambientes de desenvolvimento
+
 O projeto pode ser dividido em dois, a parte do cliente e a do servidor. Este guia tem como finalidade guiar o preparo do ambiente para a execução de ambos.
 
 
