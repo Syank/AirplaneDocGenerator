@@ -8,7 +8,10 @@ import { faHome } from '@fortawesome/free-solid-svg-icons'
 import { faBars } from '@fortawesome/free-solid-svg-icons'
 import { faMinus } from '@fortawesome/free-solid-svg-icons'
 import { faTimes } from '@fortawesome/free-solid-svg-icons'
+
 import { white } from "tailwindcss/colors";
+
+
 
 /**
  * Classe do componente TopBar
@@ -122,7 +125,7 @@ class TopBar extends React.Component{
         let userLogger = this.isUserLogged();
 
         let topBarBox = 
-            <div class="bg-topBar w-screen h-8 flex justify-between items-center">
+            <div class="bg-topBar w-screen h-8 flex justify-between items-center shadow-topBarShadow">
                 <div class="h-full w-auto flex flex-row">
                 {// Caso tenha um usuário logado, chama a função que retorna os botões das funcionalidades extras
                     userLogger && 
