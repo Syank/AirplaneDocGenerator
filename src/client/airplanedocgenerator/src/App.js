@@ -1,25 +1,18 @@
-import logo from './logo.svg';
-import './App.css';
+import TopBar from "./assets/components/TopBar";
+
+import LoginScreen from "./views/LoginScreen";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    // Previne o aparecimento das barras de rolagem
+    document.body.style.overflow = "hidden";
+
+    return (
+        <div className="App w-screen h-screen flex flex-col overflow-hidden">
+            <TopBar></TopBar>
+            
+            <LoginScreen></LoginScreen>
+        </div>
+    );
 }
 
 export default App;
