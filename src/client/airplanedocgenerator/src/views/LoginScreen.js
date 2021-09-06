@@ -35,6 +35,8 @@ class LoginScreen extends React.Component{
         this.userLoginFormName = "userLogin";
         this.userPasswordFormName = "userPassword";
 
+        this.login = this.login.bind(this);
+        
     }
 
     /**
