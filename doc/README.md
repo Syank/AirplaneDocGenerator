@@ -40,6 +40,11 @@ O projeto do servidor ainda necessita de mais algumas configurações que ainda 
 
 - Como o projeto tem o Maven como gerenciador de dependências, após clicar em Finish você deve notar no canto inferior direito que o Eclipse estará baixando e instalando as dependências para você. Caso não apareça nada, selecione a parte do projeto no "Project Explorer" e aperte F5. Aguarde a instalação das dependências;
 
+- Em ..\src\main\resources você encontrará o arquivo application.resources:
+  - Na linha `spring.datasource.url=jdbc:postgresql://localhost:5432/<nome_do_banco>`, coloque o nome do banco de dados 
+  - Na linha `spring.datasource.username=<nome_de_usuario>`, coloque seu nome de usuário do banco de dados
+  - Na linha `spring.datasource.password=<senha>`, coloque sua senha do banco de dados
+
 - No pacote "api.crabteam", execute o arquivo AirplaneManualGeneratorApplication;
 
 - Com isso, o ambiente do servidor estará configurado!
