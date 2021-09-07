@@ -30,7 +30,7 @@ class CardOption extends React.Component {
         this.buttonText = props.buttonText;
         this.buttonOnClick = props.buttonOnClick;
 
-        this.iconColor = "#7A91FA";
+        this.iconColor = "#5E74D6";
         this.iconSize = "3x";
 
     }
@@ -80,7 +80,7 @@ class CardOption extends React.Component {
         let iconComponent = this.getIconComponent(this.icon);
 
         let cardOption = (
-            <div className="w-56 h-80 bg-white flex flex-col items-center p-5 justify-around shadow-simpleShadow">
+            <div className="w-56 h-80 bg-white flex flex-col items-center p-5 justify-around shadow-simpleShadow transition duration-300 ease-in-out hover:bg-green-100">
                 {iconComponent}
 
                 <label className="mb-5 mt-5 text-center">{this.cardText}</label>
