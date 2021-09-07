@@ -3,21 +3,19 @@ import React from "react";
 class CardHeader extends React.Component {
     render() {
         return (
-            <div class="container mt-4 mx-auto">
-                <div class="grid grid-cols-3">
-                    <div class="shadow-lg cursor-pointer transform hover:-translate-y-1 transition-all duration-200">
-                        <div class="card m-2 shadow-card border border-white text-center bg-white">
-                            <div class="m-3 card">
-                                <h2 class="font-roboto font-bold text-lg mb-2 text-accent text-3xl pt-4">
+            <div className="mt-4 mx-auto w-5/12">
+                    <div className="shadow-lg">
+                        <div className="card m-2 shadow-card border border-white text-center bg-white">
+                            <div className="m-3 card">
+                                <h2 className="font-bold mb-2 text-accent text-3xl pt-4">
                                     {this.props.title}
                                 </h2>
-                                <p class="font-roboto text-sm underline font-bold p-6">
+                                <p className="text-sm p-6">
                                     {this.props.description}
                                 </p>
                             </div>
                         </div>
                     </div>
-                </div>
             </div>
         );
     }
