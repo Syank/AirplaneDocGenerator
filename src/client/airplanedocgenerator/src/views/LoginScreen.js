@@ -20,8 +20,8 @@ import Button from "../assets/components/Button";
  * @author Rafael Furtado
  */
 class LoginScreen extends React.Component{
-    constructor(){
-        super();
+    constructor(props){
+        super(props);
 
         this.userIcon = <FontAwesomeIcon icon={faUser} color={"#5E74D6"}/>;
         this.passwordIcon = <FontAwesomeIcon icon={faKey} color={"#5E74D6"}/>;
@@ -37,6 +37,16 @@ class LoginScreen extends React.Component{
         this.userPasswordFormName = "userPassword";
 
         this.login = this.login.bind(this);
+
+    }
+
+    /**
+     * Chama pelo método recebido do componente pai para navegar a aplicação para a página inicial (home)
+     * 
+     * @author Rafael Furtado
+     */
+    goToHomePage(){
+        this.props.navigation("home");
 
     }
 
@@ -86,6 +96,8 @@ class LoginScreen extends React.Component{
 
         if(authenticated){
             console.log("Redirecionando para página home");
+
+            this.goToHomePage();
 
         }else{
             console.log("Não foi possível realizar o login");
@@ -184,7 +196,7 @@ class LoginScreen extends React.Component{
      */
     render(){
         let loginScreen = this.getLoginScreen();
-            
+        
         return loginScreen;
     }
 
