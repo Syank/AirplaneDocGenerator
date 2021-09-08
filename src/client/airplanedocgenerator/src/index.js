@@ -1,12 +1,15 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import "./assets/style/index.css";
-import App from "./App";
 import reportWebVitals from "./utils/reportWebVitals";
+import Application from "./Application";
+
+// Previne o aparecimento das barras de rolagem
+document.body.style.overflow = "hidden";
 
 ReactDOM.render(
     <React.StrictMode>
-        <App />
+        <Application/>
     </React.StrictMode>,
     document.getElementById("root")
 );
