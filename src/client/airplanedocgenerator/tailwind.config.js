@@ -19,6 +19,14 @@ module.exports = {
             DEFAULT: theme("colors.gray.300", "currentColor"),
             white: "#FFFFFF",
         }),
+        backgroundColor: (theme) => ({
+            ...theme("colors"),
+            primary: "#3490dc",
+            secondary: "#ffed4a",
+            danger: "#e3342f",
+            green: "#56EA6D",
+            greenDark: "#41af7e",
+        }),
     },
     variants: {
         extend: {},
