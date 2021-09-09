@@ -1,40 +1,29 @@
 import React from "react";
 
-import aviao from "../assets/misc/images/cloud.jpg";
-
 import CardHeader from "../assets/components/CardHeader";
 import CardOption from "../assets/components/CardOption";
 
-/**
- * Uma classe de "view" que representa a tela de login da aplicação
- *
- * @author Rafael Furtado
- */
-class HomeScreen extends React.Component {
+import cloud from "../assets/misc/images/cloud.jpg";
+
+class CreationScreen extends React.Component {
     constructor() {
         super();
 
-        this.headerCardTitle = "Bem-vindo";
+        this.headerCardTitle = "Criação de manual";
         this.headerCardText =
-            "Na página inicial você tem acesso a todos os serviços para criar, compor e gerar um manual, que podem ser acessados através de seus respectivos caminhos logo abaixo";
+            "Aqui é possível criar um novo projeto de manual, seja seguindo o guia para criar um do zero ou fazendo a importação de uma estrutura válida direto de sua máquina";
 
         this.cardOptionTexts = {
             newProject:
-                "Crie um novo projeto de manual a partir da importação de um já existente ou siga os passos do guia e crie um do zero",
-            editProject:
-                "Selecione um manual da lista de administre suas informações, crie revisões e edite suas partes",
-            printProject:
-                "Selecione um manual da lista e gere os PDFs de suas versões DELTA e FULL",
+                "Siga o passo a passo para a criação de um novo documento",
+            importProject:
+                "Escolha um diretório com estrutura válida em seu computador para importa-lo ",
         };
 
         this.cardOptionButtonsText = {
-            newProject: "Criar",
-            editProject: "Administrar",
-            printProject: "Gerar",
+            newProject: "Criar Documento",
+            importProject: "Importar Documento",
         };
-
-        this.goToCreateNewProjectPage =
-            this.goToCreateNewProjectPage.bind(this);
     }
 
     /**
@@ -43,25 +32,39 @@ class HomeScreen extends React.Component {
      * Esta função deve ser passada para o atributo "onDragStart" do elemento
      *
      * @param {Event} event Evento recebido como parâmetro quando a ação de arrastar é iniciada pelo usuário
-     * @author Rafael Furtado
+     * @author Carolina Margiotti
      */
     preventImageDrag(event) {
         event.preventDefault();
     }
 
     /**
+     * Função responsável por chamar a cadeia de eventos que irão realizar a autenticação e redirecionamento
+     * da página ao realizar o login
+     *
+     * @param {Event} event Evento passado como parâmetro para a função quando o formulário é submetido
+     * @author Carolina Margiotti
+     */
+    create(event) {
+        // Impede o formulário de ser enviado automáticamente
+        event.preventDefault();
+
+        console.log(event);
+    }
+
+    /**
      * Constrói e configura o elemento para ser a imagem de fundo da tela de login
      *
      * @returns Retorna o elemento da imagem de fundo da tela de login
-     * @author Rafael Furtado
+     * @author Carolina Margiotti
      */
     getBackgroundImage() {
         let backgroundImage = (
             <img
-                src={aviao}
-                alt="Avião"
+                src={cloud}
+                alt="Cloud"
                 onDragStart={this.preventImageDrag}
-                className="w-full select-none absolute filter opacity-40  blur-blurLogin"
+                className="w-full select-none absolute filter opacity-40 blur-blurLogin"
             />
         );
 
@@ -72,7 +75,7 @@ class HomeScreen extends React.Component {
      * Constrói adequadamente o componente do cabeçalho de título da página
      *
      * @returns Retorna o cabeçalho de título da página
-     * @author Rafael Furtado
+     * @author Carolina Margiotti
      */
     getHeaderCard() {
         let headerCard = (
@@ -87,32 +90,22 @@ class HomeScreen extends React.Component {
 
     /**
      * Chama pelo método recebido do componente pai para navegar a aplicação para a página de
-     * criação de um novo projeto de manual
+     * criação de um novo documento de manual
      *
      * @author Carolina Margiotti
      */
     goToCreateNewProjectPage() {
-        this.props.navigation("creation-screen");
+        console.log("Indo para página de criar novo documento");
     }
 
     /**
      * Chama pelo método recebido do componente pai para navegar a aplicação para a página de
-     * edição de projetos/manuais
+     * importação de projetos/manuais
      *
-     * @author Rafael Furtado
+     * @author Carolina Margiotti
      */
-    goToEditProjectPage() {
-        console.log("Indo para página de editar projeto");
-    }
-
-    /**
-     * Chama pelo método recebido do componente pai para navegar a aplicação para a página
-     * de geração de manuais
-     *
-     * @author Rafael Furtado
-     */
-    goToPrintProjectPage() {
-        console.log("Indo para página de gerar documento");
+    goToImportProjectPage() {
+        console.log("Indo para página de importar documento");
     }
 
     /**
@@ -142,9 +135,9 @@ class HomeScreen extends React.Component {
      * Constrói adequadamente o componente que representa a página home em si
      *
      * @returns Retorna o componente que representa a página home
-     * @author Rafael Furtado
+     * @author Carolina Margiotti
      */
-    getHomeScreen() {
+    getCreationScreen() {
         let cardOption1 = this.getCardOption(
             this.cardOptionTexts["newProject"],
             this.cardOptionButtonsText["newProject"],
@@ -152,16 +145,10 @@ class HomeScreen extends React.Component {
             "file"
         );
         let cardOption2 = this.getCardOption(
-            this.cardOptionTexts["editProject"],
-            this.cardOptionButtonsText["editProject"],
-            this.goToEditProjectPage,
-            "edit"
-        );
-        let cardOption3 = this.getCardOption(
-            this.cardOptionTexts["printProject"],
-            this.cardOptionButtonsText["printProject"],
-            this.goToPrintProjectPage,
-            "print"
+            this.cardOptionTexts["importProject"],
+            this.cardOptionButtonsText["importProject"],
+            this.goToImportProjectPage,
+            "file-upload"
         );
 
         let homeScreen = (
@@ -178,7 +165,6 @@ class HomeScreen extends React.Component {
                     <div className="w-full h-full flex flex-row items-center justify-evenly">
                         {cardOption1}
                         {cardOption2}
-                        {cardOption3}
                     </div>
                 </div>
             </div>
@@ -193,14 +179,14 @@ class HomeScreen extends React.Component {
      * Renderiza a página inicial da aplicação
      *
      * @returns Retorna o elemento a ser renderizado na janela
-     * @author Rafael Furtado
+     * @author Carolina Margiotti
      */
     render() {
-        let homeScreen = this.getHomeScreen();
+        let creationScreen = this.getCreationScreen();
 
-        return homeScreen;
+        return creationScreen;
     }
 }
 
 // Permite a exportação do componente
-export default HomeScreen;
+export default CreationScreen;
