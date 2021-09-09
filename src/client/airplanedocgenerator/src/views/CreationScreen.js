@@ -5,6 +5,11 @@ import CardOption from "../assets/components/CardOption";
 
 import cloud from "../assets/misc/images/cloud.jpg";
 
+/**
+ * Uma classe de "view" que representa a tela de criação ou importação de manual
+ *
+ * @author Carolina Margiotti
+ */
 class CreationScreen extends React.Component {
     constructor() {
         super();
@@ -36,20 +41,6 @@ class CreationScreen extends React.Component {
      */
     preventImageDrag(event) {
         event.preventDefault();
-    }
-
-    /**
-     * Função responsável por chamar a cadeia de eventos que irão realizar a autenticação e redirecionamento
-     * da página ao realizar o login
-     *
-     * @param {Event} event Evento passado como parâmetro para a função quando o formulário é submetido
-     * @author Carolina Margiotti
-     */
-    create(event) {
-        // Impede o formulário de ser enviado automáticamente
-        event.preventDefault();
-
-        console.log(event);
     }
 
     /**
@@ -132,7 +123,7 @@ class CreationScreen extends React.Component {
     }
 
     /**
-     * Constrói adequadamente o componente que representa a página home em si
+     * Constrói adequadamente o componente que representa a página de criação de manual
      *
      * @returns Retorna o componente que representa a página home
      * @author Carolina Margiotti
@@ -151,7 +142,7 @@ class CreationScreen extends React.Component {
             "file-upload"
         );
 
-        let homeScreen = (
+        let creationScreen = (
             <div id="contentDisplay" className="w-full h-full">
                 {this.getBackgroundImage()}
 
@@ -170,7 +161,7 @@ class CreationScreen extends React.Component {
             </div>
         );
 
-        return homeScreen;
+        return creationScreen;
     }
 
     /**

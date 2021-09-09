@@ -78,11 +78,12 @@ class Application extends React.Component {
     }
 
     /**
-     * Constrói o componente que representa a tela inicial (home) e passa para ele o método de navegação
+     * Constrói o componente que representa a tela de criação 1 e passa para ele o método de navegação
      * do componente Application
      *
-     * @returns Retorna o componente que representa a página home
-     * @author Rafael Furtado
+     * @returns Retorna o componente que representa a página de criação 1
+     * @author Carolina Margiotti
+     *
      */
     getCreationScreen() {
         let creationScreen = (
@@ -93,11 +94,11 @@ class Application extends React.Component {
     }
 
     /**
-     * Constrói o componente que representa a tela de criação 1 e passa para ele o método de navegação
+     * Constrói o componente que representa a tela inicial (home) e passa para ele o método de navegação
      * do componente Application
      *
-     * @returns Retorna o componente que representa a página de criação 1
-     * @author Carolina Margiotti
+     * @returns Retorna o componente que representa a página home
+     * @author Rafael Furtado
      */
     getHomeScreen() {
         let homeScreen = (
