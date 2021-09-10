@@ -67,7 +67,7 @@ class NewProjectScreen extends React.Component {
                                    </div>
                                    <div className="m-8">
                                         <label className="text-lg">Codelist: </label>
-                                        <label for="codelist-file" className="w-68 p-1 px-4 bg-blue-300 rounded-lg bg-inputFile text-white cursor-pointer">Selecionar Codelist em sua máquina</label>
+                                        <label for="codelist-file" className="w-68 p-1 px-4 bg-blue-300 rounded-lg bg-inputFileColor text-white cursor-pointer">Selecionar Codelist em sua máquina</label>
                                         <input type="file" id="codelist-file" className="hidden"></input>
 
                                         <p className="text-xs ml-12 mr-12 mt-4">A escolha de um Codelist no momento da criação não é obrigatória, ele pode ser importado ou criado no gerenciamento do documento.</p>

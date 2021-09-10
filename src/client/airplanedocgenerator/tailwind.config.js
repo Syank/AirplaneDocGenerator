@@ -22,6 +22,7 @@ module.exports = {
                 accent: "#5E74D6",
                 white: "#FFFFFF",
                 loginIcon: "#5E74D6",
+                inputFileColor: "#33AEB6"
             },
             backgroundColor: {
                 topBar: "#5E74D6",
