@@ -2,7 +2,6 @@ import React from "react";
 
 import clouds from "../assets/misc/images/cloud.jpg";
 import Button from "../assets/components/Button";
-import TopBar from "../assets/components/TopBar";
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faQuestionCircle } from "@fortawesome/free-solid-svg-icons";
