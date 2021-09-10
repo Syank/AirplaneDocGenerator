@@ -3,6 +3,7 @@ import TopBar from "./assets/components/TopBar";
 import HomeScreen from "./views/HomeScreen";
 import CreationScreen from "./views/CreationScreen";
 import LoginScreen from "./views/LoginScreen";
+import NewProjectScreen from "./views/NewProjectScreen";
 
 /**
  * Classe de componente raiz da aplicação, todos os outros componentes deverão ser filhos desta classe
@@ -38,6 +39,10 @@ class Application extends React.Component {
                 break;
             case "creation-screen":
                 pageToDisplay = this.getCreationScreen();
+
+                break;
+            case "new-project-screen":
+                pageToDisplay = this.getNewProjectScreen();
 
                 break;
             default:
@@ -91,6 +96,19 @@ class Application extends React.Component {
         );
 
         return creationScreen;
+    }
+
+    /**
+     * Constrói o componente da segunda tela de criação de um projeto
+     * @returns Componente da segunda parte da criação do projeto
+     * @author Bárbara Port
+     */
+    getNewProjectScreen () {
+        let newProjectScreen = (
+            <NewProjectScreen navigation={this.setPageToRender}></NewProjectScreen>
+        );
+
+        return newProjectScreen;
     }
 
     /**

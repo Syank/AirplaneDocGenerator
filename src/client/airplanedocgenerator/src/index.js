@@ -3,13 +3,15 @@ import ReactDOM from "react-dom";
 import "./assets/style/index.css";
 import reportWebVitals from "./utils/reportWebVitals";
 import Application from "./Application";
+import CreationScreen from "./views/CreationScreen";
+import NewProjectScreen from "./views/NewProjectScreen";
 
 // Previne o aparecimento das barras de rolagem
 document.body.style.overflow = "hidden";
 
 ReactDOM.render(
     <React.StrictMode>
-        <Application/>
+        <NewProjectScreen/>
     </React.StrictMode>,
     document.getElementById("root")
 );
