@@ -11,12 +11,6 @@ import { faQuestionCircle } from "@fortawesome/free-solid-svg-icons";
  * @author Bárbara Port
  */
 class NewProjectScreen extends React.Component {
-     constructor() {
-          super();
-
-          this.cardTitle = "Crie um novo projeto de manual";
-          this.cardText = "Esta sessão irá lhe auxiliar na criação de um novo projeto de manual. Preencha os campos e siga as instruções.";
-     }
 
      /**
       * Prevenção de imagens arrastáveis
@@ -36,9 +30,17 @@ class NewProjectScreen extends React.Component {
           let backgroundImage =
                <img src={clouds} alt="Clouds"
                     onDragStart={this.preventImageDrag}
-                    className="w-full h-full select-none absolute filter blur-blurLogin opacity-20" />
+                    className="w-full select-none absolute filter opacity-40 blur-blurLogin" />
 
           return backgroundImage;
+     }
+
+     /**
+      * Criar o projeto (onSubmit do formulário)
+      * @author Bárbara Port
+      */
+     sendFormData() {
+          console.log("Criando um projeto!!");
      }
 
      /**
@@ -57,7 +59,7 @@ class NewProjectScreen extends React.Component {
                                    <hr></hr>
                                    <p className="text-lg mt-4">Esta sessão irá lhe auxiliar na criação de um novo projeto de manual, preencha os campos e siga as instruções!</p>
                               </div>
-                              <form>
+                              <form onSubmit={this.sendFormData()}>
                                    <div className="m-10">
                                         <label for="project-name" className="text-lg">Nome: </label>
                                         <input type="text" id="project-name" className="border-b border-black focus:bg-gray-200 outline-none" placeholder="XXX-YYYY"></input>
@@ -81,14 +83,6 @@ class NewProjectScreen extends React.Component {
           );
 
           return newProjectScreen;
-     }
-
-     /**
-      * Criar o projeto
-      * @author Bárbara Port
-      */
-     createProject() {
-          console.log("Criando um projeto!!");
      }
 
      /**
