@@ -52,7 +52,7 @@ class NewProjectScreen extends React.Component {
           let newProjectScreen = (
                <div id="contentDisplay" className="w-full h-full">
                     {this.getBackgroundImage()}
-                    <div id="newProjectScreen" className="w-screen h-screen flex justify-center items-center">
+                    <div id="newProjectScreen" className="w-full h-full flex justify-center items-center">
                          <div className="bg-white lg:w-5/12 md:w-10/12 h-5/6 relative flex justify-start text-center flex-col border-r-8 border-b-8 border-accent">
                               <div className="m-8">
                                    <p className="text-2xl font-bold">Crie um novo projeto de manual</p>
