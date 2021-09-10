@@ -11,12 +11,18 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Component;
+
 /**
  * Classe de filtro de requisições que verifica se a requisição recebida vem de um usuário autenticado, ou seja,
  * logado no sistema
  * 
  * @author Rafael Furtado
  */
+@Component
+@Order(Ordered.HIGHEST_PRECEDENCE)
 public class AuthenticationFilter implements Filter {
 
 	@Override
