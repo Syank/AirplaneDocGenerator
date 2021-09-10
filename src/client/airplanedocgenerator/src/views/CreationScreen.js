@@ -22,13 +22,15 @@ class CreationScreen extends React.Component {
             newProject:
                 "Siga o passo a passo para a criação de um novo documento",
             importProject:
-                "Escolha um diretório com estrutura válida em seu computador para importa-lo ",
+                "Escolha um diretório com estrutura válida em seu computador para importá-lo ",
         };
 
         this.cardOptionButtonsText = {
             newProject: "Criar Documento",
             importProject: "Importar Documento",
         };
+
+        this.goToCreateNewProjectScreen = this.goToCreateNewProjectScreen.bind(this);
     }
 
     /**
@@ -85,8 +87,8 @@ class CreationScreen extends React.Component {
      *
      * @author Carolina Margiotti
      */
-    goToCreateNewProjectPage() {
-        console.log("Indo para página de criar novo documento");
+    goToCreateNewProjectScreen() {
+        this.props.navigation("new-project-screen");
     }
 
     /**
@@ -132,7 +134,7 @@ class CreationScreen extends React.Component {
         let cardOption1 = this.getCardOption(
             this.cardOptionTexts["newProject"],
             this.cardOptionButtonsText["newProject"],
-            this.goToCreateNewProjectPage,
+            this.goToCreateNewProjectScreen,
             "file"
         );
         let cardOption2 = this.getCardOption(

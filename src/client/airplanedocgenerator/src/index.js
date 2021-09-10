@@ -11,7 +11,7 @@ document.body.style.overflow = "hidden";
 
 ReactDOM.render(
     <React.StrictMode>
-        <NewProjectScreen/>
+        <Application/>
     </React.StrictMode>,
     document.getElementById("root")
 );

@@ -61,13 +61,13 @@ class NewProjectScreen extends React.Component {
                               </div>
                               <form onSubmit={this.sendFormData()}>
                                    <div className="m-10">
-                                        <label for="project-name" className="text-lg">Nome: </label>
+                                        <label htmlFor="project-name" className="text-lg">Nome: </label>
                                         <input type="text" id="project-name" className="border-b border-black focus:bg-gray-200 outline-none" placeholder="XXX-YYYY"></input>
                                         <FontAwesomeIcon icon={faQuestionCircle} color="black" />
                                    </div>
                                    <div className="m-8">
                                         <label className="text-lg">Codelist: </label>
-                                        <label for="codelist-file" className="w-68 p-1 px-4 rounded-lg bg-inputFileColor text-white cursor-pointer hover:bg-blue-300 active:bg-blue-300">Selecionar Codelist em sua máquina</label>
+                                        <label htmlFor="codelist-file" className="w-68 p-1 px-4 rounded-lg bg-inputFileColor text-white cursor-pointer hover:bg-blue-300 active:bg-blue-300">Selecionar Codelist em sua máquina</label>
                                         <input type="file" id="codelist-file" className="hidden"></input>
 
                                         <p className="text-xs ml-12 mr-12 mt-4">A escolha de um Codelist no momento da criação não é obrigatória, ele pode ser importado ou criado no gerenciamento do documento.</p>
