@@ -51,7 +51,6 @@ class NewProjectScreen extends React.Component {
           let newProjectScreen = (
                <div id="contentDisplay" className="w-full h-full">
                     {this.getBackgroundImage()}
-                    <TopBar></TopBar>
                     <div id="newProjectScreen" className="w-screen h-screen flex justify-center items-center">
                          <div className="bg-white lg:w-5/12 md:w-10/12 h-5/6 relative flex justify-start text-center flex-col border-r-8 border-b-8 border-accent">
                               <div className="m-8">
@@ -62,12 +61,12 @@ class NewProjectScreen extends React.Component {
                               <form>
                                    <div className="m-10">
                                         <label for="project-name" className="text-lg">Nome: </label>
-                                        <input type="text" id="project-name" className="border-b border-black" placeholder="XXX-YYYY"></input>
+                                        <input type="text" id="project-name" className="border-b border-black focus:bg-gray-200 outline-none" placeholder="XXX-YYYY"></input>
                                         <FontAwesomeIcon icon={faQuestionCircle} color="black" />
                                    </div>
                                    <div className="m-8">
                                         <label className="text-lg">Codelist: </label>
-                                        <label for="codelist-file" className="w-68 p-1 px-4 rounded-lg bg-inputFileColor text-white cursor-pointer">Selecionar Codelist em sua máquina</label>
+                                        <label for="codelist-file" className="w-68 p-1 px-4 rounded-lg bg-inputFileColor text-white cursor-pointer hover:bg-blue-300 active:bg-blue-300">Selecionar Codelist em sua máquina</label>
                                         <input type="file" id="codelist-file" className="hidden"></input>
 
                                         <p className="text-xs ml-12 mr-12 mt-4">A escolha de um Codelist no momento da criação não é obrigatória, ele pode ser importado ou criado no gerenciamento do documento.</p>
