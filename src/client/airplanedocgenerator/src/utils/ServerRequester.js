@@ -12,6 +12,17 @@
     
 
 
+    /**
+     * Função para realizar requisições do tipo GET ao servidor da aplicação
+     * 
+     * @param {String} restPath Caminho do servidor REST para acessar o serviço, no formato "/caminho/do/servico"
+     * @param {JSON} parameters JSON contendo os parâmetros para a requisição, onde a chave deve ser o nome do atributo
+     *                          e o valor, o seu valor a ser associado na URL
+     * @returns Retorna um objeto JSON contendo a resposta da requisição, com as seguintes chaves disponíveis:
+     *  - ok -> Boolean - Informa se a requisição teve sucesso ou não, 
+     *  - status -> Number - Código HTTP informando o status da requisição
+     *  - responseJson -> JSON - Objeto JSON retornado do servidor
+     */
     async doGet(restPath, parameters){
         let url = this.serverURL + restPath;
 
@@ -49,10 +60,13 @@
      * 
      * @author Rafael Furtado
      * @param {String} caminhoRest - Rota de acesso ao serviço REST, por exemplo /rest/texto
-     * @param {Object} data - JSON com parâmetros para a requisição, no formato chave:valor
-     * @returns JSON - Retorna um objeto JSON contendo a resposta do servidor para o serviço solicitado
+     * @param {JSON} data - JSON com parâmetros para a requisição, no formato chave:valor
+     * @returns Retorna um objeto JSON contendo a resposta da requisição, com as seguintes chaves disponíveis:
+     *  - ok -> Boolean - Informa se a requisição teve sucesso ou não, 
+     *  - status -> Number - Código HTTP informando o status da requisição
+     *  - responseJson -> JSON - Objeto JSON retornado do servidor
      */
-    async doPost(restPath, data = {}, contentType = "application/json"){
+    async doPost(restPath, data = {}){
         let url = this.serverURL + restPath;
 
         let requestConfigs = {
