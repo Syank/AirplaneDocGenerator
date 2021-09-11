@@ -6,7 +6,7 @@
  class ServerRequester{
     constructor(){
         // URL do servidor
-        this.serverURL = window.location.protocol + "//" + window.location.host;
+        this.serverURL = window.location.protocol + "//" + window.location.hostname + ":8080" ;
 
     }
     
@@ -41,7 +41,7 @@
         }
 
         // Faz a requisição para a URL construída e obtêm sua resposta como JSON
-        return await this.fazerRequisicao(url, requestConfigs);
+        return await this.doRequest(url, requestConfigs);
     }
 
     /**
@@ -57,10 +57,7 @@
 
         let requestConfigs = {
                             method: "POST",
-                            body: JSON.stringify(data),
-                            headers: {
-                                "Content-Type": contentType   
-                                }
+                            body: JSON.stringify(data)
                         };
 
         // Faz a requisição para a URL construída e obtêm sua resposta como JSON
@@ -79,19 +76,20 @@
      * @returns JSON - Retorna um objeto JSON contendo a resposta do servidor para o serviço solicitado 
      */
     async doRequest(url, requestConfigs){
-        let requisicao = await fetch(url, requestConfigs);
+        let request = await fetch(url, requestConfigs);
 
         let response = {};
 
-        try{
-            let responseJson = await requisicao.json();
+        response["ok"] = request.ok;
+        response["status"] = request.status;
 
-            response["ok"] = requisicao.ok;
-            response["status"] = requisicao.status;
+        try {
+            let responseJson = await request.json();
+
             response["responseJson"] = responseJson;
 
-        }catch(e){
-            console.log("Requisição sem retorno");
+        } catch (error){
+            response["responseJson"] = error.message;
 
         }
 
