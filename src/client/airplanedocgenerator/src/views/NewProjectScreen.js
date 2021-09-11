@@ -1,39 +1,17 @@
 import React from "react";
 
-import clouds from "../assets/misc/images/cloud.jpg";
 import Button from "../assets/components/Button";
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faQuestionCircle } from "@fortawesome/free-solid-svg-icons";
+
+import { getBackgroundImage } from "../utils/pagesUtils";
 
 /**
  * Classe que representa a página de criação de um projeto
  * @author Bárbara Port
  */
 class NewProjectScreen extends React.Component {
-
-     /**
-      * Prevenção de imagens arrastáveis
-      * @param {Event} event Evento recebido na tentativa de arrastar uma imagem
-      * @author Rafael Furtado
-      */
-     preventImageDrag(event) {
-          event.preventDefault();
-     }
-
-     /**
-      * Imagem de fundo
-      * @returns Elemento com a imagem de fundo
-      * @author Rafael Furtado
-      */
-     getBackgroundImage() {
-          let backgroundImage =
-               <img src={clouds} alt="Clouds"
-                    onDragStart={this.preventImageDrag}
-                    className="w-full select-none absolute filter opacity-40 blur-blurLogin" />
-
-          return backgroundImage;
-     }
 
      /**
       * Criar o projeto (onSubmit do formulário)
@@ -51,7 +29,7 @@ class NewProjectScreen extends React.Component {
      getNewProjectScreen() {
           let newProjectScreen = (
                <div id="contentDisplay" className="w-full h-full">
-                    {this.getBackgroundImage()}
+                    {getBackgroundImage()}
                     <div id="newProjectScreen" className="w-full h-full flex justify-center items-center">
                          <div className="bg-white lg:w-5/12 md:w-10/12 h-5/6 relative flex justify-start text-center flex-col border-r-8 border-b-8 border-accent">
                               <div className="m-8">

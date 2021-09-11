@@ -1,9 +1,9 @@
 import React from "react";
 
-import aviao from "../assets/misc/images/cloud.jpg";
-
 import CardHeader from "../assets/components/CardHeader";
 import CardOption from "../assets/components/CardOption";
+
+import { getBackgroundImage } from "../utils/pagesUtils";
 
 /**
  * Uma classe de "view" que representa a tela de login da aplicação
@@ -35,37 +35,6 @@ class HomeScreen extends React.Component {
 
         this.goToCreateNewProjectPage =
             this.goToCreateNewProjectPage.bind(this);
-    }
-
-    /**
-     * Previne que imagens sejam "arrastáveis"
-     *
-     * Esta função deve ser passada para o atributo "onDragStart" do elemento
-     *
-     * @param {Event} event Evento recebido como parâmetro quando a ação de arrastar é iniciada pelo usuário
-     * @author Rafael Furtado
-     */
-    preventImageDrag(event) {
-        event.preventDefault();
-    }
-
-    /**
-     * Constrói e configura o elemento para ser a imagem de fundo da tela de login
-     *
-     * @returns Retorna o elemento da imagem de fundo da tela de login
-     * @author Rafael Furtado
-     */
-    getBackgroundImage() {
-        let backgroundImage = (
-            <img
-                src={aviao}
-                alt="Avião"
-                onDragStart={this.preventImageDrag}
-                className="w-full select-none absolute filter opacity-40  blur-blurLogin"
-            />
-        );
-
-        return backgroundImage;
     }
 
     /**
@@ -166,7 +135,7 @@ class HomeScreen extends React.Component {
 
         let homeScreen = (
             <div id="contentDisplay" className="w-full h-full">
-                {this.getBackgroundImage()}
+                {getBackgroundImage()}
 
                 <div
                     id="homeScreen"
