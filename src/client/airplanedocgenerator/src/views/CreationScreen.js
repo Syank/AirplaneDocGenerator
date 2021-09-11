@@ -3,7 +3,7 @@ import React from "react";
 import CardHeader from "../assets/components/CardHeader";
 import CardOption from "../assets/components/CardOption";
 
-import cloud from "../assets/misc/images/cloud.jpg";
+import { getBackgroundImage } from "../utils/pagesUtils";
 
 /**
  * Uma classe de "view" que representa a tela de criação ou importação de manual
@@ -31,37 +31,6 @@ class CreationScreen extends React.Component {
         };
 
         this.goToCreateNewProjectScreen = this.goToCreateNewProjectScreen.bind(this);
-    }
-
-    /**
-     * Previne que imagens sejam "arrastáveis"
-     *
-     * Esta função deve ser passada para o atributo "onDragStart" do elemento
-     *
-     * @param {Event} event Evento recebido como parâmetro quando a ação de arrastar é iniciada pelo usuário
-     * @author Carolina Margiotti
-     */
-    preventImageDrag(event) {
-        event.preventDefault();
-    }
-
-    /**
-     * Constrói e configura o elemento para ser a imagem de fundo da tela de login
-     *
-     * @returns Retorna o elemento da imagem de fundo da tela de login
-     * @author Carolina Margiotti
-     */
-    getBackgroundImage() {
-        let backgroundImage = (
-            <img
-                src={cloud}
-                alt="Cloud"
-                onDragStart={this.preventImageDrag}
-                className="w-full select-none absolute filter opacity-40 blur-blurLogin"
-            />
-        );
-
-        return backgroundImage;
     }
 
     /**
@@ -146,7 +115,7 @@ class CreationScreen extends React.Component {
 
         let creationScreen = (
             <div id="contentDisplay" className="w-full h-full">
-                {this.getBackgroundImage()}
+                {getBackgroundImage()}
 
                 <div
                     id="homeScreen"

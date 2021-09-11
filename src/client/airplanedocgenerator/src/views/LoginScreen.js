@@ -1,7 +1,6 @@
 import React from "react";
 
 // Imagens usadas
-import aviao from '../assets/misc/images/aviao.jpg';
 import loginImg from "../assets/misc/images/loginImage.png";
 
 // Componente dos ícones do FontAwesome
@@ -12,7 +11,7 @@ import { faUser } from '@fortawesome/free-solid-svg-icons'
 import { faKey } from '@fortawesome/free-solid-svg-icons'
 import Button from "../assets/components/Button";
 
-
+import { getBackgroundImage } from "../utils/pagesUtils";
 
 /**
  * Uma classe de "view" que representa a tela de login da aplicação
@@ -47,19 +46,6 @@ class LoginScreen extends React.Component{
      */
     goToHomePage(){
         this.props.navigation("home");
-
-    }
-
-    /**
-     * Previne que imagens sejam "arrastáveis"
-     * 
-     * Esta função deve ser passada para o atributo "onDragStart" do elemento
-     * 
-     * @param {Event} event Evento recebido como parâmetro quando a ação de arrastar é iniciada pelo usuário
-     * @author Rafael Furtado
-     */
-    preventImageDrag(event){
-        event.preventDefault();
 
     }
     
@@ -104,21 +90,6 @@ class LoginScreen extends React.Component{
 
         }
 
-    }
-
-    /**
-     * Constrói e configura o elemento para ser a imagem de fundo da tela de login
-     * 
-     * @returns Retorna o elemento da imagem de fundo da tela de login
-     * @author Rafael Furtado
-     */
-    getBackgroundImage(){
-        let backgroundImage = 
-            <img src={aviao} alt="Avião" 
-                onDragStart={this.preventImageDrag} 
-                className="w-full h-full select-none absolute filter blur-blurLogin opacity-60"/>
-        
-        return backgroundImage;
     }
 
     /**
@@ -173,7 +144,7 @@ class LoginScreen extends React.Component{
     getLoginScreen(){
         let loginScreen =
             <div id="contentDisplay" className="w-full h-full">
-                {this.getBackgroundImage()}
+                {getBackgroundImage()}
 
                 <div id="loginScreen" className="w-full h-full flex flex-col items-center justify-center relative select-none">
                     <div id="loginForm" className="w-loginFormW h-loginFormH bg-white shadow-loginFormShadow">
