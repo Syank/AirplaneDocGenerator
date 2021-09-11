@@ -22,7 +22,6 @@ import org.springframework.stereotype.Component;
  * @author Rafael Furtado
  */
 @Component
-@Order(Ordered.HIGHEST_PRECEDENCE)
 public class AuthenticationFilter implements Filter {
 
 	@Override
