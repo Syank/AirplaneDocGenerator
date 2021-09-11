@@ -16,7 +16,6 @@ public abstract class Usuario {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	
-	
 	@Column(nullable = false)
 	private String nome;
 	
@@ -26,6 +25,8 @@ public abstract class Usuario {
 	@Column(nullable = false)
 	private String senha;
 		
+	
+	
 	public Long getId() {
 		return id;
 	}
@@ -49,12 +50,6 @@ public abstract class Usuario {
 	}
 	public void setSenha(String senha) {
 		this.senha = senha;
-	}
-	public String getTipo() {
-		return tipo;
-	}
-	public void setTipo(String tipo) {
-		this.tipo = tipo;
 	}
 
 }
