@@ -54,7 +54,7 @@ class RegisterUser extends React.Component{
     }
 
     /**
-     * Fecha o formulário de registro de usuário ao clicar fora dela
+     * Fecha o formulário de registro de usuário ao clicar fora dele
      * 
      * @param {Event} event Evento ao clicar fora do formulário de registro
      * @author Rafael Furtado
@@ -63,7 +63,8 @@ class RegisterUser extends React.Component{
         let clickTargetId = event.target.id;
 
         if(clickTargetId === this.id){
-            console.log("fechando");
+            this.props.control(false);
+
         }
             
     }
