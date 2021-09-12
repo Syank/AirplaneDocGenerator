@@ -5,8 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
-import java.io.UnsupportedEncodingException;
-
 import javax.servlet.http.HttpSession;
 
 import org.junit.jupiter.api.Test;
