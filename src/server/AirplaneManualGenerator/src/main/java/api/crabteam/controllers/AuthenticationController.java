@@ -6,6 +6,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -43,7 +45,7 @@ public class AuthenticationController {
 	 * @author Rafael Furtado
 	 */
 	@PostMapping("/login")
-	public boolean authenticateUser(@RequestBody LoginCredentials loginCredentials, ServletRequest request) {
+	public ResponseEntity<Boolean> authenticateUser(@RequestBody LoginCredentials loginCredentials, ServletRequest request) {
 		String email = loginCredentials.getEmail();
 		String password = loginCredentials.getPassword();
 		
@@ -67,12 +69,12 @@ public class AuthenticationController {
 				
 				session.setAttribute("admin", admin);
 				
-				return true;
+				return new ResponseEntity<Boolean>(true, HttpStatus.OK);
 			}
 			
 		}
 		
-		return false;
+		return new ResponseEntity<Boolean>(false, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
 	/**
@@ -85,16 +87,16 @@ public class AuthenticationController {
 	 * @author Rafael Furtado
 	 */
 	@GetMapping("/isUserAdmin")
-	public boolean isUserAdmin(ServletRequest request) {
+	public ResponseEntity<Boolean> isUserAdmin(ServletRequest request) {
 		HttpSession session = ((HttpServletRequest) request).getSession(false);
 		
 		if(session != null) {
 			boolean isAdmin = (boolean) session.getAttribute("admin");
 			
-			return isAdmin;
+			return new ResponseEntity<Boolean>(isAdmin, HttpStatus.OK);
 		}
 		
-		return false;
+		return new ResponseEntity<Boolean>(false, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
 	/**
@@ -102,9 +104,10 @@ public class AuthenticationController {
 	 * 
 	 * @param request - Contexto da requisição, objeto gerido internamente pelo servidor
 	 * @author Rafael Furtado
+	 * @return 
 	 */
 	@GetMapping("/logout")
-	public void userLogout(ServletRequest request) {
+	public ResponseEntity<Boolean> userLogout(ServletRequest request) {
 		HttpSession session = ((HttpServletRequest) request).getSession(false);
 		
 		if(session != null) {
@@ -112,6 +115,7 @@ public class AuthenticationController {
 			
 		}
 		
+		return new ResponseEntity<Boolean>(false, HttpStatus.OK);
 	}
 	
 }

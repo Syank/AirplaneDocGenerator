@@ -4,9 +4,10 @@ package api.crabteam.controllers.requestsBody;
 
 /**
  * Classe para mapear a requisição de autenticação no momento da solicitação de um login, tendo como única e necessária
- * funcionalidade métodos getters que permitam extrair os valores dos atributos recebidos na requisição
+ * funcionalidade métodos getters e setters que permitam extrair os valores dos atributos recebidos na requisição
  * <p>
- * O Spring se encarregará de atribuir corretamente os atributos do JSON recebido para o objeto da classe
+ * O Spring se encarregará de atribuir corretamente os atributos do JSON recebido para o objeto da classe, 
+ * desde que o nome das chaves correspondam aos nomes dos atributos desta classe
  * 
  * @author Rafael Furtado
  */

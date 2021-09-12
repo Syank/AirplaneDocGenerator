@@ -23,13 +23,23 @@ public abstract class Usuario {
 	@Column(nullable = false)
 	private String nome;
 	
-	@Column(nullable = false)
+	@Column(nullable = false, unique = true)
 	private String email;
 	
 	@Column(nullable = false, columnDefinition = "text")
 	@Convert(converter = PasswordConverter.class)
 	private Password senha;
+	
+	public Usuario() {
 		
+	}
+	
+	public Usuario(String nome, String email, String senha) {
+		this.nome = nome;
+		this.email = email;
+		this.setSenha(senha);
+		
+	}
 	
 	
 	public Long getId() {
