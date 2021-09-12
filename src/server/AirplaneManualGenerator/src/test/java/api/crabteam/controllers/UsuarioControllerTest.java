@@ -70,7 +70,7 @@ public class UsuarioControllerTest {
 		testSession.setAttribute("admin", true);
 		
 		
-		// ------ Caso 1 -------
+		// ------ Caso 1: Assegura que um usuário administrador consiga cadastrar um novo usuário comum -------
 		RegisterUser newUserData1 = new RegisterUser(testUserName, testUserEmail, testUserPassword, false);
 		MockHttpServletResponse result1 = performRegisterUserPost(newUserData1, testSession);
 		Usuario registeredUser1 = userRep.findByEmail(testUserEmail);
@@ -83,7 +83,7 @@ public class UsuarioControllerTest {
 		assertTrue(result1.getStatus() == HttpStatus.OK.value());
 		
 		
-		// ------ Caso 2 -------
+		// ------ Caso 2: Assegura que um usuário administrador consiga cadastrar um novo usuário administrador -------
 		RegisterUser newUserData2 = new RegisterUser(testUserName, testUserEmail + "case2", testUserPassword, true);
 		MockHttpServletResponse result2 = performRegisterUserPost(newUserData2, testSession);
 		Usuario registeredUser2 = userRep.findByEmail(testUserEmail + "case2");
@@ -96,14 +96,14 @@ public class UsuarioControllerTest {
 		assertTrue(result2.getStatus() == HttpStatus.OK.value());
 		
 		
-		// ------ Caso 3 -------
+		// ------ Caso 3: Assegura que não seja possível dois usuários terem o mesmo email -------
 		RegisterUser newUserData3 = new RegisterUser(testUserName, testUserEmail, testUserPassword, true);
 		MockHttpServletResponse result3 = performRegisterUserPost(newUserData3, testSession);
 		
 		assertTrue(result3.getStatus() == HttpStatus.BAD_REQUEST.value());
 		
 		
-		// ------ Caso 4 -------
+		// ------ Caso 4: Assegura que um usuário comum não possa cadastrar um novo usuário qualquer -------
 		testSession.setAttribute("admin", false);
 		
 		RegisterUser newUserData4 = new RegisterUser(testUserName, testUserEmail, testUserPassword, true);
@@ -112,7 +112,7 @@ public class UsuarioControllerTest {
 		assertTrue(result4.getStatus() == HttpStatus.UNAUTHORIZED.value());
 		
 		
-		// ------ Caso 5 -------
+		// ------ Caso 5: Assegura que uma requisição não autenticada não consiga cadastrar um novo usuário qualquer -------
 		testSession.invalidate();
 		
 		RegisterUser newUserData5 = new RegisterUser(testUserName, testUserEmail, testUserPassword, true);

@@ -36,4 +36,5 @@ public class UsuarioFactory {
 		
 		return new UsuarioPadrao(userName, userEmail, userPassword);
 	}
+	
 }
