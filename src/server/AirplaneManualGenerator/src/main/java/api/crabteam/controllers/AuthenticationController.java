@@ -97,4 +97,21 @@ public class AuthenticationController {
 		return false;
 	}
 	
+	/**
+	 * Realiza o logout do usuário do sistema, invalidando sua sessão
+	 * 
+	 * @param request - Contexto da requisição, objeto gerido internamente pelo servidor
+	 * @author Rafael Furtado
+	 */
+	@GetMapping("/logout")
+	public void userLogout(ServletRequest request) {
+		HttpSession session = ((HttpServletRequest) request).getSession(false);
+		
+		if(session != null) {
+			session.invalidate();
+			
+		}
+		
+	}
+	
 }

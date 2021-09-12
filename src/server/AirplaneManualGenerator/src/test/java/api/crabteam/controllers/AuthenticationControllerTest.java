@@ -1,8 +1,13 @@
 package api.crabteam.controllers;
 
+import static org.junit.Assert.assertNull;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+
+import java.io.UnsupportedEncodingException;
+
+import javax.servlet.http.HttpSession;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -86,7 +91,7 @@ public class AuthenticationControllerTest {
 	 * usuário logado na sessão é administrador ou não
 	 *  
 	 * @throws Exception Caso ocorra algum problema durante a requisição HTTP feita internamente
-	 *                   para o próprio serviro
+	 *                   para o próprio servidor
 	 *                   
 	 * @author Rafael Furtado
 	 */
@@ -118,6 +123,31 @@ public class AuthenticationControllerTest {
 		
 		assertTrue(expectedResult1);
 		assertFalse(expectedResult2);
+		
+	}
+	
+	/**
+	 * Verifica se para o serviço de logout, a sessão do usuário é invalidade
+	 * 
+	 * @throws Exception Caso ocorra algum problema durante a requisição HTTP feita internamente
+	 *                   para o próprio servidor
+	 *                   
+	 * @author Rafael Furtado
+	 */
+	@Test
+	public void userLogoutTest() throws Exception {
+		MockHttpSession testSession = getSessionForTest();
+
+		HttpSession sessionResult = mockMvc
+							.perform(
+									get("/authentication/logout")
+									.session(testSession)
+							)
+							.andReturn()
+							.getRequest()
+							.getSession(false);
+		
+		assertNull(sessionResult);
 		
 	}
 	
