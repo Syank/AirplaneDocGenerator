@@ -5,6 +5,8 @@ import CreationScreen from "./views/CreationScreen";
 import LoginScreen from "./views/LoginScreen";
 import NewProjectScreen from "./views/NewProjectScreen";
 
+
+
 /**
  * Classe de componente raiz da aplicação, todos os outros componentes deverão ser filhos desta classe
  *

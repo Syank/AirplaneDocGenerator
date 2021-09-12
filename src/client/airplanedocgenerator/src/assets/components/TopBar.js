@@ -10,6 +10,7 @@ import { faMinus } from '@fortawesome/free-solid-svg-icons'
 import { faTimes } from '@fortawesome/free-solid-svg-icons'
 
 import { white } from "tailwindcss/colors";
+import RegisterUser from "./RegisterUser";
 
 
 
@@ -35,6 +36,10 @@ class TopBar extends React.Component{
         this.iconBoxStyle = "h-full w-auto flex flex-row items-center text-20px pr-3 pl-3 "
                           + "hover:bg-hoverTopBarButton "
                           + "active:bg-activeTopBarButton";
+
+        this.setRegisterUserState = this.setRegisterUserState.bind(this);
+
+        this.state = {showRegisterUser: false}
 
     }
 
@@ -89,6 +94,17 @@ class TopBar extends React.Component{
     }
 
     /**
+     * Função de controle para exibir ou esconder o componente de registro de usuários
+     * 
+     * @param {Boolean} show Valor booleano para decidir se deve ou não exibir a tela de registro de usuários
+     * @author Rafael Furtado
+     */
+    setRegisterUserState(show){
+        this.setState({showRegisterUser: show});
+
+    }
+
+    /**
      * Retorna os componentes extras para a tob bar acessíveis apenas quando o usuário está logado na aplicação
      * 
      * @returns Retorna funcionalidades extras para a top bar para um usuário logado
@@ -124,27 +140,35 @@ class TopBar extends React.Component{
     getTopBar(){
         let userLogger = this.isUserLogged();
 
-        let topBarBox = 
-            <div className="bg-topBar w-screen h-8 flex justify-between items-center shadow-topBarShadow">
-                <div className="h-full w-auto flex flex-row">
-                {// Caso tenha um usuário logado, chama a função que retorna os botões das funcionalidades extras
-                    userLogger && 
-                        this.getUserLoggedFunctions()
+        let topBarBox = (
+            <div>
+                <div className="bg-topBar w-screen h-8 flex justify-between items-center shadow-topBarShadow">
+                    <div className="h-full w-auto flex flex-row">
+                    {// Caso tenha um usuário logado, chama a função que retorna os botões das funcionalidades extras
+                        userLogger && 
+                            this.getUserLoggedFunctions()
+                    }
+                    </div>
+
+                    <div className="h-full w-auto flex flex-row">
+                        <div className={this.iconBoxStyle}
+                            onClick={this.minimizeApplication}>
+                            {this.closeIcon}
+                        </div>
+
+                        <div className={this.iconBoxStyle}
+                            onClick={this.closeApplication}>
+                            {this.minimizeIcon}
+                        </div>
+                    </div>
+                </div>
+
+                {
+                this.state.showRegisterUser &&
+                    <RegisterUser control={this.setRegisterUserState}></RegisterUser>
                 }
-                </div>
-
-                <div className="h-full w-auto flex flex-row">
-                    <div className={this.iconBoxStyle}
-                        onClick={this.minimizeApplication}>
-                        {this.closeIcon}
-                    </div>
-
-                    <div className={this.iconBoxStyle}
-                        onClick={this.closeApplication}>
-                        {this.minimizeIcon}
-                    </div>
-                </div>
-            </div>;
+            </div>
+        );
 
         return topBarBox;
     }
