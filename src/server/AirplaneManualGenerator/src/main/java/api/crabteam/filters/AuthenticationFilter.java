@@ -25,10 +25,13 @@ public class AuthenticationFilter implements Filter {
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
-		HttpSession session = ((HttpServletRequest) request).getSession(false);
+		HttpServletRequest httpRequest = ((HttpServletRequest) request);
+		HttpSession session = httpRequest.getSession(false);
+		
+		String requestPath = httpRequest.getRequestURI();
 		
 		// Caso a sessão seja nula, envia uma resposta de erro ao cliente e impede que a requisição prossiga
-		if(session == null) {
+		if(session == null && !requestPath.equals("/authentication/login")) {
 			HttpServletResponse httpResponse = (HttpServletResponse) response;
 			
 			httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Solicitação de serviço negada, autentique-se e tente novamente");
