@@ -16,7 +16,14 @@ public class Password {
 	
 	private static final int PASSWORD_SALT = 5;  // A higher salt value results in a more safe password, but demands more CPU process for it
 
+	public Password() {
+		
+	}
 	
+	public Password(String hashedPassword) {
+		this.value = hashedPassword;
+		
+	}
 	
 	/**
 	 * Checks if the given password is the same as the encrypted one for this class instance
@@ -50,7 +57,7 @@ public class Password {
 	}
 
 	/**
-	 * Sets the password value
+	 * Encrypts the given value and sets it's as the password value
 	 * 
 	 * @param value - The password value to set for the object
 	 * @author Rafael Furtado
@@ -62,6 +69,11 @@ public class Password {
 		
 		this.value = hashedPassword;
 		
+	}
+	
+	@Override
+	public String toString() {
+		return this.getValue();
 	}
 	
 }
