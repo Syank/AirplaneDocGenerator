@@ -12,6 +12,7 @@ import { faKey } from '@fortawesome/free-solid-svg-icons'
 import Button from "../assets/components/Button";
 
 import { getBackgroundImage } from "../utils/pagesUtils";
+import ServerRequester from "../utils/ServerRequester";
 
 /**
  * Uma classe de "view" que representa a tela de login da aplicação
@@ -58,10 +59,21 @@ class LoginScreen extends React.Component{
      *          retorna false
      * @author Rafael Furtado
      */
-    authenticateUser(userLogin, userPassword) {
-        console.log("Realizando login");
+    async authenticateUser(userLogin, userPassword) {
+        let serverRequester = new ServerRequester("http://localhost:8080");
 
-        return true;
+        let userCredentials = {
+            email: userLogin,
+            password: userPassword
+        };
+
+        let response = await serverRequester.doPost("/authentication/login", userCredentials);
+
+        if(response["responseJson"] === true){
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -71,18 +83,16 @@ class LoginScreen extends React.Component{
      * @param {Event} event Evento passado como parâmetro para a função quando o formulário é submetido
      * @author Rafael Furtado
      */
-    login(event){
+    async login(event){
         // Impede o formulário de ser enviado automáticamente
         event.preventDefault();
         
         let userLogin = document.getElementById(this.userLoginInputId).value;
         let userPassword = document.getElementById(this.userPasswordInputId).value;
 
-        let authenticated = this.authenticateUser(userLogin, userPassword);
+        let authenticated = await this.authenticateUser(userLogin, userPassword);
 
         if(authenticated){
-            console.log("Redirecionando para página home");
-
             this.goToHomePage();
 
         }else{
