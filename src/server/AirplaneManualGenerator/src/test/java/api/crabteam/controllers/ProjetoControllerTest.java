@@ -3,7 +3,10 @@ package api.crabteam.controllers;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +44,7 @@ public class ProjetoControllerTest {
 	private MockMvc mockMvc;
 
 	private static String testProjectName = "ABC-1234";
-	private static String testUserDescription = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque et felis a tortor molestie mattis. Suspendisse bibendum mauris quis felis finibus semper. Duis sagittis nisi quis tempus mollis. Mauris aliquet velit enim, nec tincidunt elit dictum eget. Donec bibendum sit amet diam quis elementum. Etiam eget mi non eros cursus suscipit. Aenean risus felis, viverra vel velit vitae, tempor varius tellus. Sed volutpat ante eu tempus ullamcorper. Cras vel pulvinar eros. Nunc vitae blandit metus. Sed pulvinar nisi a orci vestibulum bibendum. Pellentesque tempor egestas nisl. Vivamus iaculis elit interdum aliquet rhoncus. In tempus luctus quam a posuere. Vestibulum dictum lectus id est facilisis, vel bibendum tellus pretium.";
+	private static String testProjectDescription = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque et felis a tortor molestie mattis. Suspendisse bibendum mauris quis felis finibus semper. Duis sagittis nisi quis tempus mollis. Mauris aliquet velit enim, nec tincidunt elit dictum eget. Donec bibendum sit amet diam quis elementum. Etiam eget mi non eros cursus suscipit. Aenean risus felis, viverra vel velit vitae, tempor varius tellus. Sed volutpat ante eu tempus ullamcorper. Cras vel pulvinar eros. Nunc vitae blandit metus. Sed pulvinar nisi a orci vestibulum bibendum. Pellentesque tempor egestas nisl. Vivamus iaculis elit interdum aliquet rhoncus. In tempus luctus quam a posuere. Vestibulum dictum lectus id est facilisis, vel bibendum tellus pretium.";
 	
 	
 	
@@ -60,7 +63,7 @@ public class ProjetoControllerTest {
 		MockHttpSession testSession = getSessionForTest();
 		
 		
-		NewProject newProject = new NewProject(testProjectName, testUserDescription);
+		NewProject newProject = new NewProject(testProjectName, testProjectDescription);
 		
 		// ----- Caso 1: Assegurar um usuário cadastrar um projeto ----------
 		MockHttpServletResponse result = mockMvc
@@ -115,6 +118,45 @@ public class ProjetoControllerTest {
 		
 		assertTrue(result3.getStatus() == HttpStatus.UNAUTHORIZED.value());
 		
+	}
+	
+	/**
+	 * Realização de testes para a listagem de todos os projetos
+	 * 
+	 * @author Bárbara Port
+	 * @throws Exception
+	 */
+	@Test
+	public void getAllProjectsTest () throws Exception {
+		MockHttpSession testSession = getSessionForTest();
+		
+		// ----- Cadastrando mais um
+		NewProject newProject = new NewProject("CBA-1234", "This is a short description...");
+		mockMvc
+		.perform(
+			post("/project/create")
+			.contentType(MediaType.APPLICATION_JSON)
+			.content(asJsonString(newProject))
+			.session(testSession)
+		)
+		.andReturn()
+		.getResponse();
+		
+		// ----- Caso 1: Assegurar que um usuário possa visualizar todos os projetos ----------
+		mockMvc.perform(get("/project/all")
+					.session(testSession)
+				)
+				.andExpect(status().isOk())
+				.andDo(print());
+		
+		// ----- Caso 2: Assegurar que uma sessão não autenticada não visualize os projetos ----------
+		testSession.invalidate();
+		
+		mockMvc.perform(get("/project/all")
+					.session(testSession)
+				)
+				.andExpect(status().isUnauthorized())
+				.andDo(print());
 	}
 	
 	/**
