@@ -4,9 +4,9 @@
  * @author Rafael Furtado
  */
  class ServerRequester{
-    constructor(){
-        // URL do servidor
-        this.serverURL = window.location.protocol + "//" + window.location.hostname + ":8080" ;
+    constructor(serverUrl){
+        // Parâmetro opcional, caso serverUrl não seja declaro, irá atribuir o valor da direita
+        this.serverURL = serverUrl || (window.location.protocol + "//" + window.location.hostname + ":8080");
 
     }
     
@@ -71,7 +71,10 @@
 
         let requestConfigs = {
                             method: "POST",
-                            body: JSON.stringify(data)
+                            body: JSON.stringify(data),
+                            headers: {
+                                "Content-Type": "application/json"
+                            }
                         };
 
         // Faz a requisição para a URL construída e obtêm sua resposta como JSON
