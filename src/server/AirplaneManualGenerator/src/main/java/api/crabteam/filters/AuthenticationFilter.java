@@ -31,7 +31,7 @@ public class AuthenticationFilter implements Filter {
 		String requestPath = httpRequest.getRequestURI();
 		
 		// Caso a sessão seja nula, envia uma resposta de erro ao cliente e impede que a requisição prossiga
-		if(session == null && !requestPath.equals("/authentication/login")) {
+		if((session == null && !requestPath.equals("/authentication/login")) && !httpRequest.getMethod().equalsIgnoreCase("OPTIONS")) {
 			HttpServletResponse httpResponse = (HttpServletResponse) response;
 			
 			httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Solicitação de serviço negada, autentique-se e tente novamente");

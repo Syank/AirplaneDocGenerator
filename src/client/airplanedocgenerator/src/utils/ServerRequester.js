@@ -93,6 +93,8 @@
      * @returns JSON - Retorna um objeto JSON contendo a resposta do servidor para o serviço solicitado 
      */
     async doRequest(url, requestConfigs){
+        requestConfigs["credentials"] = "include";
+        
         let request = await fetch(url, requestConfigs);
 
         let response = {};

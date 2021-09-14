@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faQuestionCircle } from "@fortawesome/free-solid-svg-icons";
 
 import { getBackgroundImage } from "../utils/pagesUtils";
+import ServerRequester from "../utils/ServerRequester";
 
 /**
  * Classe que representa a página de criação de um projeto
@@ -14,11 +15,35 @@ import { getBackgroundImage } from "../utils/pagesUtils";
 class NewProjectScreen extends React.Component {
 
      /**
-      * Criar o projeto (onSubmit do formulário)
-      * @author Bárbara Port
+      * Criar um novo projeto
+      * 
+      * @param {Event} event
+      * @author Rafael Furtado
       */
-     sendFormData() {
-          console.log("Criando um projeto!!");
+     async sendFormData(event) {
+          event.preventDefault();
+
+          let serverRequester = new ServerRequester("http://localhost:8080");
+
+          //let fileInput = document.getElementById("codelist-file");
+          let nameInput = document.getElementById("project-name");
+
+          let projectName = nameInput.value;
+
+          let newProjectForm = {
+               nome: projectName
+          }
+
+          let response = await serverRequester.doPost("/project/create", newProjectForm);
+          
+          if(response["responseJson"] === true){
+               alert("Projeto criado com sucesso");
+
+          }else{
+               alert("Não foi possível criar o projeto, contate os administradores");
+
+          }
+          
      }
 
      /**
@@ -37,7 +62,7 @@ class NewProjectScreen extends React.Component {
                                    <hr></hr>
                                    <p className="text-lg mt-4">Esta sessão irá lhe auxiliar na criação de um novo projeto de manual, preencha os campos e siga as instruções!</p>
                               </div>
-                              <form onSubmit={this.sendFormData()}>
+                              <form onSubmit={this.sendFormData}>
                                    <div className="m-10">
                                         <label htmlFor="project-name" className="text-lg">Nome: </label>
                                         <input type="text" id="project-name" className="border-b border-black focus:bg-gray-200 outline-none" placeholder="XXX-YYYY"></input>
