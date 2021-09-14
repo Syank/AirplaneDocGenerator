@@ -59,7 +59,6 @@ class LoginScreen extends React.Component {
      * @author Rafael Furtado
      */
     async authenticateUser(userLogin, userPassword) {
-        return true;
         let serverRequester = new ServerRequester("http://localhost:8080");
 
         let userCredentials = {
