@@ -37,12 +37,27 @@ class NewProjectScreen extends React.Component {
           }
 
           let response = await serverRequester.doPost("/project/create", newProjectForm);
-          
-          if(response["responseJson"] === true){
+
+          if (response["responseJson"] === true) {
                notification("success", "Oba!", "Projeto criado com sucesso!");
 
-          }else{
+          } else {
                notification("error", "Ops...", "Não foi possível criar o projeto. Tente novamente.");
+          }
+
+     }
+
+     /**
+      * Função que identifica o nome do arquivo selecionado pelo usuário e o coloca na label
+      * @returns Nome do arquivo selecionado pelo usuário
+      */
+     setFileName() {
+          let files = document.getElementById("codelist-file").files;
+
+          if (files.length !== 0) {
+               let fileName = files[0].name;
+               let labelFileName = document.getElementById("codelist-file-name");
+               labelFileName.textContent = fileName;
           }
           
      }
@@ -71,8 +86,8 @@ class NewProjectScreen extends React.Component {
                                    </div>
                                    <div className="m-8">
                                         <label className="text-lg">Codelist: </label>
-                                        <label htmlFor="codelist-file" className="w-68 p-1 px-4 rounded-lg bg-inputFileColor text-white cursor-pointer hover:bg-blue-300 active:bg-blue-300">Selecionar Codelist em sua máquina</label>
-                                        <input type="file" id="codelist-file" className="hidden"></input>
+                                        <label htmlFor="codelist-file" id="codelist-file-name" className="w-68 p-1 px-4 rounded-lg bg-inputFileColor text-white cursor-pointer hover:bg-blue-300 active:bg-blue-300">Selecionar Codelist em sua máquina</label>
+                                        <input type="file" id="codelist-file" onChange={this.setFileName} className="hidden" accept=".xls,.xlsx"></input>
 
                                         <p className="text-xs ml-12 mr-12 mt-4">A escolha de um Codelist no momento da criação não é obrigatória, ele pode ser importado ou criado no gerenciamento do documento.</p>
                                    </div>
