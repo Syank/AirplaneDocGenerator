@@ -16,9 +16,13 @@ class Application extends React.Component {
     constructor() {
         super();
 
-        this.state = { pageToRender: "login" };
+        this.state = {
+            pageToRender: "login",
+            userLogged: false
+        };
 
         this.setPageToRender = this.setPageToRender.bind(this);
+        this.setUserLoggedState = this.setUserLoggedState.bind(this);
     }
 
     /**
@@ -78,7 +82,7 @@ class Application extends React.Component {
      */
     getLoginScreen() {
         let loginScreen = (
-            <LoginScreen navigation={this.setPageToRender}></LoginScreen>
+            <LoginScreen navigation={this.setPageToRender} setUserLoggedState={this.setUserLoggedState}></LoginScreen>
         );
 
         return loginScreen;
@@ -137,13 +141,18 @@ class Application extends React.Component {
     getApplicationView() {
         let applicationView = (
             <div className="App w-screen h-screen flex flex-col overflow-hidden">
-                <TopBar></TopBar>
+                <TopBar navigation={this.setPageToRender} userLoggedState={this.state["userLogged"]}></TopBar>
 
                 {this.getPageToDisplay()}
             </div>
         );
 
         return applicationView;
+    }
+
+    setUserLoggedState(state){
+        this.setState({userLogged: state});
+
     }
 
     /**

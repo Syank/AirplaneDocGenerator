@@ -93,6 +93,8 @@ class LoginScreen extends React.Component{
         let authenticated = await this.authenticateUser(userLogin, userPassword);
 
         if(authenticated){
+            this.props.setUserLoggedState(true);
+            
             this.goToHomePage();
 
         }else{

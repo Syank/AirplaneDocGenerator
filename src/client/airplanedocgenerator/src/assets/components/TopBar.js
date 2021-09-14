@@ -11,6 +11,7 @@ import { faTimes } from '@fortawesome/free-solid-svg-icons'
 
 import { white } from "tailwindcss/colors";
 import RegisterUser from "./RegisterUser";
+import ServerRequester from "../../utils/ServerRequester";
 
 
 
@@ -23,8 +24,8 @@ import RegisterUser from "./RegisterUser";
  * @author Rafael Furtado
  */
 class TopBar extends React.Component{
-    constructor(){
-        super();
+    constructor(props){
+        super(props);
 
         this.returnIcon = <FontAwesomeIcon icon={faArrowLeft} color={white}/>;
         this.homeIcon = <FontAwesomeIcon icon={faHome} color={white}/>;
@@ -38,8 +39,11 @@ class TopBar extends React.Component{
                           + "active:bg-activeTopBarButton";
 
         this.setRegisterUserState = this.setRegisterUserState.bind(this);
+        this.returnToHomePage = this.returnToHomePage.bind(this);
 
-        this.state = {showRegisterUser: false}
+        this.state = {
+            showRegisterUser: false, 
+        };
 
     }
 
@@ -79,7 +83,7 @@ class TopBar extends React.Component{
      * @author Rafael Furtado
      */
     returnToHomePage(){
-        console.log("Voltando para a página inicial");
+        this.props.navigation("home");
 
     }
 
@@ -138,14 +142,12 @@ class TopBar extends React.Component{
      * @author Rafael Furtado
      */
     getTopBar(){
-        let userLogger = this.isUserLogged();
-
         let topBarBox = (
             <div>
                 <div className="bg-topBar w-screen h-8 flex justify-between items-center shadow-topBarShadow">
                     <div className="h-full w-auto flex flex-row">
                     {// Caso tenha um usuário logado, chama a função que retorna os botões das funcionalidades extras
-                        userLogger && 
+                        this.props["userLoggedState"] && 
                             this.getUserLoggedFunctions()
                     }
                     </div>
@@ -180,7 +182,13 @@ class TopBar extends React.Component{
      * @author Rafael Furtado
      */
     isUserLogged(){
-        return false;
+        let isLogged = sessionStorage.getItem("isLogged");
+
+        if(isLogged === null){
+            return false;
+        }
+
+        return isLogged;
     }
 
     /**
@@ -192,7 +200,9 @@ class TopBar extends React.Component{
      * @author Rafael Furtado
      */
     render(){
-        return this.getTopBar();
+        let comp = this.getTopBar();
+
+        return comp;
     }
 
 }
