@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faQuestionCircle } from "@fortawesome/free-solid-svg-icons";
 
 import { getBackgroundImage } from "../utils/pagesUtils";
-import { notification, withConfirmation } from "../assets/components/Notifications";
+import { notification } from "../assets/components/Notifications";
 
 import ServerRequester from "../utils/ServerRequester";
 

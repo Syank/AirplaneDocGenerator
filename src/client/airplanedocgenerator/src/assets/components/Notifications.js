@@ -22,10 +22,6 @@ export function notification(nStatus, nTitle, nMessage) {
  * @param {String} cTitle Título quando está confirmando
  * @param {String} cMessage Mensagem para exibir ao usuário na confirmação
  * @param {String} cIcon Ícone da confirmação (exemplo: "warning")
- * @param {String} sTitle Título se der sucesso
- * @param {String} sMessage Mensagem se der sucesso
- * @param {String} eTitle Título do possível erro
- * @param {String} eMessage Mensagem do possível erro
  * @param {String} sOption O que fazer após clicar no OK?
  */
 export function withConfirmation(cTitle, cMessage, cIcon, sOption) {
