@@ -12,6 +12,8 @@ import { faKey } from '@fortawesome/free-solid-svg-icons'
 import Button from "../assets/components/Button";
 
 import { getBackgroundImage } from "../utils/pagesUtils";
+import { notification } from "../assets/components/Notifications";
+
 import ServerRequester from "../utils/ServerRequester";
 
 /**
@@ -96,7 +98,7 @@ class LoginScreen extends React.Component{
             this.goToHomePage();
 
         }else{
-            console.log("Não foi possível realizar o login");
+            notification("error", "Ops!", "Verifique o e-mail e a senha e tente novamente!");
 
         }
 

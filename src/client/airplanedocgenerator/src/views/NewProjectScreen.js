@@ -6,6 +6,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faQuestionCircle } from "@fortawesome/free-solid-svg-icons";
 
 import { getBackgroundImage } from "../utils/pagesUtils";
+import { notification } from "../assets/components/Notifications";
+
 import ServerRequester from "../utils/ServerRequester";
 
 /**
@@ -37,11 +39,10 @@ class NewProjectScreen extends React.Component {
           let response = await serverRequester.doPost("/project/create", newProjectForm);
           
           if(response["responseJson"] === true){
-               alert("Projeto criado com sucesso");
+               notification("success", "Oba!", "Projeto criado com sucesso!");
 
           }else{
-               alert("Não foi possível criar o projeto, contate os administradores");
-
+               notification("error", "Ops...", "Não foi possível criar o projeto. Tente novamente.");
           }
           
      }
