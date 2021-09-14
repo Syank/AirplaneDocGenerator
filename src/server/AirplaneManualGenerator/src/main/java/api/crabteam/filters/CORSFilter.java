@@ -31,6 +31,9 @@ public class CORSFilter implements Filter {
 		
 		httpResponse.addHeader("Access-Control-Allow-Origin", "http://localhost:3000");
 		httpResponse.addHeader("Access-Control-Allow-Headers", "Content-Type");
+		httpResponse.addHeader("Access-Control-Allow-Headers", "Set-Cookie");
+		httpResponse.addHeader("Access-Control-Allow-Credentials", "true");
+		
 		
 		chain.doFilter(request, response);
 		
