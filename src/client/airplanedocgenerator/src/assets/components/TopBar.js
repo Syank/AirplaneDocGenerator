@@ -40,6 +40,7 @@ class TopBar extends React.Component{
 
         this.setRegisterUserState = this.setRegisterUserState.bind(this);
         this.returnToHomePage = this.returnToHomePage.bind(this);
+        this.returnToPreviousPage = this.returnToPreviousPage.bind(this);
 
         this.state = {
             showRegisterUser: false, 
@@ -93,7 +94,7 @@ class TopBar extends React.Component{
      * @author Rafael Furtado
      */
     returnToPreviousPage(){
-        console.log("Voltando para página anterior");
+        this.props.returnToPreviousPage();
 
     }
 

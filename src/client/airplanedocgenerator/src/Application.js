@@ -18,11 +18,18 @@ class Application extends React.Component {
 
         this.state = {
             pageToRender: "login",
-            userLogged: false
+            userLogged: false,
+        };
+
+        this.previousPageMap = {
+            "creation-screen": "home",
+            "new-project-screen": "creation-screen"
         };
 
         this.setPageToRender = this.setPageToRender.bind(this);
         this.setUserLoggedState = this.setUserLoggedState.bind(this);
+        this.returnToPreviousPage = this.returnToPreviousPage.bind(this);
+
     }
 
     /**
@@ -71,6 +78,7 @@ class Application extends React.Component {
      */
     setPageToRender(pageName) {
         this.setState({ pageToRender: pageName });
+
     }
 
     /**
@@ -141,13 +149,27 @@ class Application extends React.Component {
     getApplicationView() {
         let applicationView = (
             <div className="App w-screen h-screen flex flex-col overflow-hidden">
-                <TopBar navigation={this.setPageToRender} userLoggedState={this.state["userLogged"]}></TopBar>
+                <TopBar navigation={this.setPageToRender} 
+                        userLoggedState={this.state["userLogged"]}
+                        returnToPreviousPage={this.returnToPreviousPage}>
+                </TopBar>
 
                 {this.getPageToDisplay()}
             </div>
         );
 
         return applicationView;
+    }
+
+    returnToPreviousPage(){
+        let actualPAge = this.state["pageToRender"];
+        let previousPage = this.previousPageMap[actualPAge];
+
+        if(previousPage !== undefined){
+            this.setPageToRender(previousPage);
+
+        }
+        
     }
 
     setUserLoggedState(state){
