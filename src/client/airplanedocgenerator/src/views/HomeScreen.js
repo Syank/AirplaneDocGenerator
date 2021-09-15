@@ -3,6 +3,8 @@ import React from "react";
 import CardHeader from "../assets/components/CardHeader";
 import CardOption from "../assets/components/CardOption";
 
+import { notification } from "../assets/components/Notifications";
+
 import { getBackgroundImage } from "../utils/pagesUtils";
 
 /**
@@ -71,7 +73,7 @@ class HomeScreen extends React.Component {
      * @author Rafael Furtado
      */
     goToEditProjectPage() {
-        console.log("Indo para página de editar projeto");
+        notification("info", "Aguarde um pouco!", "Essa funcionalidade estará disponível em breve!");
     }
 
     /**
@@ -81,7 +83,7 @@ class HomeScreen extends React.Component {
      * @author Rafael Furtado
      */
     goToPrintProjectPage() {
-        console.log("Indo para página de gerar documento");
+        notification("info", "Aguarde um pouco!", "Essa funcionalidade estará disponível em breve!");
     }
 
     /**

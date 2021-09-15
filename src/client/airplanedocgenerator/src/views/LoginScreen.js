@@ -103,6 +103,8 @@ class LoginScreen extends React.Component {
 
         if (authenticated) {
             this.goToHomePage();
+        }
+        else {
             notification(
                 "error",
                 "Ops!",

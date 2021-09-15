@@ -2,8 +2,7 @@ import Swal from 'sweetalert2';
 
 /**
  * Função que notificará o usuário de acordo com os parâmetros passados
- * 
- * @param {String} status "error" ou "success"
+ * @param {String} status Tipos: https://sweetalert2.github.io/#icons
  * @param {String} title 
  * @param {String} message 
  * 
@@ -21,7 +20,7 @@ export function notification(nStatus, nTitle, nMessage) {
  * 
  * @param {String} cTitle Título quando está confirmando
  * @param {String} cMessage Mensagem para exibir ao usuário na confirmação
- * @param {String} cIcon Ícone da confirmação (exemplo: "warning")
+ * @param {String} cIcon Tipos: https://sweetalert2.github.io/#icons
  * @param {String} sOption O que fazer após clicar no OK?
  */
 export function withConfirmation(cTitle, cMessage, cIcon, sOption) {
