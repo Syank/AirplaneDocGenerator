@@ -103,7 +103,11 @@ class LoginScreen extends React.Component {
 
         if (authenticated) {
             this.goToHomePage();
-            notification("error", "Ops!", "Verifique o e-mail e a senha e tente novamente!");
+            notification(
+                "error",
+                "Ops!",
+                "Verifique o e-mail e a senha e tente novamente!"
+            );
         }
     }
 
