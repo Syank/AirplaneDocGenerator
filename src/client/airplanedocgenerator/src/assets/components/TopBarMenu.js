@@ -1,25 +1,49 @@
 import React from "react";
 import MenuOption from "./MenuOption";
 
+
+
+/**
+ * Classe do componente de menu da TopBar
+ * 
+ * O menu é dinâmico e se adaptará em razão do tipo de usuário logado
+ * 
+ * @author Rafael Furtado
+ */
 class TopBarMenu extends React.Component{
     constructor(props) {
         super(props);
 
         this.loggout = this.loggout.bind(this);
         this.openRegisterUserMenu = this.openRegisterUserMenu.bind(this);
-        
+
     }
 
+    /**
+     * Faz o logout do usuário do sistema
+     * 
+     * @author Rafael Furtado
+     */
     loggout(){
         this.props.loggoutFunction();
 
     }
 
+    /**
+     * Abre o menu de registro de usuários
+     * 
+     * @author Rafael Furtado
+     */
     openRegisterUserMenu(){
         this.props.setShowRegisterUser(true);
 
     }
 
+    /**
+     * Constrói o componente do menu
+     * 
+     * @returns Retorna o elemento do menu
+     */
     getTopBarMenu(){
         let menu = (
             <div className="z-20 w-topBarMenuW h-topBarMenuH min-h-topBarMenuMinH absolute bg-topBar top-8">

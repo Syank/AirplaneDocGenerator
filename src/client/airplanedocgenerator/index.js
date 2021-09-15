@@ -1,6 +1,5 @@
 const { app, BrowserWindow, ipcMain } = require("electron");
-const { path } = require("path");
-const { fs } = require("fs");
+
 
 var mainWindow;
 
@@ -25,7 +24,7 @@ app.on("ready", () => {
 
 ipcMain.on("minimize", function () {
     mainWindow.minimize();
-    
+
 });
 
 ipcMain.on("close", function () {

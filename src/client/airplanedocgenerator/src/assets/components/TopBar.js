@@ -11,10 +11,7 @@ import { faTimes } from '@fortawesome/free-solid-svg-icons'
 
 import { white } from "tailwindcss/colors";
 import RegisterUser from "./RegisterUser";
-import ServerRequester from "../../utils/ServerRequester";
 import TopBarMenu from "./TopBarMenu";
-
-
 
 
 

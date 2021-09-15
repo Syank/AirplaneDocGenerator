@@ -102,6 +102,14 @@ class Application extends React.Component {
         return loginScreen;
     }
 
+    /**
+     * Altera o estado do tipo de usuário logado
+     * 
+     * Esta função é usada pelo menu da topbar para decidir o que deverá ser exibido
+     * 
+     * @param {boolean} isAdmin Valor booleando determinando se o usuário logado é administrador ou não
+     * @author Rafael Furtado
+     */
     setUserLoggedType(isAdmin){
         this.setState({isUserAdmin: isAdmin});
 
@@ -174,6 +182,11 @@ class Application extends React.Component {
         return applicationView;
     }
 
+    /**
+     * Realiza o logout do usuário do sistema e retorna para a página de login
+     * 
+     * @author Rafael Furtado
+     */
     async logoutUser(){
         let serverRequester = new ServerRequester("http://localhost:8080");
 
@@ -190,6 +203,11 @@ class Application extends React.Component {
 
     }
 
+    /**
+     * Retorna para a página anterior
+     * 
+     * @author Rafael Furtado
+     */
     returnToPreviousPage(){
         let actualPAge = this.state["pageToRender"];
         let previousPage = this.previousPageMap[actualPAge];
@@ -201,6 +219,12 @@ class Application extends React.Component {
         
     }
 
+    /**
+     * Altera do estado de se o usuário está logado ou não
+     * 
+     * @param {boolean} state Valor booleano para determinado se o usuário está logado ou não
+     * @author Rafael Furtado
+     */
     setUserLoggedState(state){
         this.setState({userLogged: state});
 
