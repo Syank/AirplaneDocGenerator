@@ -12,6 +12,9 @@ import { faTimes } from '@fortawesome/free-solid-svg-icons'
 import { white } from "tailwindcss/colors";
 import RegisterUser from "./RegisterUser";
 import ServerRequester from "../../utils/ServerRequester";
+import TopBarMenu from "./TopBarMenu";
+
+
 
 
 
@@ -41,9 +44,12 @@ class TopBar extends React.Component{
         this.setRegisterUserState = this.setRegisterUserState.bind(this);
         this.returnToHomePage = this.returnToHomePage.bind(this);
         this.returnToPreviousPage = this.returnToPreviousPage.bind(this);
+        this.toggleTopBarMenu = this.toggleTopBarMenu.bind(this);
+        this.minimizeApplication = this.minimizeApplication.bind(this);
 
         this.state = {
             showRegisterUser: false, 
+            showMenu: false
         };
 
     }
@@ -54,7 +60,7 @@ class TopBar extends React.Component{
      * @author Rafael Furtado
      */
     closeApplication(){
-        console.log("Fechando aplicação");
+        window.electron.windowControll.close();
 
     }
 
@@ -64,7 +70,7 @@ class TopBar extends React.Component{
      * @author Rafael Furtado
      */
     minimizeApplication(){
-        console.log("Minimizando aplicação");
+        window.electron.windowControll.minimize();
 
     }
 
@@ -73,8 +79,8 @@ class TopBar extends React.Component{
      * 
      * @author Rafael Furtado
      */
-    openTopBarMenu(){
-        console.log("Abrindo menu da top bar");
+    toggleTopBarMenu(){
+       this.setState({showMenu: !this.state["showMenu"]});
 
     }
 
@@ -118,8 +124,12 @@ class TopBar extends React.Component{
     getUserLoggedFunctions(){
         let userLoggedFunctions =
         <div className="flex flex-row items-center h-full w-auto">
+            {this.state["showMenu"] && 
+                <TopBarMenu adminOptions={this.props.userLoggedType} loggoutFunction={this.props.loggoutFunction}/>
+            }
+
             <div className={this.iconBoxStyle}
-                onClick={this.openTopBarMenu}>
+                onClick={this.toggleTopBarMenu}>
                 {this.menuIcon}
             </div>
             <div className={this.iconBoxStyle}

@@ -4,6 +4,7 @@ import HomeScreen from "./views/HomeScreen";
 import CreationScreen from "./views/CreationScreen";
 import LoginScreen from "./views/LoginScreen";
 import NewProjectScreen from "./views/NewProjectScreen";
+import ServerRequester from "./utils/ServerRequester";
 
 
 
@@ -19,6 +20,7 @@ class Application extends React.Component {
         this.state = {
             pageToRender: "login",
             userLogged: false,
+            isUserAdmin: false
         };
 
         this.previousPageMap = {
@@ -29,6 +31,8 @@ class Application extends React.Component {
         this.setPageToRender = this.setPageToRender.bind(this);
         this.setUserLoggedState = this.setUserLoggedState.bind(this);
         this.returnToPreviousPage = this.returnToPreviousPage.bind(this);
+        this.setUserLoggedType = this.setUserLoggedType.bind(this);
+        this.logoutUser = this.logoutUser.bind(this);
 
     }
 
@@ -90,10 +94,17 @@ class Application extends React.Component {
      */
     getLoginScreen() {
         let loginScreen = (
-            <LoginScreen navigation={this.setPageToRender} setUserLoggedState={this.setUserLoggedState}></LoginScreen>
+            <LoginScreen navigation={this.setPageToRender} 
+                         setUserLoggedState={this.setUserLoggedState}
+                         setUserLoggedType={this.setUserLoggedType}></LoginScreen>
         );
 
         return loginScreen;
+    }
+
+    setUserLoggedType(isAdmin){
+        this.setState({isUserAdmin: isAdmin});
+
     }
 
     /**
@@ -151,7 +162,9 @@ class Application extends React.Component {
             <div className="App w-screen h-screen flex flex-col overflow-hidden">
                 <TopBar navigation={this.setPageToRender} 
                         userLoggedState={this.state["userLogged"]}
-                        returnToPreviousPage={this.returnToPreviousPage}>
+                        returnToPreviousPage={this.returnToPreviousPage}
+                        userLoggedType={this.state["isUserAdmin"]}
+                        loggoutFunction={this.logoutUser}>
                 </TopBar>
 
                 {this.getPageToDisplay()}
@@ -159,6 +172,22 @@ class Application extends React.Component {
         );
 
         return applicationView;
+    }
+
+    async logoutUser(){
+        let serverRequester = new ServerRequester("http://localhost:8080");
+
+        let response = await serverRequester.doGet("/authentication/logout");
+
+        if(response["responseJson"] === true){
+            console.log("Redirecionando para login");
+
+        }else{
+            console.log("O servidor está offline 😥\nVocê será redirecionado para a página de login");
+        }
+
+        this.setState({userLogged: false, isUserAdmin: false, pageToRender: "login"})
+
     }
 
     returnToPreviousPage(){

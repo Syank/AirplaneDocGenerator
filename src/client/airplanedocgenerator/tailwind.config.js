@@ -14,9 +14,14 @@ module.exports = {
             },
             width: {
                 loginFormW: "300px",
+                topBarMenuW: "160px"
             },
             height: {
                 loginFormH: "400px",
+                topBarMenuH: "fit-content"
+            },
+            minHeight: {
+                topBarMenuMinH: "40px"
             },
             colors: {
                 accent: "#5E74D6",
@@ -28,6 +33,8 @@ module.exports = {
                 topBar: "#5E74D6",
                 hoverTopBarButton: "#8498f0",
                 activeTopBarButton: "#acbbff",
+                topBarMenu: "#5366bd",
+                topBarMenuHover: "#5e96d6"
             },
             fontSize: {
                 "20px": "20px",

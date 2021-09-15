@@ -30,16 +30,15 @@ public class AuthenticationFilter implements Filter {
 		
 		String requestPath = httpRequest.getRequestURI();
 		
-		boolean authentication = requestPath.equals("/authentication/login");
+		boolean authentication = requestPath.contains("/authentication");
 		boolean checkLogged = requestPath.equals("/user/isLogged");
 		boolean preflight = httpRequest.getMethod().equalsIgnoreCase("OPTIONS");
 		
-		if(((!authentication || !checkLogged) || !preflight) && session != null ) {
+		if(!((!authentication || !checkLogged) || !preflight) && session == null ) {
 			HttpServletResponse httpResponse = (HttpServletResponse) response;
 			
 			httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Solicitação de serviço negada, autentique-se e tente novamente");
 			
-		// Caso a sessão não seja nula, continua o fluxo normal da requisição
 		}else {
 			chain.doFilter(request, response);
 			

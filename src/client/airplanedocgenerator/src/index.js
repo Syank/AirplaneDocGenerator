@@ -4,6 +4,7 @@ import "./assets/style/index.css";
 import reportWebVitals from "./utils/reportWebVitals";
 import Application from "./Application";
 
+
 // Previne o aparecimento das barras de rolagem
 document.body.style.overflow = "hidden";
 
