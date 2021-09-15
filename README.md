@@ -3,72 +3,46 @@
        <body>
               <h1 align="center">AirplaneDocGenerator :airplane::card_index_dividers:</h1>
               <p align="center">
-                     <img src="https://img.shields.io/badge/HTML-239120?style=for-the-badge&logo=html5&logoColor=white">
+                     <img src="https://img.shields.io/badge/Electron-2B2E3A?style=for-the-badge&logo=electron&logoColor=9FEAF9">
                      <img src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB">
-                     <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black">
+                     <img src="https://img.shields.io/badge/HTML-239120?style=for-the-badge&logo=html5&logoColor=white">
                      <img src="https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white">
-                     <img src="https://img.shields.io/badge/Spring-6DB33F?style=for-the-badge&logo=spring&logoColor=white">
+                     <img src="https://img.shields.io/badge/Spring_Boot-F2F4F9?style=for-the-badge&logo=spring-boot">
                      <img src="https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white">
               </p>
-              <h2>AirplaneDocGenerator :airplane::card_index_dividers::computer:</h2>
-              <p align="justify">A empresa parceira possui a necessidade de automatizar a geração de manuais para as suas aeronaves.</p>
+              <h2 section="airplanedocgenerator">AirplaneDocGenerator :airplane::card_index_dividers::computer:</h2>
+              <p align="justify">Nossa empresa parceira possui a necessidade de automatizar a geração de manuais para as suas aeronaves, pois, atualmente, o processo é feito manualmente.</p>
               <h3>Índice</h3>
               <ul>
-                     <li><a href="">O que é o AirplaneDocGenerator?</a>
+                     <li><a href="oquee">O que é o AirplaneDocGenerator?</a>
                      <ul>
-                            <li><a href="">Benefícios do AirplaneDocGenerator</a>
-                            <li><a href="">Entregas</a>
-                            <li><a href="">Cronograma de Entregas</a>
+                            <li><a href="">Primeira entrega</a>
+                            <li><a href="">AirplaneDocGenerator em funcionamento</a>
+                            <li><a href=""><i>User stories</i> entregues</a>
+                            <li><a href=""><i>Mockups</i></a>
+                            <li><a href="">Modelo conceitual do banco de dados</a>
+                            <li><a href=""><i>Burndown</i></a>
                      </ul>
                      <li><a href="">Integrantes da equipe</a>
               </ul>
-              <h3>Benefícios da nossa plataforma</h3>
-              <h3>:hourglass_flowing_sand: Entregas</h3>
-              <h4>Primeira entrega :clock12:</h4>
+              <h2 align="center">:rainbow::spiral_calendar: Primeira entrega :star:</h3>
+              <h3>:question: O que fizemos?</h2>
               <p align="justify"></p>
-              <img src="card" width="550px" height="300px">
-              <h4>Segunda entrega :clock4:</h4>
+              <img src="card">
+              <h3>:grey_question: Por quê?</h2>
               <p align="justify"></p>
-              <img src="card" width="550px" height="300px">
-              <h4>Terceira entrega :clock8:</h4>
+              <h2 align="center">:desktop_computer::computer_mouse: AirplaneDocGenerator em funcionamento :checkered_flag:</h3>
+              <p align="center"><img src="gif"></p>
+              <h2 align="center"><i>User stories</i> entregues :pilot:</h3>
               <p align="justify"></p>
-              <img src="card" width="550px" height="300px">
-              <h4>Quarta entrega :clock12:</h4>
+              <img src="userstories">
+              <h2 align="center">:bookmark_tabs: <i>Mockups</i> :memo:</h3>
+              <img src="mockups">
+              <h2 align="center">Modelo conceitual do banco de dados :open_file_folder:</h3>
+              <img src="bd">
+              <h2 align="center"><i>Burndown</i> :date::chart_with_downwards_trend:</h3>
               <p align="justify"></p>
-              <img src="card" width="550px" height="300px">
-              <h3>Cronograma de Entregas</h3>
-              <table>
-                     <thead>
-                            <th width=100px>Entrega</th>
-                            <th width=500px>Descrição</th>
-                            <th width=45px>Data</th>
-                            <th width=45px>Link</th>
-                     </thead>
-                     <tr>
-                            <td><p align="center">Entrega 1</p></td>
-                            <td><p align="justify">O usuário poderá acessar o sistema e criar projetos.</p></td>
-                            <td><p align="center">19/09</p></td>
-                            <td><p align="center"><a href="">Visualizar</a></p></td>
-                     </tr>
-                     <tr>
-                            <td><p align="center">Entrega 2</p></td>
-                            <td><p align="justify">A definir.</p></td>
-                            <td><p align="center">10/10</p></td>
-                            <td><p align="center"><a href="">Visualizar</p></td>
-                     </tr>
-                     <tr>
-                            <td><p align="center">Entrega 3</p></td>
-                            <td><p align="justify">A definir.</p></td>
-                            <td><p align="center">07/11</p></td>
-                            <td><p align="center"><a href="">Visualizar</p></td>
-                     </tr>
-                     <tr>
-                            <td><p align="center">Entrega 4</p></td>
-                            <td><p align="justify">A definir.</p></td>
-                            <td><p align="center">28/11</p></td>
-                            <td><p align="center"><a href="">Visualizar</p></td>
-                     </tr>
-              </table>
+              <img src="burndown">
               <h2>Integrantes da equipe :girl::boy:</h2>
               <ul>
                      <li><a href="https://www.linkedin.com/in/b%C3%A1rbara-port-402158198/">Bárbara dos Santos Port</a> (<i>Scrum Master</i>)
