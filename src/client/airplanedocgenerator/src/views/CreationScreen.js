@@ -3,6 +3,8 @@ import React from "react";
 import CardHeader from "../assets/components/CardHeader";
 import CardOption from "../assets/components/CardOption";
 
+import { notification } from "../assets/components/Notifications";
+
 import { getBackgroundImage } from "../utils/pagesUtils";
 
 /**
@@ -67,7 +69,7 @@ class CreationScreen extends React.Component {
      * @author Carolina Margiotti
      */
     goToImportProjectPage() {
-        console.log("Indo para página de importar documento");
+        notification("info", "Aguarde um pouco!", "Essa funcionalidade estará disponível em breve!");
     }
 
     /**

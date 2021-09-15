@@ -39,16 +39,16 @@ class Tooltip extends React.Component {
      */
     render() {
         return (
-            <div class="group cursor-help inline-block relative">
+            <div className="group cursor-help inline-block relative">
                 <div
                     id="tooltip"
-                    class="opacity-0 absolute z-10 w-36 text-center bottom-full left-1/2 transform -translate-x-1/2"
+                    className="opacity-0 absolute z-10 w-36 text-center bottom-full left-1/2 transform -translate-x-1/2"
                 >
-                    <div class="relative mx-2">
-                        <div class="bg-black text-white text-xs rounded py-1 px-4 right-0 bottom-full">
+                    <div className="relative mx-2">
+                        <div className="bg-black text-white text-xs rounded py-1 px-4 right-0 bottom-full">
                             {this.text}
                             <svg
-                                class="absolute h-3 w-full left-0 top-full"
+                                className="absolute h-3 w-full left-0 top-full"
                                 viewBox="0 0 255 255"
                             >
                                 <polygon points="0,0 127.5,127.5 255,0" />
