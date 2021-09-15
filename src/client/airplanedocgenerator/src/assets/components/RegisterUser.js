@@ -4,6 +4,7 @@ import Button from "./Button";
 import SimpleInput from "./SimpleInput";
 
 import ServerRequester from "../../utils/ServerRequester";
+import { notification } from "./Notifications";
 
 
 
@@ -38,19 +39,34 @@ class RegisterUser extends React.Component{
      * @param {Event} event Evento da submissão do formulário
      * @author Rafael Furtado
      */
-    registerNewUser(event){
+    async registerNewUser(event){
         event.preventDefault();
 
-        //let serverRequester = new ServerRequester();
+        let serverRequester = new ServerRequester();
 
-        //let userName = document.getElementById(this.userNameInputId).value;
-        //let userEmail = document.getElementById(this.userEmailInputId).value;
-        //let userPassword = document.getElementById(this.userPasswordInputId).value;
+        let userName = document.getElementById(this.userNameInputId).value;
+        let userEmail = document.getElementById(this.userEmailInputId).value;
+        let userPassword = document.getElementById(this.userPasswordInputId).value;
 
-        //let isAdmin = document.getElementById(this.userAdminCheckBoxId).checked;
+        let isAdmin = document.getElementById(this.userAdminCheckBoxId).checked;
 
-        // Essa função ainda está incompleta e será finalizada quando o serviço de cadastro for feito no servidor
-        //serverRequester.doPost();
+        let newUserForm = {
+            nome: userName,
+            senha: userPassword,
+            email: userEmail,
+            admin: isAdmin
+        }
+
+        let response = await serverRequester.doPost("/user/register", newUserForm);
+
+        if(response["responseJson"] === true){
+            notification("success", "Sucesso!", "O usuário foi cadastrado com sucesso! 🥳");
+
+        }else{
+            notification("error", "Ops!", "Não foi possível cadastrar o usuário, talvez o e-mail já esteja em uso 😥");
+
+        }
+
     }
 
     /**
@@ -78,8 +94,8 @@ class RegisterUser extends React.Component{
     getRegisterComponent(){
         let component = (
             <div id={this.id} className="z-10 w-full h-full absolute flex flex-row items-center justify-center backdrop-filter backdrop-blur-blurLogin" onClick={this.close}>
-                <form className="bg-white w-loginFormW h-loginFormH flex flex-col justify-evenly items-center p-5" onSubmit={this.registerNewUser}>
-                    <label className="text-accent text-2xl text-center font-bold">Cadastro de novo usuário</label>
+                <form className="bg-white w-loginFormW h-loginFormH flex flex-col justify-evenly items-center p-5 shadow-registerUser" onSubmit={this.registerNewUser}>
+                    <label className="text-accent text-2xl text-center font-bold select-none">Cadastro de novo usuário</label>
 
                     <div className="flex flex-col items-center justify-center">
                         <SimpleInput type="text" iconName="user" id={this.userNameInputId} name={this.userNameInputId} placeHolder="Nome"/>

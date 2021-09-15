@@ -6,7 +6,8 @@ class TopBarMenu extends React.Component{
         super(props);
 
         this.loggout = this.loggout.bind(this);
-
+        this.openRegisterUserMenu = this.openRegisterUserMenu.bind(this);
+        
     }
 
     loggout(){
@@ -15,7 +16,8 @@ class TopBarMenu extends React.Component{
     }
 
     openRegisterUserMenu(){
-        console.log("aaaaaaaa");
+        this.props.setShowRegisterUser(true);
+
     }
 
     getTopBarMenu(){

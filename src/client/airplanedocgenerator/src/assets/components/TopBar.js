@@ -125,7 +125,9 @@ class TopBar extends React.Component{
         let userLoggedFunctions =
         <div className="flex flex-row items-center h-full w-auto">
             {this.state["showMenu"] && 
-                <TopBarMenu adminOptions={this.props.userLoggedType} loggoutFunction={this.props.loggoutFunction}/>
+                <TopBarMenu adminOptions={this.props.userLoggedType} 
+                            loggoutFunction={this.props.loggoutFunction}
+                            setShowRegisterUser={this.setRegisterUserState}/>
             }
 
             <div className={this.iconBoxStyle}
