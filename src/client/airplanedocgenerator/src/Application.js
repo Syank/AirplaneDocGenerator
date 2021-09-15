@@ -4,6 +4,7 @@ import HomeScreen from "./views/HomeScreen";
 import CreationScreen from "./views/CreationScreen";
 import LoginScreen from "./views/LoginScreen";
 import NewProjectScreen from "./views/NewProjectScreen";
+import ServerRequester from "./utils/ServerRequester";
 
 
 
@@ -16,9 +17,23 @@ class Application extends React.Component {
     constructor() {
         super();
 
-        this.state = { pageToRender: "login" };
+        this.state = {
+            pageToRender: "login",
+            userLogged: false,
+            isUserAdmin: false
+        };
+
+        this.previousPageMap = {
+            "creation-screen": "home",
+            "new-project-screen": "creation-screen"
+        };
 
         this.setPageToRender = this.setPageToRender.bind(this);
+        this.setUserLoggedState = this.setUserLoggedState.bind(this);
+        this.returnToPreviousPage = this.returnToPreviousPage.bind(this);
+        this.setUserLoggedType = this.setUserLoggedType.bind(this);
+        this.logoutUser = this.logoutUser.bind(this);
+
     }
 
     /**
@@ -67,6 +82,7 @@ class Application extends React.Component {
      */
     setPageToRender(pageName) {
         this.setState({ pageToRender: pageName });
+
     }
 
     /**
@@ -78,10 +94,25 @@ class Application extends React.Component {
      */
     getLoginScreen() {
         let loginScreen = (
-            <LoginScreen navigation={this.setPageToRender}></LoginScreen>
+            <LoginScreen navigation={this.setPageToRender} 
+                         setUserLoggedState={this.setUserLoggedState}
+                         setUserLoggedType={this.setUserLoggedType}></LoginScreen>
         );
 
         return loginScreen;
+    }
+
+    /**
+     * Altera o estado do tipo de usuário logado
+     * 
+     * Esta função é usada pelo menu da topbar para decidir o que deverá ser exibido
+     * 
+     * @param {boolean} isAdmin Valor booleando determinando se o usuário logado é administrador ou não
+     * @author Rafael Furtado
+     */
+    setUserLoggedType(isAdmin){
+        this.setState({isUserAdmin: isAdmin});
+
     }
 
     /**
@@ -137,13 +168,66 @@ class Application extends React.Component {
     getApplicationView() {
         let applicationView = (
             <div className="App w-screen h-screen flex flex-col overflow-hidden">
-                <TopBar></TopBar>
+                <TopBar navigation={this.setPageToRender} 
+                        userLoggedState={this.state["userLogged"]}
+                        returnToPreviousPage={this.returnToPreviousPage}
+                        userLoggedType={this.state["isUserAdmin"]}
+                        loggoutFunction={this.logoutUser}>
+                </TopBar>
 
                 {this.getPageToDisplay()}
             </div>
         );
 
         return applicationView;
+    }
+
+    /**
+     * Realiza o logout do usuário do sistema e retorna para a página de login
+     * 
+     * @author Rafael Furtado
+     */
+    async logoutUser(){
+        let serverRequester = new ServerRequester("http://localhost:8080");
+
+        let response = await serverRequester.doGet("/authentication/logout");
+
+        if(response["responseJson"] === true){
+            console.log("Redirecionando para login");
+
+        }else{
+            console.log("O servidor está offline 😥\nVocê será redirecionado para a página de login");
+        }
+
+        this.setState({userLogged: false, isUserAdmin: false, pageToRender: "login"})
+
+    }
+
+    /**
+     * Retorna para a página anterior
+     * 
+     * @author Rafael Furtado
+     */
+    returnToPreviousPage(){
+        let actualPAge = this.state["pageToRender"];
+        let previousPage = this.previousPageMap[actualPAge];
+
+        if(previousPage !== undefined){
+            this.setPageToRender(previousPage);
+
+        }
+        
+    }
+
+    /**
+     * Altera do estado de se o usuário está logado ou não
+     * 
+     * @param {boolean} state Valor booleano para determinado se o usuário está logado ou não
+     * @author Rafael Furtado
+     */
+    setUserLoggedState(state){
+        this.setState({userLogged: state});
+
     }
 
     /**

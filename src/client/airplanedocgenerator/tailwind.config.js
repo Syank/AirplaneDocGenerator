@@ -11,12 +11,18 @@ module.exports = {
                 loginFormShadow: "10px 10px 0px -2px rgba(102,126,234,0.5)",
                 topBarShadow: "0px 2px 4px rgba(0, 0, 0, 0.2)",
                 card: "6px 8px #5E74D6",
+                registerUser: "0px 0px 30px 20px rgba(0,0,0,0.2);"
             },
             width: {
                 loginFormW: "300px",
+                topBarMenuW: "160px"
             },
             height: {
                 loginFormH: "400px",
+                topBarMenuH: "fit-content"
+            },
+            minHeight: {
+                topBarMenuMinH: "40px"
             },
             colors: {
                 accent: "#5E74D6",
@@ -28,6 +34,8 @@ module.exports = {
                 topBar: "#5E74D6",
                 hoverTopBarButton: "#8498f0",
                 activeTopBarButton: "#acbbff",
+                topBarMenu: "#5366bd",
+                topBarMenuHover: "#5e96d6"
             },
             fontSize: {
                 "20px": "20px",

@@ -38,6 +38,10 @@ export function withConfirmation(cTitle, cMessage, cIcon, sOption) {
                switch (sOption) {
                     case "example":
                          notification("success", "Uhu!", "Exemplo exibido!");
+                         break;
+                    
+                    default:
+                         break;
                }
           }
      })

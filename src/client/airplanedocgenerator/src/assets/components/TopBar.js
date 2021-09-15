@@ -11,6 +11,7 @@ import { faTimes } from '@fortawesome/free-solid-svg-icons'
 
 import { white } from "tailwindcss/colors";
 import RegisterUser from "./RegisterUser";
+import TopBarMenu from "./TopBarMenu";
 
 
 
@@ -23,8 +24,8 @@ import RegisterUser from "./RegisterUser";
  * @author Rafael Furtado
  */
 class TopBar extends React.Component{
-    constructor(){
-        super();
+    constructor(props){
+        super(props);
 
         this.returnIcon = <FontAwesomeIcon icon={faArrowLeft} color={white}/>;
         this.homeIcon = <FontAwesomeIcon icon={faHome} color={white}/>;
@@ -38,8 +39,15 @@ class TopBar extends React.Component{
                           + "active:bg-activeTopBarButton";
 
         this.setRegisterUserState = this.setRegisterUserState.bind(this);
+        this.returnToHomePage = this.returnToHomePage.bind(this);
+        this.returnToPreviousPage = this.returnToPreviousPage.bind(this);
+        this.toggleTopBarMenu = this.toggleTopBarMenu.bind(this);
+        this.minimizeApplication = this.minimizeApplication.bind(this);
 
-        this.state = {showRegisterUser: false}
+        this.state = {
+            showRegisterUser: false, 
+            showMenu: false
+        };
 
     }
 
@@ -49,7 +57,7 @@ class TopBar extends React.Component{
      * @author Rafael Furtado
      */
     closeApplication(){
-        console.log("Fechando aplicação");
+        window.electron.windowControll.close();
 
     }
 
@@ -59,7 +67,7 @@ class TopBar extends React.Component{
      * @author Rafael Furtado
      */
     minimizeApplication(){
-        console.log("Minimizando aplicação");
+        window.electron.windowControll.minimize();
 
     }
 
@@ -68,8 +76,8 @@ class TopBar extends React.Component{
      * 
      * @author Rafael Furtado
      */
-    openTopBarMenu(){
-        console.log("Abrindo menu da top bar");
+    toggleTopBarMenu(){
+       this.setState({showMenu: !this.state["showMenu"]});
 
     }
 
@@ -79,7 +87,7 @@ class TopBar extends React.Component{
      * @author Rafael Furtado
      */
     returnToHomePage(){
-        console.log("Voltando para a página inicial");
+        this.props.navigation("home");
 
     }
 
@@ -89,7 +97,7 @@ class TopBar extends React.Component{
      * @author Rafael Furtado
      */
     returnToPreviousPage(){
-        console.log("Voltando para página anterior");
+        this.props.returnToPreviousPage();
 
     }
 
@@ -113,8 +121,14 @@ class TopBar extends React.Component{
     getUserLoggedFunctions(){
         let userLoggedFunctions =
         <div className="flex flex-row items-center h-full w-auto">
+            {this.state["showMenu"] && 
+                <TopBarMenu adminOptions={this.props.userLoggedType} 
+                            loggoutFunction={this.props.loggoutFunction}
+                            setShowRegisterUser={this.setRegisterUserState}/>
+            }
+
             <div className={this.iconBoxStyle}
-                onClick={this.openTopBarMenu}>
+                onClick={this.toggleTopBarMenu}>
                 {this.menuIcon}
             </div>
             <div className={this.iconBoxStyle}
@@ -138,14 +152,12 @@ class TopBar extends React.Component{
      * @author Rafael Furtado
      */
     getTopBar(){
-        let userLogger = this.isUserLogged();
-
         let topBarBox = (
             <div>
                 <div className="bg-topBar w-screen h-8 flex justify-between items-center shadow-topBarShadow">
                     <div className="h-full w-auto flex flex-row">
                     {// Caso tenha um usuário logado, chama a função que retorna os botões das funcionalidades extras
-                        userLogger && 
+                        this.props["userLoggedState"] && 
                             this.getUserLoggedFunctions()
                     }
                     </div>
@@ -180,7 +192,13 @@ class TopBar extends React.Component{
      * @author Rafael Furtado
      */
     isUserLogged(){
-        return false;
+        let isLogged = sessionStorage.getItem("isLogged");
+
+        if(isLogged === null){
+            return false;
+        }
+
+        return isLogged;
     }
 
     /**
@@ -192,7 +210,9 @@ class TopBar extends React.Component{
      * @author Rafael Furtado
      */
     render(){
-        return this.getTopBar();
+        let comp = this.getTopBar();
+
+        return comp;
     }
 
 }

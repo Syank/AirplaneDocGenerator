@@ -101,7 +101,12 @@ class LoginScreen extends React.Component {
             userPassword
         );
 
-        if (authenticated) {
+        if(authenticated){
+            let isAdmin = await this.isUserAdmin();
+            
+            this.props.setUserLoggedState(true);
+            this.props.setUserLoggedType(isAdmin);
+            
             this.goToHomePage();
         }
         else {
@@ -111,6 +116,18 @@ class LoginScreen extends React.Component {
                 "Verifique o e-mail e a senha e tente novamente!"
             );
         }
+    }
+
+    async isUserAdmin(){
+        let serverRequester = new ServerRequester("http://localhost:8080");
+
+        let response = await serverRequester.doGet("/authentication/isUserAdmin");
+
+        if(response["responseJson"] === true){
+            return true;
+        }
+
+        return false;
     }
 
     /**
