@@ -7,6 +7,8 @@ import { notification } from "../assets/components/Notifications";
 
 import { getBackgroundImage } from "../utils/pagesUtils";
 
+
+
 /**
  * Uma classe de "view" que representa a tela de login da aplicação
  *
@@ -37,6 +39,8 @@ class HomeScreen extends React.Component {
 
         this.goToCreateNewProjectPage =
             this.goToCreateNewProjectPage.bind(this);
+        
+        this.goToSelectProjectPage = this.goToSelectProjectPage.bind(this);
     }
 
     /**
@@ -72,8 +76,10 @@ class HomeScreen extends React.Component {
      *
      * @author Rafael Furtado
      */
-    goToEditProjectPage() {
-        notification("info", "Aguarde um pouco!", "Essa funcionalidade estará disponível em breve!");
+    goToSelectProjectPage() {
+        this.props.navigation("selectProject");
+
+        //notification("info", "Aguarde um pouco!", "Essa funcionalidade estará disponível em breve!");
     }
 
     /**
@@ -125,7 +131,7 @@ class HomeScreen extends React.Component {
         let cardOption2 = this.getCardOption(
             this.cardOptionTexts["editProject"],
             this.cardOptionButtonsText["editProject"],
-            this.goToEditProjectPage,
+            this.goToSelectProjectPage,
             "edit"
         );
         let cardOption3 = this.getCardOption(

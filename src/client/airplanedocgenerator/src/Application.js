@@ -5,6 +5,7 @@ import CreationScreen from "./views/CreationScreen";
 import LoginScreen from "./views/LoginScreen";
 import NewProjectScreen from "./views/NewProjectScreen";
 import ServerRequester from "./utils/ServerRequester";
+import SelectProjectScreen from "./views/SelectProjectScreen";
 
 
 
@@ -62,6 +63,10 @@ class Application extends React.Component {
                 pageToDisplay = this.getNewProjectScreen();
 
                 break;
+            case "selectProject":
+                pageToDisplay = this.getSelectProjectScreen();
+                
+                break;
             default:
                 pageToDisplay = this.getLoginScreen();
 
@@ -69,6 +74,14 @@ class Application extends React.Component {
         }
 
         return pageToDisplay;
+    }
+
+    getSelectProjectScreen(){
+        let screen = (
+            <SelectProjectScreen></SelectProjectScreen>
+        );
+
+        return screen
     }
 
     /**
