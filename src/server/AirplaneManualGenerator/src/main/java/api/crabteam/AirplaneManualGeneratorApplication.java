@@ -37,12 +37,12 @@ public class AirplaneManualGeneratorApplication implements CommandLineRunner {
 		}
 		
 		Projeto projeto1 = new Projeto("ABO-1234", "Um projeto qualquer apenas para teste");
-		Projeto projeto2 = new Projeto("AOC-1231", "Um projeto qualquer apenas para teste");
-		Projeto projeto3 = new Projeto("ATC-1232", "Um projeto qualquer apenas para teste");
-		Projeto projeto4 = new Projeto("ACC-1233", "Um projeto qualquer apenas para teste");
-		Projeto projeto5 = new Projeto("ACC-1235", "Um projeto qualquer apenas para teste");
-		Projeto projeto6 = new Projeto("ADC-1236", "Um projeto qualquer apenas para teste");
-		Projeto projeto7 = new Projeto("ADC-1237", "Um projeto qualquer apenas para teste");
+		Projeto projeto2 = new Projeto("AOC-2851", "Um projeto qualquer apenas para teste");
+		Projeto projeto3 = new Projeto("ATC-7412", "Um projeto qualquer apenas para teste");
+		Projeto projeto4 = new Projeto("ACC-5233", "Um projeto qualquer apenas para teste");
+		Projeto projeto5 = new Projeto("BCC-1235", "Um projeto qualquer apenas para teste");
+		Projeto projeto6 = new Projeto("ADC-2686", "Um projeto qualquer apenas para teste");
+		Projeto projeto7 = new Projeto("ZDC-1987", "Um projeto qualquer apenas para teste");
 		
 		projRep.save(projeto1);
 		projRep.save(projeto2);

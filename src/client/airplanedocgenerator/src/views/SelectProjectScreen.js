@@ -30,6 +30,7 @@ class SelectProjectScreen extends React.Component {
             },
             projectsList: [[]],
             searchList: [[]],
+            originalProjectsList: [[]],
             page: 1,
             search: ""
         }
@@ -69,7 +70,7 @@ class SelectProjectScreen extends React.Component {
 
         }
         
-        this.setState({projectsList: projectsList});
+        this.setState({projectsList: projectsList, originalProjectsList: projects});
 
     }
 
@@ -205,7 +206,7 @@ class SelectProjectScreen extends React.Component {
 
         let searchList = this.getSearchList(valueToSearch);
 
-        this.setState({search: valueToSearch, searchList: searchList, page: 1});
+        this.setState({search: valueToSearch, projectsList: searchList, page: 1});
 
     }
 
@@ -214,31 +215,29 @@ class SelectProjectScreen extends React.Component {
 
         let projectsByPage = [];
 
-        for (let i = 0; i < this.state["projectsList"].length; i++) {
-            const projectsInPage = this.state["projectsList"][i];
-        
-            for (let x = 0; x < projectsInPage.length; x++) {
-                const project = projectsInPage[x];
+        let originalList = this.state["originalProjectsList"];
 
-                if(!project["nome"].includes(valueToSearch.toUpperCase())){
-                    continue;
-                }
-                
-                if(projectsByPage.length < 5){
-                    projectsByPage.push(project);
-    
-                }else{
-                    projectsList.push(project);
-    
-                    projectsByPage = [project];
-    
-                }
+        for (let i = 0; i < originalList.length; i++) {
+            const project = originalList[i];
+            const projectName = project["nome"];
+
+            if (valueToSearch !== "" && !projectName.includes(valueToSearch.toUpperCase())) {
+                continue;
+            }
+
+            if (projectsByPage.length < 5) {
+                projectsByPage.push(project);
+
+            } else {
+                projectsList.push(projectsByPage);
+
+                projectsByPage = [project];
 
             }
 
         }
 
-        if(projectsByPage.length > 0){
+        if (projectsByPage.length > 0) {
             projectsList.push(projectsByPage);
 
         }
@@ -276,12 +275,6 @@ class SelectProjectScreen extends React.Component {
 
     getProjectsToShow(){
         let page = this.state["page"] - 1;
-
-        let searchCriteria = this.state["search"];
-
-        if(searchCriteria !== ""){
-            return this.state["searchList"][page];
-        }
 
         let projectsToShow = this.state["projectsList"][page];
 
