@@ -15,11 +15,13 @@ module.exports = {
             },
             width: {
                 loginFormW: "300px",
-                topBarMenuW: "160px"
+                topBarMenuW: "160px",
+                selectProjectW: "650px"
             },
             height: {
                 loginFormH: "400px",
-                topBarMenuH: "fit-content"
+                topBarMenuH: "fit-content",
+                selectProjectH: "360px"
             },
             minHeight: {
                 topBarMenuMinH: "40px"

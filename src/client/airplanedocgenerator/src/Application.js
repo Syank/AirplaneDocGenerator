@@ -5,6 +5,7 @@ import CreationScreen from "./views/CreationScreen";
 import LoginScreen from "./views/LoginScreen";
 import NewProjectScreen from "./views/NewProjectScreen";
 import ServerRequester from "./utils/ServerRequester";
+import SelectProjectScreen from "./views/SelectProjectScreen";
 
 
 
@@ -25,7 +26,8 @@ class Application extends React.Component {
 
         this.previousPageMap = {
             "creation-screen": "home",
-            "new-project-screen": "creation-screen"
+            "new-project-screen": "creation-screen",
+            "selectProject": "home"
         };
 
         this.setPageToRender = this.setPageToRender.bind(this);
@@ -62,6 +64,10 @@ class Application extends React.Component {
                 pageToDisplay = this.getNewProjectScreen();
 
                 break;
+            case "selectProject":
+                pageToDisplay = this.getSelectProjectScreen();
+                
+                break;
             default:
                 pageToDisplay = this.getLoginScreen();
 
@@ -69,6 +75,14 @@ class Application extends React.Component {
         }
 
         return pageToDisplay;
+    }
+
+    getSelectProjectScreen(){
+        let screen = (
+            <SelectProjectScreen></SelectProjectScreen>
+        );
+
+        return screen
     }
 
     /**
