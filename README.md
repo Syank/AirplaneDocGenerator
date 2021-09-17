@@ -10,11 +10,11 @@
                      <img src="https://img.shields.io/badge/Spring_Boot-F2F4F9?style=for-the-badge&logo=spring-boot">
                      <img src="https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white">
               </p>
-              <h2 section="airplanedocgenerator">AirplaneDocGenerator :airplane::card_index_dividers::computer:</h2>
-              <p align="justify">Nosso cliente possui a necessidade de automatizar a geração de manuais para as suas aeronaves, pois, atualmente, o processo é feito de forma manual.</p>
+              <h2 section="">AirplaneDocGenerator :airplane::card_index_dividers::computer:</h2>
+              <p align="justify">Nosso cliente possui a necessidade de automatizar a geração de manuais para as suas aeronaves, pois, atualmente, o processo é feito de forma manual, o que pode tomar muito tempo em razão da complexidade para a montagem deles e, também, pode aumentar as chances de erros. Nossa aplicação tem como objetivo resolver esses problemas através de uma interface simples e intuitiva que agilizará o processo.</p>
               <h3>:pushpin: Índice</h3>
               <ul>
-                     <li><a href="oquee">O que é o AirplaneDocGenerator?</a>
+                     <li><a href="">O que é o AirplaneDocGenerator?</a>
                      <ul>
                             <li><a href="">Primeira entrega</a>
                             <li><a href="">AirplaneDocGenerator em funcionamento</a>
