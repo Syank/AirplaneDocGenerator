@@ -37,6 +37,7 @@ O projeto pode ser dividido em dois, a parte do cliente e a do servidor. Este gu
   - JDK 16
   - IDE Eclipse *(Configurado para JDK 16 como padrão)*
   - PostgresSQL 13
+    - É necessário criar um banco de dados para o projeto
 
 - Nota: Para o projeto do servidor, foi adotada a IDE Eclipse como padrão para seu desenvolvimento e execução;
 
@@ -59,3 +60,10 @@ O projeto pode ser dividido em dois, a parte do cliente e a do servidor. Este gu
 - Você notará que diversas saídas aparecerão no console, caso nenhuma exceção seja lança, o projeto foi configurado adequadamente!
 
 - **Atenção**, o projeto exige a versão 16 do Java, certifique-se de que o padrão do seu Eclipse esteja configurado para o Java 16, caso contrário, vá ao Build Path do projeto e altere manualmente;
+
+
+#### Considerações
+
+Os projetos são, de certa forma, independentes, e podem ser executados separadamente, contúdo, o cliente envia requisições ao servidor, então para o desenvolvimento e utilização adequada é necessário que ambos estejam em execução, o servidor no Eclipse e o cliente no VSCode
+
+No cliente, somente mudanças nos componentes do React são atualizados automáticamente e renderizados na tela após salvar os arquivos, caso alguma alteração seja feita em algo do Electron, será necessário parar a execução no terminal e iniciar novamente para que as mudanças sejam aplicadas.
