@@ -31,7 +31,7 @@
                      <h2 align="center">:rainbow::spiral_calendar: Primeira entrega :star:</h3>
                      <h3>:question: O que fizemos?</h2>
                      <p align="justify">A primeira entrega conteve todo o planejamento das <i>sprints</i> do nosso projeto, além de termos desenvolvido as primeiras funcionalidades, que foram planejadas e validadas. Os usuários já poderão acessar o sistema e podem criar um novo projeto. Todos os projetos criados também serão listados a eles.</p>
-                     <img src="card">
+                     <img src="https://raw.githubusercontent.com/Syank/AirplaneDocGenerator/main/doc/cards/sprint%201/card01.png" width="550px" height="300px">
                      <h3>:grey_question: Por quê?</h2>
                      <p align="justify">Nossa plataforma seguirá o processo que usuário realiza desde a criação do projeto até a geração do arquivo formado. Portanto, decidimos e validamos que a primeira entrega de valor englobaria a criação de um projeto. Sendo assim, a cada entrega, o processo como um todo evoluirá.</p>
               </section>
