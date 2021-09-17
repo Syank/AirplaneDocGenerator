@@ -58,6 +58,7 @@
                      <img src="burndown">
               </section>
               <section id="equipe">
+                     <h2>Integrantes da equipe :girl::boy:</h2>
                      <ul>
                             <li><a href="https://www.linkedin.com/in/b%C3%A1rbara-port-402158198/">Bárbara dos Santos Port</a> (<i>Scrum Master</i>)
                             <li><a href="https://www.linkedin.com/in/rafael-furtado-613a9712a/">Rafael Furtado Rodrigues dos Santos</a> (<i>Product Owner</i>)
@@ -66,6 +67,5 @@
                             <li><a href="https://www.linkedin.com/in/francisco-cardoso-1954651b2/">Francisco Norberto Cardoso Neto</a> (<i>Development Team</i>)
                      </ul>
               </section>
-              <h2>Integrantes da equipe :girl::boy:</h2>
        </body>
 </html>
