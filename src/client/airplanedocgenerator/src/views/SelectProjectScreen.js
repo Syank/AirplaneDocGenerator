@@ -11,12 +11,11 @@ import ServerRequester from "../utils/ServerRequester";
 
 
 /**
- * Uma classe de "view" que representa a tela de login da aplicação
+ * Classe de componente que representa a tela de listagem e seleção de manuais no sistema
  *
  * @author Rafael Furtado
  */
 class SelectProjectScreen extends React.Component {
-    // eslint-disable-next-line no-useless-constructor
     constructor(props) {
         super(props);
 
@@ -43,6 +42,12 @@ class SelectProjectScreen extends React.Component {
 
     }
 
+    /**
+     * Função do ciclo de vida dos componentes do React, será chamado apenas uma vez, quando o
+     * componente for renderizado na tela
+     * 
+     * @author Rafael Furtado
+     */
     async componentDidMount(){
         let projects = await this.getProjecsList();
 
@@ -74,6 +79,12 @@ class SelectProjectScreen extends React.Component {
 
     }
 
+    /**
+     * Faz uma requisição ao servidor para obter a lista de todos os projetos
+     * 
+     * @returns Retorna a lista de projetos no sistema
+     * @author Rafael Furtado
+     */
     async getProjecsList(){
         let serverRequester = new ServerRequester("http://localhost:8080");
 
@@ -110,18 +121,18 @@ class SelectProjectScreen extends React.Component {
     }
 
     /**
-     * Constrói adequadamente o componente que representa a página de exibição de manual
+     * Constrói adequadamente o componente que representa a página de exibição da lista de manuais
      *
-     * @returns Retorna o componente que representa a exibição de manual
+     * @returns Retorna o componente que representa a página de exibição da lista de manuais
      * @author Carolina Margiotti
      */
-    getDisplayScreen() {
-        let displayScreen = (
+    getSelectProjectScreen() {
+        let selectProjectScreen = (
             <div id="contentDisplay" className="w-full h-full">
                 {getBackgroundImage()}
 
                 <div
-                    id="homeScreen"
+                    id="selectProjectScreen"
                     className="w-full h-full flex flex-col items-center justify-center relative select-none"
                 >
                     <div className="w-full h-2/4 flex flex-row justify-center items-start">
@@ -134,9 +145,15 @@ class SelectProjectScreen extends React.Component {
             </div>
         );
 
-        return displayScreen;
+        return selectProjectScreen;
     }
 
+    /**
+     * Constrói a seção onde será exibido a lista de manuais e suas informações
+     * 
+     * @returns Retorna o container onde será exibido a lista de manuais no sistema
+     * @author Rafael Furtado
+     */
     getSelectContainer(){
         let container = (
             <div className="text-xl w-selectProjectW h-selectProjectH bg-white flex flex-row items-center px-6 py-2 shadow-2xl">
@@ -149,6 +166,12 @@ class SelectProjectScreen extends React.Component {
         return container;
     }
 
+    /**
+     * Constrói a lista em si de onde os manuais serão exibidos para serem selecionados
+     * 
+     * @returns Retorna o lado do container de manuais onde está a lista de manuais
+     * @author Rafael Furtado
+     */
     getListSide(){
         let container = (
             <div className="w-full h-full flex flex-col justify-between pr-5">
@@ -179,6 +202,11 @@ class SelectProjectScreen extends React.Component {
         return container;
     }
 
+    /**
+     * Retorna para a página anterior na lista de seleção de manuais
+     * 
+     * @author Rafael Furtado
+     */
     previousPage(){
         let actualPage = this.state["page"];
         
@@ -188,6 +216,11 @@ class SelectProjectScreen extends React.Component {
         }
     }
 
+    /**
+     * Avança para a próxima página na lista de seleção de manuais
+     * 
+     * @author Rafael Furtado
+     */
     nextPage(){
         let actualPage = this.state["page"];
         let maxPage = this.state["projectsList"].length;
@@ -199,6 +232,11 @@ class SelectProjectScreen extends React.Component {
 
     }
 
+    /**
+     * Realiza a busca de manuais de acordo com o texto escrito no input de busca
+     * 
+     * Após a busca, o componente será renderizado novamente para exibir o resultado
+     */
     search(){
         let searchInput = document.getElementById("projectSearch");
 
@@ -210,6 +248,13 @@ class SelectProjectScreen extends React.Component {
 
     }
 
+    /**
+     * Utilizando o texto de busca, filtra a lista de manuais a serem exibidos
+     * 
+     * @param {String} valueToSearch Valor digitado no input de pesquisa
+     * @returns Retorna uma nova lista de manuais a serem exibidos de acordo com o parâmetro de busca
+     * @author Rafael Furtado
+     */
     getSearchList(valueToSearch){
         let projectsList = [];
 
@@ -245,6 +290,12 @@ class SelectProjectScreen extends React.Component {
         return projectsList;
     }
 
+    /**
+     * Constrói o lado do compononte onde estará disponível dados e utilidades para gerir a lista de manuais
+     * 
+     * @returns Retorna o lado do container de manuais no qual será exibido os campos de busca e informações
+     * @author Rafael Furtado
+     */
     getInformationSide(){
         let container = (
             <div className=" w-full h-full flex flex-col items-center justify-between pt-5 pb-5">
@@ -263,6 +314,12 @@ class SelectProjectScreen extends React.Component {
         return container;
     }
 
+    /**
+     * Constrói o componente de rodapé onde exibi a quantia de páginas de manuais que podem ser vistos
+     * 
+     * @returns Retorna o componente que serve de páginação da lista de manuais
+     * @author Rafael Furtado
+     */
     getPaginationElement(){
         let maxPage = this.state["projectsList"].length;
 
@@ -273,6 +330,11 @@ class SelectProjectScreen extends React.Component {
         return pagination;
     }
 
+    /**
+     * Através da variável de estado "page", define quais serão os manuais que deverão ser exibidos para a página
+     * 
+     * @returns Retorna a lista de manuais que serão exibidas para a página em questão
+     */
     getProjectsToShow(){
         let page = this.state["page"] - 1;
 
@@ -281,6 +343,12 @@ class SelectProjectScreen extends React.Component {
         return projectsToShow;
     }
 
+    /**
+     * Constrói os componentes no qual o usuário pode interagir e ver qual manual representa
+     * 
+     * @returns Retorna os componentes que representam os manuais a serem exibidos na lista
+     * @author Rafael Furtado
+     */
     populateList(){
         let projects = [];
 
@@ -306,6 +374,12 @@ class SelectProjectScreen extends React.Component {
         return projects;
     }
 
+    /**
+     * Seleciona o manual em razão de seu nome, para exibir mais informações sobre ele
+     * 
+     * @param {String} name Nome do manual a ser selecionado
+     * @author Rafael Furtado
+     */
     setSelectedItem(name){
         let project = this.getProjectDataByName(name);
 
@@ -313,11 +387,24 @@ class SelectProjectScreen extends React.Component {
 
     }
 
+    /**
+     * Deleta o manual do sistema
+     * 
+     * @param {String} name Nome do manual a ser deletado
+     * @author Rafael Furtado
+     */
     deleteProject(name){
-        console.log(name);
+        notification("info", "Um momento! 🤔", "Este recurso ainda não está disponível no momento")
 
     }
 
+    /**
+     * Através do nome, retorna as informações do manual a serem exibidas ao usuário
+     * 
+     * @param {String} name Nome do manual a ter as informações acessadas
+     * @returns Retorna as informações do manual requisitado
+     * @author Rafael Furtado
+     */
     getProjectDataByName(name){
         let projectsLists = this.state["projectsList"];
 
@@ -346,9 +433,9 @@ class SelectProjectScreen extends React.Component {
      * @author Carolina Margiotti
      */
     render() {
-        let displayScreen = this.getDisplayScreen();
+        let selectProjectScreen = this.getSelectProjectScreen();
 
-        return displayScreen;
+        return selectProjectScreen;
     }
 
 }
