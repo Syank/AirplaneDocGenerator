@@ -93,7 +93,7 @@ class SelectProjectScreen extends React.Component {
         let projectsList = []
 
         if(response["responseJson"] === false){
-            notification("error", "Algo deu errado 🙁", "Não foi possível carregar a lista de projetos")
+            notification("error", "Algo deu errado 🙁", "Não foi possível carregar a lista de projetos");
 
             return projectsList;
         }
@@ -307,11 +307,21 @@ class SelectProjectScreen extends React.Component {
                     <label>{this.state["selectedProject"]["nome"]}</label>
                     <p className="mt-5 text-sm">{this.state["selectedProject"]["descricao"]}</p>
                 </div>
-                <Button text="Selecionar" type="confirm"></Button>
+                <Button text="Selecionar" type="confirm" onClick={this.goToProjectView}></Button>
             </div>
         );
 
         return container;
+    }
+
+    /**
+     * Vai para a página de edição/gerenciamento do manual selecionado
+     * 
+     * @author Rafael Furtado
+     */
+    goToProjectView(){
+        notification("info", "Um momento! 🤔", "Este recurso ainda não está disponível no momento");
+
     }
 
     /**
