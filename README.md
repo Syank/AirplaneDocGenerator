@@ -61,7 +61,7 @@
               <section id="burndown">
                      <h2 align="center"><i>Burndown</i> :date::chart_with_downwards_trend:</h3>
                      <p align="justify">Nossa <i>sprint</i> foi bastante intensa. Foi necessário um grande esforço de todos os membros para que tudo ocorresse como o planejado. Conseguimos consolidar o <i>backlog</i> antes do dia 9 da <i>sprint</i> e a partir desse dia desenvolvemos persistentemente para realizar a entrega com a melhor qualidade possível.</p>
-                     <img src="burndown">
+                     <img src="https://raw.githubusercontent.com/Syank/AirplaneDocGenerator/main/doc/burndown/sprint%201/burndown-s1.png">
               </section>
               <section id="equipe">
                      <h2>Integrantes da equipe :girl::boy:</h2>
