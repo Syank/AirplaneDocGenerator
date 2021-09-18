@@ -13,6 +13,7 @@ import ServerRequester from "../utils/ServerRequester";
  * @author Bárbara Port
  */
 class NewProjectScreen extends React.Component {
+
     /**
      * Criar um novo projeto
      *
@@ -28,6 +29,15 @@ class NewProjectScreen extends React.Component {
         let nameInput = document.getElementById("project-name");
 
         let projectName = nameInput.value;
+
+        let partLetter = projectName.split("-")[0];
+        let partNumber = projectName.split("-")[1];
+
+        if((partLetter === undefined || partNumber === undefined) 
+            || this.isValidPartLetter(partLetter) || this.isValidPartNumber(partNumber)){
+            notification("error", "Nome de projeto inválido! 😵", 
+                "O formato do nome de projetos devem iguais ao seguinte exemplo: ABC-1234");
+        }
 
         let newProjectForm = {
             nome: projectName,
@@ -47,6 +57,53 @@ class NewProjectScreen extends React.Component {
                 "Não foi possível criar o projeto. Tente novamente."
             );
         }
+    }
+
+    /**
+     * Verifica se a parte de números do nome de um projeto contêm apenas números
+     * 
+     * @param {String} supposedPartNumber String da parte de números do nome de um projeto
+     * @author Rafael Furtado 
+     */
+    isValidPartNumber(supposedPartNumber){
+        if(supposedPartNumber === undefined || supposedPartNumber.length !== 4 || supposedPartNumber.includes(".")){
+            return false;
+        }
+
+        let isNumber = +supposedPartNumber;
+
+        if(isNaN(isNumber)){
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Verifica se a parte de letras de um nome de projeto contêm apenas letras
+     * 
+     * @param {String} supposedPartLetter String da parte de letras do nome do projeto
+     * @author Rafael Furtado
+     */
+    isValidPartLetter(supposedPartLetter){
+        if(supposedPartLetter === undefined || isNaN(supposedPartLetter) || supposedPartLetter.length !== 3){
+            return false;
+        }
+
+        let regex = (/[a-zA-Z]/);
+
+        let letters = supposedPartLetter.split("");
+
+        for (let i = 0; i < letters.length; i++) {
+            const letter = letters[i];
+            
+            if(!regex.test(letter)){
+                return false;
+            }
+
+        }
+
+        return true;
     }
 
     /**

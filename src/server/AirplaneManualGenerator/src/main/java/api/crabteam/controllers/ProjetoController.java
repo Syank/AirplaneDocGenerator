@@ -60,7 +60,7 @@ public class ProjetoController {
 	 */
 	@PostMapping("/create")
 	public ResponseEntity<Boolean> createNewProject(@RequestBody NewProject newProject){
-		String name = newProject.getNome();
+		String name = newProject.getNome().toUpperCase();
 		String description = newProject.getDescricao();
 		
 		Projeto projeto = new Projeto(name, description);
