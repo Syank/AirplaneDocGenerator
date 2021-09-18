@@ -37,20 +37,26 @@
               </section>
               <section id="funcionamento">
                      <h2 align="center">:desktop_computer::computer_mouse: AirplaneDocGenerator em funcionamento :checkered_flag:</h3>
-                     <p align="center"><img src="gif"></p>
+                     <p align="center">
+                            <img src="https://raw.githubusercontent.com/Syank/AirplaneDocGenerator/main/doc/gifs/sprint1/Apresenta%C3%A7%C3%A3o%20Sprint%201%20%20%20GIF.gif"
+                     </p>
               </section>
               <section id="backlogEntrega">
                      <h2 align="center"><i>User stories</i> entregues :pilot:</h3>
                      <p align="justify">Nessa entrega, o usuário poderá criar o projeto e visualizar todos aqueles que foram criados.</p>
-                     <img src="userstories">
+                     <img src="https://raw.githubusercontent.com/Syank/AirplaneDocGenerator/main/doc/backlog/sprint%201/Sprint%201%20cropped.png">
               </section>
               <section id="mockups">
                      <h2 align="center">:bookmark_tabs: <i>Mockups</i> :memo:</h3>
-                     <img src="mockups">
+                     <img src="https://raw.githubusercontent.com/Syank/AirplaneDocGenerator/main/doc/mockups/sprint%201/Login.png">
+                     <img src="https://raw.githubusercontent.com/Syank/AirplaneDocGenerator/main/doc/mockups/sprint%201/Home.png">
+                     <img src="https://raw.githubusercontent.com/Syank/AirplaneDocGenerator/main/doc/mockups/sprint%201/MenuNovoDoc.png">
+                     <img src="https://raw.githubusercontent.com/Syank/AirplaneDocGenerator/main/doc/mockups/sprint%201/NovoDoc.png">
+                     <img src="https://raw.githubusercontent.com/Syank/AirplaneDocGenerator/main/doc/mockups/sprint%201/AdministrarDocs.png">
               </section>
               <section id="banco">
                      <h2 align="center">Modelo conceitual do banco de dados :open_file_folder:</h3>
-                     <img src="bd">
+                     <img src="https://raw.githubusercontent.com/Syank/AirplaneDocGenerator/main/doc/database/sprint%201/conceitual/conceitual.png">
               </section>
               <section id="burndown">
                      <h2 align="center"><i>Burndown</i> :date::chart_with_downwards_trend:</h3>
