@@ -124,7 +124,8 @@ class TopBar extends React.Component{
             {this.state["showMenu"] && 
                 <TopBarMenu adminOptions={this.props.userLoggedType} 
                             loggoutFunction={this.props.loggoutFunction}
-                            setShowRegisterUser={this.setRegisterUserState}/>
+                            setShowRegisterUser={this.setRegisterUserState}
+                            toggleMenu={this.toggleTopBarMenu}/>
             }
 
             <div className={this.iconBoxStyle}
