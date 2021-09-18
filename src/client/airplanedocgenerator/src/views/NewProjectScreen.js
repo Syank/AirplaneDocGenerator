@@ -13,6 +13,14 @@ import ServerRequester from "../utils/ServerRequester";
  * @author Bárbara Port
  */
 class NewProjectScreen extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.isValidPartLetter = this.isValidPartLetter.bind(this);
+        this.isValidPartNumber = this.isValidPartNumber.bind(this);
+        this.sendFormData = this.sendFormData.bind(this);
+        
+    }
 
     /**
      * Criar um novo projeto
@@ -34,29 +42,29 @@ class NewProjectScreen extends React.Component {
         let partNumber = projectName.split("-")[1];
 
         if((partLetter === undefined || partNumber === undefined) 
-            || this.isValidPartLetter(partLetter) || this.isValidPartNumber(partNumber)){
+            || !this.isValidPartLetter(partLetter) || !this.isValidPartNumber(partNumber)){
             notification("error", "Nome de projeto inválido! 😵", 
                 "O formato do nome de projetos devem iguais ao seguinte exemplo: ABC-1234");
+
+        }else{
+            let newProjectForm = {
+                nome: projectName,
+            };
+    
+            let response = await serverRequester.doPost("/project/create", newProjectForm);
+    
+            if (response["responseJson"] === true) {
+                notification("success", "Oba! 😄", "Projeto criado com sucesso!");
+            } else {
+                notification(
+                    "error",
+                    "Ops...",
+                    "Não foi possível criar o projeto. Tente novamente."
+                );
+            }
+
         }
 
-        let newProjectForm = {
-            nome: projectName,
-        };
-
-        let response = await serverRequester.doPost(
-            "/project/create",
-            newProjectForm
-        );
-
-        if (response["responseJson"] === true) {
-            notification("success", "Oba!", "Projeto criado com sucesso!");
-        } else {
-            notification(
-                "error",
-                "Ops...",
-                "Não foi possível criar o projeto. Tente novamente."
-            );
-        }
     }
 
     /**
@@ -86,7 +94,7 @@ class NewProjectScreen extends React.Component {
      * @author Rafael Furtado
      */
     isValidPartLetter(supposedPartLetter){
-        if(supposedPartLetter === undefined || isNaN(supposedPartLetter) || supposedPartLetter.length !== 3){
+        if(supposedPartLetter === undefined || !isNaN(supposedPartLetter) || supposedPartLetter.length !== 3){
             return false;
         }
 
