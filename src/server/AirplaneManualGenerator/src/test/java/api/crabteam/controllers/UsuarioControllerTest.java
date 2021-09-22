@@ -23,9 +23,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import api.crabteam.controllers.requestsBody.RegisterUser;
-import api.crabteam.model.Administrador;
-import api.crabteam.model.Usuario;
-import api.crabteam.model.UsuarioPadrao;
+import api.crabteam.model.entities.Administrador;
+import api.crabteam.model.entities.Usuario;
+import api.crabteam.model.entities.UsuarioPadrao;
 import api.crabteam.model.repositories.UsuarioRepository;
 
 

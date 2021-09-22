@@ -27,7 +27,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import api.crabteam.controllers.requestsBody.NewProject;
-import api.crabteam.model.Projeto;
+import api.crabteam.model.entities.Projeto;
 import api.crabteam.model.repositories.ProjetoRepository;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)

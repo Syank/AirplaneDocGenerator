@@ -3,7 +3,7 @@ package api.crabteam.model.repositories;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import api.crabteam.model.Usuario;
+import api.crabteam.model.entities.Usuario;
 
 public interface UsuarioRepository extends JpaRepository<Usuario, String>{
 	
