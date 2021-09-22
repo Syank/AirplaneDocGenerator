@@ -21,7 +21,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import api.crabteam.controllers.requestsBody.LoginCredentials;
-import api.crabteam.model.Administrador;
+import api.crabteam.model.entities.Administrador;
 import api.crabteam.model.repositories.AdministradorRepository;
 
 

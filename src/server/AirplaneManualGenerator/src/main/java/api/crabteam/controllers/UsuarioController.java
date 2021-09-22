@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import api.crabteam.controllers.requestsBody.RegisterUser;
-import api.crabteam.model.Usuario;
+import api.crabteam.model.entities.Usuario;
 import api.crabteam.model.factories.UsuarioFactory;
 import api.crabteam.model.repositories.UsuarioRepository;
 

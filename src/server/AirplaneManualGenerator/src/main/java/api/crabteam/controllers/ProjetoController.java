@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import api.crabteam.controllers.requestsBody.NewProject;
-import api.crabteam.model.Projeto;
+import api.crabteam.model.entities.Projeto;
 import api.crabteam.model.repositories.ProjetoRepository;
 
 /**

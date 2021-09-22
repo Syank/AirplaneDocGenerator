@@ -1,9 +1,9 @@
 package api.crabteam.model.factories;
 
 import api.crabteam.controllers.requestsBody.RegisterUser;
-import api.crabteam.model.Administrador;
-import api.crabteam.model.Usuario;
-import api.crabteam.model.UsuarioPadrao;
+import api.crabteam.model.entities.Administrador;
+import api.crabteam.model.entities.Usuario;
+import api.crabteam.model.entities.UsuarioPadrao;
 
 
 /**

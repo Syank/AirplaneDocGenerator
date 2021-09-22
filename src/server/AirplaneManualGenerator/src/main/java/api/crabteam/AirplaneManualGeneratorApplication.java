@@ -5,9 +5,9 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import api.crabteam.model.Administrador;
-import api.crabteam.model.Projeto;
-import api.crabteam.model.Usuario;
+import api.crabteam.model.entities.Administrador;
+import api.crabteam.model.entities.Projeto;
+import api.crabteam.model.entities.Usuario;
 import api.crabteam.model.repositories.ProjetoRepository;
 import api.crabteam.model.repositories.UsuarioRepository;
 
