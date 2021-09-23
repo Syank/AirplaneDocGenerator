@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
@@ -18,10 +19,11 @@ public class Codelist {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
 	
-	@Column(nullable = false)
+	@Column(nullable = false, unique = true)
 	private String nome;
 	
-	@OneToOne(mappedBy = "codelist")
+	@OneToOne
+	@JoinColumn(name = "projeto", referencedColumnName = "id")
 	private Projeto projeto;
 	
 	@OneToMany(mappedBy = "codelist", cascade = CascadeType.ALL)
