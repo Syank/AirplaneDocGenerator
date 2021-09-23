@@ -1,10 +1,13 @@
 package api.crabteam.model.entities;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 
 /**
  * Classe que representa a entidade "Projeto" no banco de dados
@@ -21,10 +24,12 @@ public class Projeto {
 	@Column(nullable = false, unique = true)
 	private String nome;
 	
-	@Column(columnDefinition = "text")
+	@Column(columnDefinition = "text", nullable = false)
 	private String descricao;
 	
-	
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "codelist", referencedColumnName = "id")
+	private Codelist codelist;
 	
 	public Projeto() {
 		

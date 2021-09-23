@@ -2,27 +2,29 @@ package api.crabteam.model.entities;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
-@Entity(name = "remark")
-public class Remark {
+@Entity(name = "codelist")
+public class Codelist {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
 	
 	@Column(nullable = false)
-	private String traco;
+	private String nome;
 	
-	@Column(nullable = false)
-	private String apelido;
+	@OneToOne(mappedBy = "codelist")
+	private Projeto projeto;
 	
-	@ManyToMany(mappedBy = "remarks")
-	List<Linha> linhas;
-	
+	@OneToMany(mappedBy = "codelist", cascade = CascadeType.ALL)
+	private List<Linha> linhas;
+
 }
