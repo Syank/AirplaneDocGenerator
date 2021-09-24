@@ -1,24 +1,28 @@
 package api.crabteam.model.entities;
 
+import java.util.List;
+
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.ManyToMany;
 
-
-
-@Table(name = "remark")
+@Entity(name = "remark")
 public class Remark {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
 	
-	@Column
+	@Column(nullable = false)
 	private String traco;
 	
-	@Column
+	@Column(nullable = false)
 	private String apelido;
+	
+	@ManyToMany(mappedBy = "remarks")
+	List<Linha> linhas;
 	
 }

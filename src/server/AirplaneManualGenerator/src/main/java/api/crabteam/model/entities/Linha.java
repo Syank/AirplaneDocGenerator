@@ -2,42 +2,54 @@ package api.crabteam.model.entities;
 
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 
 
-@Table(name = "linha")
+@Entity(name = "linha")
 public class Linha {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
 	
-	@Column
+	@Column(nullable = false)
 	private String secao;
 	
 	@Column
 	private String subSecao;
 	
-	@Column
+	@Column(nullable = false)
 	private String block;
 	
-	@Column
+	@Column(nullable = false)
 	private String blockName;
 	
-	@Column
+	@Column(nullable = false)
 	private String code;
 	
-	@Column
-	@OneToMany(cascade = CascadeType.ALL)
+	@Column(nullable = false)
+	private String filePath;
+	
+	@ManyToMany
+	@JoinTable(
+		name = "linha_remarks",
+		joinColumns = @JoinColumn(name = "linha"),
+		inverseJoinColumns = @JoinColumn(name = "remark")
+	)
 	private List<Remark> remarks;
 	
-	@Column
-	private String filePath;
+	@ManyToOne
+	@JoinColumn(name = "codelist")
+	private Codelist codelist;
+	
+	
 	
 }
