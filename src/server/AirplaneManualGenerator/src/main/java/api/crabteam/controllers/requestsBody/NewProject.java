@@ -14,6 +14,7 @@ package api.crabteam.controllers.requestsBody;
 public class NewProject {
 	private String nome;
 	private String descricao;
+	private byte[] arquivoCodelist;
 	
 	public NewProject() {
 		
@@ -39,6 +40,14 @@ public class NewProject {
 	
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
+	}
+
+	public byte[] getArquivoCodelist() {
+		return arquivoCodelist;
+	}
+
+	public void setArquivoCodelist(byte[] arquivoCodelist) {
+		this.arquivoCodelist = arquivoCodelist;
 	}
 	
 }

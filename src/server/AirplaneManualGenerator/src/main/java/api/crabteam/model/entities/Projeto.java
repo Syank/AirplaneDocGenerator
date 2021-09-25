@@ -28,7 +28,7 @@ public class Projeto {
 	private String descricao;
 	
 	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "codelist", referencedColumnName = "id")
+	@JoinColumn(name = "codelist_id", referencedColumnName = "id")
 	private Codelist codelist;
 	
 	public Projeto() {
@@ -60,6 +60,14 @@ public class Projeto {
 
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
+	}
+
+	public Codelist getCodelist() {
+		return codelist;
+	}
+
+	public void setCodelist(Codelist codelist) {
+		this.codelist = codelist;
 	}
 	
 }
