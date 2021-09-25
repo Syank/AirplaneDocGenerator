@@ -19,7 +19,6 @@ class NewProjectScreen extends React.Component {
         this.isValidPartLetter = this.isValidPartLetter.bind(this);
         this.isValidPartNumber = this.isValidPartNumber.bind(this);
         this.sendFormData = this.sendFormData.bind(this);
-        
     }
 
     /**
@@ -41,20 +40,33 @@ class NewProjectScreen extends React.Component {
         let partLetter = projectName.split("-")[0];
         let partNumber = projectName.split("-")[1];
 
-        if((partLetter === undefined || partNumber === undefined) 
-            || !this.isValidPartLetter(partLetter) || !this.isValidPartNumber(partNumber)){
-            notification("error", "Nome de projeto inválido! 😵", 
-                "O formato do nome de projetos devem iguais ao seguinte exemplo: ABC-1234");
-
-        }else{
+        if (
+            partLetter === undefined ||
+            partNumber === undefined ||
+            !this.isValidPartLetter(partLetter) ||
+            !this.isValidPartNumber(partNumber)
+        ) {
+            notification(
+                "error",
+                "Nome de projeto inválido! 😵",
+                "O formato do nome de projetos devem iguais ao seguinte exemplo: ABC-1234"
+            );
+        } else {
             let newProjectForm = {
                 nome: projectName,
             };
-    
-            let response = await serverRequester.doPost("/project/create", newProjectForm);
-    
+
+            let response = await serverRequester.doPost(
+                "/project/create",
+                newProjectForm
+            );
+
             if (response["responseJson"] === true) {
-                notification("success", "Oba! 😄", "Projeto criado com sucesso!");
+                notification(
+                    "success",
+                    "Oba! 😄",
+                    "Projeto criado com sucesso!"
+                );
             } else {
                 notification(
                     "error",
@@ -62,25 +74,27 @@ class NewProjectScreen extends React.Component {
                     "Não foi possível criar o projeto. Tente novamente."
                 );
             }
-
         }
-
     }
 
     /**
      * Verifica se a parte de números do nome de um projeto contêm apenas números
-     * 
+     *
      * @param {String} supposedPartNumber String da parte de números do nome de um projeto
-     * @author Rafael Furtado 
+     * @author Rafael Furtado
      */
-    isValidPartNumber(supposedPartNumber){
-        if(supposedPartNumber === undefined || supposedPartNumber.length !== 4 || supposedPartNumber.includes(".")){
+    isValidPartNumber(supposedPartNumber) {
+        if (
+            supposedPartNumber === undefined ||
+            supposedPartNumber.length !== 4 ||
+            supposedPartNumber.includes(".")
+        ) {
             return false;
         }
 
         let isNumber = +supposedPartNumber;
 
-        if(isNaN(isNumber)){
+        if (isNaN(isNumber)) {
             return false;
         }
 
@@ -89,26 +103,29 @@ class NewProjectScreen extends React.Component {
 
     /**
      * Verifica se a parte de letras de um nome de projeto contêm apenas letras
-     * 
+     *
      * @param {String} supposedPartLetter String da parte de letras do nome do projeto
      * @author Rafael Furtado
      */
-    isValidPartLetter(supposedPartLetter){
-        if(supposedPartLetter === undefined || !isNaN(supposedPartLetter) || supposedPartLetter.length !== 3){
+    isValidPartLetter(supposedPartLetter) {
+        if (
+            supposedPartLetter === undefined ||
+            !isNaN(supposedPartLetter) ||
+            supposedPartLetter.length !== 3
+        ) {
             return false;
         }
 
-        let regex = (/[a-zA-Z]/);
+        let regex = /[a-zA-Z]/;
 
         let letters = supposedPartLetter.split("");
 
         for (let i = 0; i < letters.length; i++) {
             const letter = letters[i];
-            
-            if(!regex.test(letter)){
+
+            if (!regex.test(letter)) {
                 return false;
             }
-
         }
 
         return true;
@@ -167,7 +184,10 @@ class NewProjectScreen extends React.Component {
                                     className="border-b border-black focus:bg-gray-200 outline-none"
                                     placeholder="XXX-YYYY"
                                 ></input>
-                                <Tooltip text="O nome deve ter o seguinte formato: 3 letras - 4 números. Ex.: ABC-1234. Não é possível utilizar o mesmo nome em mais de um projeto." />
+                                <Tooltip
+                                    id="codelistNameInput"
+                                    text="O nome deve ter o seguinte formato: 3 letras - 4 números. Ex.: ABC-1234. Não é possível utilizar o mesmo nome em mais de um projeto."
+                                />
                             </div>
                             <div className="m-8">
                                 <label className="text-lg">Codelist: </label>

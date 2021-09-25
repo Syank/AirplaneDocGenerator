@@ -12,6 +12,10 @@ class Tooltip extends React.Component {
         super(props);
 
         this.text = this.props.text;
+        this.id = this.props.id;
+
+        this.handleMouseEnter = this.handleMouseEnter.bind(this);
+        this.handleMouseLeave = this.handleMouseLeave.bind(this);
     }
 
     /**
@@ -19,7 +23,7 @@ class Tooltip extends React.Component {
      * @author Carolina Margiotti
      */
     handleMouseEnter() {
-        let elementTooltip = document.getElementById("tooltip");
+        let elementTooltip = document.getElementById(this.id);
         elementTooltip.style.opacity = 1;
     }
 
@@ -28,7 +32,7 @@ class Tooltip extends React.Component {
      * @author Carolina Margiotti
      */
     handleMouseLeave() {
-        let elementTooltip = document.getElementById("tooltip");
+        let elementTooltip = document.getElementById(this.id);
         elementTooltip.style.opacity = 0;
     }
 
@@ -41,7 +45,7 @@ class Tooltip extends React.Component {
         return (
             <div className="group cursor-help inline-block relative">
                 <div
-                    id="tooltip"
+                    id={this.id}
                     className="opacity-0 absolute z-10 w-36 text-center bottom-full left-1/2 transform -translate-x-1/2"
                 >
                     <div className="relative mx-2">
