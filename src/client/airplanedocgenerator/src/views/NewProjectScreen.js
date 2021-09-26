@@ -184,10 +184,7 @@ class NewProjectScreen extends React.Component {
                                     className="border-b border-black focus:bg-gray-200 outline-none"
                                     placeholder="XXX-YYYY"
                                 ></input>
-                                <Tooltip
-                                    id="codelistNameInput"
-                                    text="O nome deve ter o seguinte formato: 3 letras - 4 números. Ex.: ABC-1234. Não é possível utilizar o mesmo nome em mais de um projeto."
-                                />
+                                <Tooltip text="O nome deve ter o seguinte formato: 3 letras - 4 números. Ex.: ABC-1234. Não é possível utilizar o mesmo nome em mais de um projeto." />
                             </div>
                             <div className="m-8">
                                 <label className="text-lg">Codelist: </label>
