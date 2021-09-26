@@ -1,5 +1,6 @@
 package api.crabteam.model.entities;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -40,12 +41,12 @@ public class Linha {
 	@Column(nullable = false)
 	private String code;
 	
-	@Column(nullable = false)
+	@Column
 	private String filePath;
 	
 	@OneToMany(cascade = CascadeType.ALL)
 	@LazyCollection(LazyCollectionOption.FALSE)
-	private List<Remark> remarks;
+	private List<Remark> remarks = new ArrayList<Remark>();
 
 	public int getId() {
 		return id;
@@ -109,6 +110,11 @@ public class Linha {
 
 	public void setRemarks(List<Remark> remarks) {
 		this.remarks = remarks;
+	}
+	
+	public void addRemark(Remark remark) {
+		this.remarks.add(remark);
+		
 	}
 
 }

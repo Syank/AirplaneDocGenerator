@@ -42,13 +42,13 @@ public class AirplaneManualGeneratorApplication implements CommandLineRunner {
 			
 		}
 		
-		Projeto projeto1 = new Projeto("ABO-1234", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla ex massa, posuere quis massa sed");
-		Projeto projeto2 = new Projeto("AOC-2851", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla ex massa, posuere quis massa sed, bibendum fringilla purus. Vivamus est turpis, semper sit amet augue non");
-		Projeto projeto3 = new Projeto("ATC-7412", "Vivamus est turpis, semper sit amet augue non");
-		Projeto projeto4 = new Projeto("ACC-5233", "consectetur adipiscing elit. Nulla ex massa, posuere quis massa sed");
-		Projeto projeto5 = new Projeto("BCC-1235", "posuere quis massa sed, bibendum fringilla purus. Vivamus est");
-		Projeto projeto6 = new Projeto("ADC-2686", "Vivamus est turpis, semper sit amet augue non");
-		Projeto projeto7 = new Projeto("ZDC-1987", "consectetur adipiscing elit. Nulla ex massa, posuere quis massa sed");
+		Projeto projeto1 = new Projeto("ABO-1234", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla ex massa, posuere quis massa sed", null);
+		Projeto projeto2 = new Projeto("AOC-2851", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla ex massa, posuere quis massa sed, bibendum fringilla purus. Vivamus est turpis, semper sit amet augue non", null);
+		Projeto projeto3 = new Projeto("ATC-7412", "Vivamus est turpis, semper sit amet augue non", null);
+		Projeto projeto4 = new Projeto("ACC-5233", "consectetur adipiscing elit. Nulla ex massa, posuere quis massa sed", null);
+		Projeto projeto5 = new Projeto("BCC-1235", "posuere quis massa sed, bibendum fringilla purus. Vivamus est", null);
+		Projeto projeto6 = new Projeto("ADC-2686", "Vivamus est turpis, semper sit amet augue non", null);
+		Projeto projeto7 = new Projeto("ZDC-1987", "consectetur adipiscing elit. Nulla ex massa, posuere quis massa sed", null);
 		
 		projRep.save(projeto1);
 		projRep.save(projeto2);
@@ -59,7 +59,7 @@ public class AirplaneManualGeneratorApplication implements CommandLineRunner {
 		projRep.save(projeto7);
 		
 		
-		Projeto projeto = new Projeto("ABY-1234", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla ex massa, posuere quis massa sed");
+		Projeto projeto = new Projeto("ABY-1234", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla ex massa, posuere quis massa sed", null);
 		
 		Codelist codelist = new Codelist();
 		codelist.setNome("ABY-1234");

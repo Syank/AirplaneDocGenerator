@@ -35,7 +35,7 @@ public class AuthenticationFilter implements Filter {
 		boolean preflight = httpRequest.getMethod().equalsIgnoreCase("OPTIONS");
 		boolean swagger = requestPath.contains("/swagger-ui");
 
-		boolean allowRequest = true;
+		boolean allowRequest = false;
 		
 		if(session == null) {
 			if(preflight) {

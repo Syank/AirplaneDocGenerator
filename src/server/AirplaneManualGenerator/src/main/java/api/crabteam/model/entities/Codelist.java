@@ -1,5 +1,6 @@
 package api.crabteam.model.entities;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -24,7 +25,7 @@ public class Codelist {
 	private String nome;
 	
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private List<Linha> linhas;
+	private List<Linha> linhas = new ArrayList<Linha>();
 	
 	@OneToOne(mappedBy = "codelist")
 	private Projeto projeto;
@@ -51,6 +52,10 @@ public class Codelist {
 
 	public void setLinhas(List<Linha> linhas) {
 		this.linhas = linhas;
+	}
+
+	public void addLinha(Linha linha) {
+		this.linhas.add(linha);
 	}
 
 }

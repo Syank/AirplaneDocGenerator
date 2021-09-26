@@ -20,9 +20,10 @@ public class NewProject {
 		
 	}
 	
-	public NewProject(String nome, String descricao) {
+	public NewProject(String nome, String descricao, byte[] arquivoCodelist) {
 		this.nome = nome;
 		this.descricao = descricao;
+		this.arquivoCodelist = arquivoCodelist;
 		
 	}
 	

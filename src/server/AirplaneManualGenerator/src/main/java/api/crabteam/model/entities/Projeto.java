@@ -24,7 +24,7 @@ public class Projeto {
 	@Column(nullable = false, unique = true)
 	private String nome;
 	
-	@Column(columnDefinition = "text", nullable = false)
+	@Column(columnDefinition = "text")
 	private String descricao;
 	
 	@OneToOne(cascade = CascadeType.ALL)
@@ -40,9 +40,10 @@ public class Projeto {
 		
 	}
 	
-	public Projeto(String nome, String descricao) {
+	public Projeto(String nome, String descricao, Codelist codelist) {
 		this.nome = nome;
 		this.descricao = descricao;
+		this.codelist = codelist;
 		
 	}
 

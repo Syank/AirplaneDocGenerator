@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import api.crabteam.controllers.requestsBody.NewProject;
 import api.crabteam.model.entities.Projeto;
+import api.crabteam.model.entities.builders.ProjetoBuilder;
 import api.crabteam.model.repositories.ProjetoRepository;
 
 /**
@@ -29,7 +30,9 @@ import api.crabteam.model.repositories.ProjetoRepository;
 public class ProjetoController {
 
 	@Autowired
-	ProjetoRepository projetoRepository;
+	public ProjetoRepository projetoRepository;
+	@Autowired
+	public ProjetoBuilder builder;
 	
 	
 	/**
@@ -59,20 +62,18 @@ public class ProjetoController {
 	 * @author Rafael Furtado
 	 */
 	@PostMapping("/create")
-	public ResponseEntity<Boolean> createNewProject(@RequestBody NewProject newProject){
-		String name = newProject.getNome().toUpperCase();
-		String description = newProject.getDescricao();
+	public ResponseEntity<?> createNewProject(@RequestBody NewProject newProject) {
+		builder.setRepository(projetoRepository);
 		
-		Projeto projeto = new Projeto(name, description);
+		builder.build(newProject);
 		
-		try {
-			projetoRepository.save(projeto);
-			
+		if(builder.isPersisted()) {
 			return new ResponseEntity<Boolean>(true, HttpStatus.OK);
-		}catch (Exception e) {
-			return new ResponseEntity<Boolean>(false, HttpStatus.BAD_REQUEST);
 		}
 		
+		String failMessage = builder.getFailMessage();
+		
+		return new ResponseEntity<String>(failMessage, HttpStatus.BAD_REQUEST);
 	}
 	
 }
