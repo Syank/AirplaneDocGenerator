@@ -16,7 +16,7 @@ import api.crabteam.model.enumarations.CodelistColumn;
 import api.crabteam.utils.FileUtils;
 
 public class CodelistBuilder {
-	private static final String PROJECTS_DIRECTORY = "..\\..\\..\\..\\..\\..\\resources\\static\\codelist";
+	private static final String PROJECTS_DIRECTORY = System.getenv("APIEmbraerCodelistFolder");
 	
 	private Codelist codelist;
 	
