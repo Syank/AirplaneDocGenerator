@@ -12,7 +12,10 @@ class Tooltip extends React.Component {
         super(props);
 
         this.text = this.props.text;
-        this.id = this.props.id;
+
+        this.state = {
+            mode: "hide",
+        };
 
         this.handleMouseEnter = this.handleMouseEnter.bind(this);
         this.handleMouseLeave = this.handleMouseLeave.bind(this);
@@ -23,8 +26,7 @@ class Tooltip extends React.Component {
      * @author Carolina Margiotti
      */
     handleMouseEnter() {
-        let elementTooltip = document.getElementById(this.id);
-        elementTooltip.style.opacity = 1;
+        this.setState({ mode: "view" });
     }
 
     /**
@@ -32,8 +34,7 @@ class Tooltip extends React.Component {
      * @author Carolina Margiotti
      */
     handleMouseLeave() {
-        let elementTooltip = document.getElementById(this.id);
-        elementTooltip.style.opacity = 0;
+        this.setState({ mode: "hide" });
     }
 
     /**
@@ -42,32 +43,38 @@ class Tooltip extends React.Component {
      * @author Carolina Margiotti
      */
     render() {
-        return (
-            <div className="group cursor-help inline-block relative">
-                <div
-                    id={this.id}
-                    className="opacity-0 absolute z-10 w-36 text-center bottom-full left-1/2 transform -translate-x-1/2"
-                >
-                    <div className="relative mx-2">
-                        <div className="bg-black text-white text-xs rounded py-1 px-4 right-0 bottom-full">
-                            {this.text}
-                            <svg
-                                className="absolute h-3 w-full left-0 top-full"
-                                viewBox="0 0 255 255"
-                            >
-                                <polygon points="0,0 127.5,127.5 255,0" />
-                            </svg>
+        if (this.state.mode === "view") {
+            return (
+                <div className="group cursor-help inline-block relative">
+                    <div className="absolute z-10 w-36 text-center bottom-full left-1/2 transform -translate-x-1/2">
+                        <div className="relative mx-2">
+                            <div className="bg-black text-white text-xs rounded py-1 px-4 right-0 bottom-full">
+                                {this.text}
+                                <svg
+                                    className="absolute h-3 w-full left-0 top-full"
+                                    viewBox="0 0 255 255"
+                                >
+                                    <polygon points="0,0 127.5,127.5 255,0" />
+                                </svg>
+                            </div>
                         </div>
                     </div>
+                    <FontAwesomeIcon
+                        icon={faQuestionCircle}
+                        color="black"
+                        onMouseLeave={this.handleMouseLeave}
+                    />
                 </div>
+            );
+        } else {
+            return (
                 <FontAwesomeIcon
                     icon={faQuestionCircle}
                     color="black"
                     onMouseEnter={this.handleMouseEnter}
-                    onMouseLeave={this.handleMouseLeave}
                 />
-            </div>
-        );
+            );
+        }
     }
 }
 
