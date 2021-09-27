@@ -29,3 +29,7 @@ ipcMain.on("minimize", function () {
 ipcMain.on("close", function () {
     mainWindow.close();
 });
+
+ipcMain.on("maximize", function () {
+    mainWindow.maximize();
+});
