@@ -5,6 +5,9 @@ contextBridge.exposeInMainWorld('electron', {
         minimize () {
             minimizeWindow()
         },
+        maximize () {
+            maximizeWindow()
+        },
         close () {
             closeWindow()
         }
@@ -13,6 +16,11 @@ contextBridge.exposeInMainWorld('electron', {
 
 function minimizeWindow() {
     ipcRenderer.send("minimize");
+
+}
+
+function maximizeWindow() {
+    ipcRenderer.send("maximize");
 
 }
 
