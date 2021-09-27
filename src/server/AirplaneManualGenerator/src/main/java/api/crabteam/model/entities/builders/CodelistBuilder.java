@@ -10,25 +10,33 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.stereotype.Service;
 
+import api.crabteam.controllers.requestsBody.NewCodelist;
 import api.crabteam.model.entities.Codelist;
 import api.crabteam.model.entities.Linha;
+import api.crabteam.model.entities.Projeto;
 import api.crabteam.model.entities.Remark;
 import api.crabteam.model.enumarations.CodelistColumn;
 import api.crabteam.model.repositories.CodelistRepository;
+import api.crabteam.model.repositories.ProjetoRepository;
 import api.crabteam.utils.FileUtils;
 
 @Service
 public class CodelistBuilder {
 	
 	private boolean isPersisted = false;
+	
 	private String failMessage;
 	
 	private CodelistRepository codelistRepository;
+	private ProjetoRepository projectRepository;
 	
 	private static final String PROJECTS_DIRECTORY = System.getenv("APIEmbraerCodelistFolder");
 	
 	private Codelist codelist;
 	
+	public CodelistBuilder() {
+		
+	}
 	
 	public CodelistBuilder(String projectName) {
 		Codelist codelist = new Codelist();
@@ -37,6 +45,7 @@ public class CodelistBuilder {
 		this.codelist = codelist;
 		
 	}
+
 
 	public CodelistBuilder(byte[] codelistBytesFile, String projectName) throws Exception {
 		String fileName = projectName + "_codelist.xlsx";
@@ -239,6 +248,45 @@ public class CodelistBuilder {
 		
 		throw new Exception();
 	}
+	
+	public void build (NewCodelist newCodelist, String projectName) {
+		String name = newCodelist.getNome().toUpperCase();
+		byte[] codelistFile = newCodelist.getArquivoCodelist();
+		
+		if(codelistFile == null) {
+			CodelistBuilder codelistBuilder = new CodelistBuilder(name);
+			Codelist codelist = codelistBuilder.getBuildedCodelist();
+			
+			this.isPersisted = persistCodelist(codelist, projectName);
+		}
+		else {
+			try {
+				CodelistBuilder codelistBuilder = new CodelistBuilder(codelistFile, name);
+				Codelist codelist = codelistBuilder.getBuildedCodelist();
+				
+				this.isPersisted = persistCodelist(codelist, projectName);
+			}
+			catch (Exception e) {
+				this.failMessage = e.getMessage();
+			}
+		}
+	}
+	
+	private boolean persistCodelist(Codelist codelist, String projectName) {
+		try {
+			this.codelistRepository.save(codelist);
+			
+			Projeto project = projectRepository.findByName(projectName);
+			project.setCodelist(codelist);
+			
+			this.projectRepository.save(project);
+			return true;
+		}
+		catch (Exception e) {
+			return false;
+		}
+		
+	}
 
 	public boolean isPersisted() {
 		return isPersisted;
@@ -270,16 +318,6 @@ public class CodelistBuilder {
 
 	public void setCodelist(Codelist codelist) {
 		this.codelist = codelist;
-	}
-	
-	private boolean persistCodelist(Codelist codelist) {
-		try {
-			this.codelistRepository.save(codelist);
-			return true;
-		}
-		catch (Exception e) {
-			return false;
-		}
 	}
 	
 }
