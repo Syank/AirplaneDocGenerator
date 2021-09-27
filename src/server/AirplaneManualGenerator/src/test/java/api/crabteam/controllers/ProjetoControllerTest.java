@@ -139,9 +139,10 @@ public class ProjetoControllerTest {
 	@Test
 	public void getAllProjectsTest () throws Exception {
 		MockHttpSession testSession = getSessionForTest();
+		byte[] file = null;
 		
 		// ----- Cadastrando mais um
-		NewProject newProject = new NewProject("CBA-1234", "This is a short description...", null);
+		NewProject newProject = new NewProject("CBA-1234", "This is a short description...", file);
 		mockMvc
 		.perform(
 			post("/project/create")

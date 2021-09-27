@@ -8,7 +8,7 @@ app.on("ready", () => {
         width: 1200,
         minHeight: 675,
         minWidth: 880,
-        frame: false,
+        frame: true,
         webPreferences: {
             nodeIntegration: false,
             worldSafeExecuteJavaScript: true,
@@ -20,6 +20,7 @@ app.on("ready", () => {
     mainWindow.setResizable(true);
 
     mainWindow.loadURL(`http://localhost:3000`);
+    
 });
 
 ipcMain.on("minimize", function () {
