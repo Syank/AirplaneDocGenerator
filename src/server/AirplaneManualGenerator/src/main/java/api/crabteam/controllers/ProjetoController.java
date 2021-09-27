@@ -1,5 +1,6 @@
 package api.crabteam.controllers;
 
+import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.ServletRequest;
@@ -13,7 +14,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import api.crabteam.controllers.requestsBody.NewProject;
 import api.crabteam.model.entities.Projeto;
@@ -60,10 +63,13 @@ public class ProjetoController {
 	 *                     O Spring se encarregará de fazer a associação com o objeto NewProject
 	 * @return Retorna <b>true</b> caso o projeto seja criado com sucesso, caso contrário, retorna <b>false</b>
 	 * @author Rafael Furtado
+	 * @throws IOException 
 	 */
 	@PostMapping("/create")
-	public ResponseEntity<?> createNewProject(@RequestBody NewProject newProject) {
+	public ResponseEntity<?> createNewProject(@RequestParam MultipartFile codelistFile, NewProject newProject) throws IOException {
 		builder.setRepository(projetoRepository);
+		
+		newProject.setArquivoCodelist(codelistFile);
 		
 		builder.build(newProject);
 		
