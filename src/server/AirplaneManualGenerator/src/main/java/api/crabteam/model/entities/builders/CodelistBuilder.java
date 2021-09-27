@@ -99,15 +99,15 @@ public class CodelistBuilder {
 						CodelistColumn columnType = (CodelistColumn) type;
 						switch (columnType) {
 							case SECAO:
-								linha.setSecao(cellValue);
+								linha.setSectionNumber(cellValue);
 	
 								break;
 							case SUB_SECAO:
-								linha.setSubSecao(cellValue);
+								linha.setSubsectionNumber(cellValue);
 	
 								break;
 							case BLOCK:
-								linha.setBlock(cellValue);
+								linha.setBlockNumber(cellValue);
 	
 								break;
 							case BLOCK_NAME:
