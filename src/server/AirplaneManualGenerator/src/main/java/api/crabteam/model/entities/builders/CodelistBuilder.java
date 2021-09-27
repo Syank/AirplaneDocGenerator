@@ -8,14 +8,23 @@ import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.springframework.stereotype.Service;
 
 import api.crabteam.model.entities.Codelist;
 import api.crabteam.model.entities.Linha;
 import api.crabteam.model.entities.Remark;
 import api.crabteam.model.enumarations.CodelistColumn;
+import api.crabteam.model.repositories.CodelistRepository;
 import api.crabteam.utils.FileUtils;
 
+@Service
 public class CodelistBuilder {
+	
+	private boolean isPersisted = false;
+	private String failMessage;
+	
+	private CodelistRepository codelistRepository;
+	
 	private static final String PROJECTS_DIRECTORY = System.getenv("APIEmbraerCodelistFolder");
 	
 	private Codelist codelist;
@@ -229,6 +238,48 @@ public class CodelistBuilder {
 		}
 		
 		throw new Exception();
+	}
+
+	public boolean isPersisted() {
+		return isPersisted;
+	}
+
+	public void setPersisted(boolean isPersisted) {
+		this.isPersisted = isPersisted;
+	}
+
+	public String getFailMessage() {
+		return failMessage;
+	}
+
+	public void setFailMessage(String failMessage) {
+		this.failMessage = failMessage;
+	}
+
+	public CodelistRepository getCodelistRepository() {
+		return codelistRepository;
+	}
+
+	public void setCodelistRepository(CodelistRepository codelistRepository) {
+		this.codelistRepository = codelistRepository;
+	}
+
+	public Codelist getCodelist() {
+		return codelist;
+	}
+
+	public void setCodelist(Codelist codelist) {
+		this.codelist = codelist;
+	}
+	
+	private boolean persistCodelist(Codelist codelist) {
+		try {
+			this.codelistRepository.save(codelist);
+			return true;
+		}
+		catch (Exception e) {
+			return false;
+		}
 	}
 	
 }
