@@ -244,8 +244,14 @@ class SelectProjectScreen extends React.Component {
 
         let searchList = this.getSearchList(valueToSearch);
 
-        this.setState({search: valueToSearch, projectsList: searchList, page: 1});
+        if (searchList.length == 0){
+            notification("error", "Algo deu errado 🙁", "Esse item não existe");
 
+            return searchList;
+        }
+        else{
+            this.setState({search: valueToSearch, projectsList: searchList, page: 1});
+        }
     }
 
     /**
@@ -349,7 +355,11 @@ class SelectProjectScreen extends React.Component {
         let page = this.state["page"] - 1;
 
         let projectsToShow = this.state["projectsList"][page];
+        
+        if(projectsToShow === undefined){
+            projectsToShow = [];
 
+        }
         return projectsToShow;
     }
 
