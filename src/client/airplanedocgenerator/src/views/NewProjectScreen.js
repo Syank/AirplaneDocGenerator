@@ -32,33 +32,34 @@ class NewProjectScreen extends React.Component {
 
         let serverRequester = new ServerRequester("http://localhost:8080");
 
-        //let fileInput = document.getElementById("codelist-file");
+        let fileInput = document.getElementById("codelist-file");
         let nameInput = document.getElementById("project-name");
 
         let projectName = nameInput.value;
+        let file = fileInput.files[0];
+
+        let formData = new FormData();
+        formData.append("nome", projectName);
+        formData.append("descricao", "Projeto sem descrição. A descrição pode ser alterada na página de gerenciamento do projeto.");
+        formData.append("codelistFile", file);
 
         let partLetter = projectName.split("-")[0];
         let partNumber = projectName.split("-")[1];
 
-        if (
-            partLetter === undefined ||
+        if (partLetter === undefined ||
             partNumber === undefined ||
             !this.isValidPartLetter(partLetter) ||
-            !this.isValidPartNumber(partNumber)
-        ) {
+            !this.isValidPartNumber(partNumber)) {
             notification(
                 "error",
                 "Nome de projeto inválido! 😵",
                 "O formato do nome de projetos devem iguais ao seguinte exemplo: ABC-1234"
             );
         } else {
-            let newProjectForm = {
-                nome: projectName,
-            };
-
             let response = await serverRequester.doPost(
                 "/project/create",
-                newProjectForm
+                formData,
+                "multipart/form-data"
             );
 
             if (response["responseJson"] === true) {
