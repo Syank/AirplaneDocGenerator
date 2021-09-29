@@ -32,33 +32,34 @@ class NewProjectScreen extends React.Component {
 
         let serverRequester = new ServerRequester("http://localhost:8080");
 
-        //let fileInput = document.getElementById("codelist-file");
+        let fileInput = document.getElementById("codelist-file");
         let nameInput = document.getElementById("project-name");
 
         let projectName = nameInput.value;
+        let file = fileInput.files[0];
+
+        let formData = new FormData();
+        formData.append("nome", projectName);
+        formData.append("descricao", "Projeto sem descrição. A descrição pode ser alterada na página de gerenciamento do projeto.");
+        formData.append("codelistFile", file);
 
         let partLetter = projectName.split("-")[0];
         let partNumber = projectName.split("-")[1];
 
-        if (
-            partLetter === undefined ||
+        if (partLetter === undefined ||
             partNumber === undefined ||
             !this.isValidPartLetter(partLetter) ||
-            !this.isValidPartNumber(partNumber)
-        ) {
+            !this.isValidPartNumber(partNumber)) {
             notification(
                 "error",
                 "Nome de projeto inválido! 😵",
                 "O formato do nome de projetos devem iguais ao seguinte exemplo: ABC-1234"
             );
         } else {
-            let newProjectForm = {
-                nome: projectName,
-            };
-
             let response = await serverRequester.doPost(
                 "/project/create",
-                newProjectForm
+                formData,
+                "multipart/form-data"
             );
 
             if (response["responseJson"] === true) {
@@ -184,10 +185,7 @@ class NewProjectScreen extends React.Component {
                                     className="border-b border-black focus:bg-gray-200 outline-none"
                                     placeholder="XXX-YYYY"
                                 ></input>
-                                <Tooltip
-                                    id="codelistNameInput"
-                                    text="O nome deve ter o seguinte formato: 3 letras - 4 números. Ex.: ABC-1234. Não é possível utilizar o mesmo nome em mais de um projeto."
-                                />
+                                <Tooltip text="O nome deve ter o seguinte formato: 3 letras - 4 números. Ex.: ABC-1234. Não é possível utilizar o mesmo nome em mais de um projeto." />
                             </div>
                             <div className="m-8">
                                 <label className="text-lg">Codelist: </label>
@@ -205,6 +203,10 @@ class NewProjectScreen extends React.Component {
                                     className="hidden"
                                     accept=".xls,.xlsx"
                                 ></input>
+                                <Tooltip
+                                    id="codelistImport"
+                                    text="O arquivo da codelist deve ser da extensão .xlsx (arquivo do Excel) e uma de suas abas de planilhas deve ter exatamente o mesmo nome declarado no campo de nome acima"
+                                />
 
                                 <p className="text-xs ml-12 mr-12 mt-4">
                                     A escolha de um Codelist no momento da

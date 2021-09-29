@@ -8,6 +8,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -27,7 +32,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import api.crabteam.controllers.requestsBody.NewProject;
+import api.crabteam.model.entities.Codelist;
 import api.crabteam.model.entities.Projeto;
+import api.crabteam.model.entities.builders.CodelistBuilder;
 import api.crabteam.model.repositories.ProjetoRepository;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
@@ -61,9 +68,9 @@ public class ProjetoControllerTest {
 	@Test
 	public void createNewProjectTest() throws Exception {
 		MockHttpSession testSession = getSessionForTest();
+		byte[] fileBytes = getCodelistFileBytes();
 		
-		
-		NewProject newProject = new NewProject(testProjectName, testProjectDescription);
+		NewProject newProject = new NewProject(testProjectName, testProjectDescription, fileBytes);
 		
 		// ----- Caso 1: Assegurar um usuário cadastrar um projeto ----------
 		MockHttpServletResponse result = mockMvc
@@ -83,7 +90,10 @@ public class ProjetoControllerTest {
 		assertTrue(expectedResult);
 		assertTrue(result.getStatus() == HttpStatus.OK.value());
 		assertNotNull(projectFind);
-		
+		assertNotNull(projectFind.getCodelist());
+		assertNotNull(projectFind.getCodelist().getLinhas());
+		assertNotNull(projectFind.getCodelist().getLinhas().get(0).getRemarks());
+		assertNotNull(projectFind.getCodelist().getLinhas().get(0).getRemarks().get(0));
 		
 		// ----- Caso 2: Assegurar que um projeto não seja cadastrado caso já exista outro com o mesmo nome --------
 		MockHttpServletResponse result2 = mockMvc
@@ -129,9 +139,10 @@ public class ProjetoControllerTest {
 	@Test
 	public void getAllProjectsTest () throws Exception {
 		MockHttpSession testSession = getSessionForTest();
+		byte[] file = null;
 		
 		// ----- Cadastrando mais um
-		NewProject newProject = new NewProject("CBA-1234", "This is a short description...");
+		NewProject newProject = new NewProject("CBA-1234", "This is a short description...", file);
 		mockMvc
 		.perform(
 			post("/project/create")
@@ -184,6 +195,16 @@ public class ProjetoControllerTest {
 	 */
 	private static String asJsonString(Object object) throws JsonProcessingException {
 		return new ObjectMapper().writeValueAsString(object);
+	}
+	
+	private byte[] getCodelistFileBytes() throws IOException {
+		File file = new File("C:\\Users\\rafs9\\Desktop\\Programação\\Projeto Integrador\\4º Semestre\\Mockup FATEC\\Mockup FATEC\\Codelist.xlsx");
+		
+		FileInputStream fileinput = new FileInputStream(file);
+		
+		byte[] byteFile = fileinput.readAllBytes();
+		
+		return byteFile;
 	}
 	
 }

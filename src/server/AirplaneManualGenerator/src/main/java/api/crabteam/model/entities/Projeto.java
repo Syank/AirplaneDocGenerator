@@ -24,11 +24,11 @@ public class Projeto {
 	@Column(nullable = false, unique = true)
 	private String nome;
 	
-	@Column(columnDefinition = "text", nullable = false)
+	@Column(columnDefinition = "text")
 	private String descricao;
 	
 	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "codelist", referencedColumnName = "id")
+	@JoinColumn(name = "codelist_id", referencedColumnName = "id")
 	private Codelist codelist;
 	
 	public Projeto() {
@@ -40,9 +40,10 @@ public class Projeto {
 		
 	}
 	
-	public Projeto(String nome, String descricao) {
+	public Projeto(String nome, String descricao, Codelist codelist) {
 		this.nome = nome;
 		this.descricao = descricao;
+		this.codelist = codelist;
 		
 	}
 
@@ -60,6 +61,14 @@ public class Projeto {
 
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
+	}
+
+	public Codelist getCodelist() {
+		return codelist;
+	}
+
+	public void setCodelist(Codelist codelist) {
+		this.codelist = codelist;
 	}
 	
 }

@@ -1,10 +1,12 @@
 package api.crabteam.model.entities;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -22,11 +24,38 @@ public class Codelist {
 	@Column(nullable = false, unique = true)
 	private String nome;
 	
-	@OneToOne
-	@JoinColumn(name = "projeto", referencedColumnName = "id")
-	private Projeto projeto;
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private List<Linha> linhas = new ArrayList<Linha>();
 	
-	@OneToMany(mappedBy = "codelist", cascade = CascadeType.ALL)
-	private List<Linha> linhas;
+	@OneToOne(mappedBy = "codelist")
+	private Projeto projeto;
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getNome() {
+		return nome;
+	}
+
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+
+	public List<Linha> getLinhas() {
+		return linhas;
+	}
+
+	public void setLinhas(List<Linha> linhas) {
+		this.linhas = linhas;
+	}
+
+	public void addLinha(Linha linha) {
+		this.linhas.add(linha);
+	}
 
 }

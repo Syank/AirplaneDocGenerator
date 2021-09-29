@@ -33,15 +33,16 @@ public class AuthenticationFilter implements Filter {
 		boolean authentication = requestPath.contains("/authentication/login");
 		boolean checkLogged = requestPath.equals("/user/isLogged");
 		boolean preflight = httpRequest.getMethod().equalsIgnoreCase("OPTIONS");
-		boolean swagger = requestPath.contains("/swagger-ui");
+		boolean swagger = requestPath.contains("swagger");
+		boolean swaggerDocs = requestPath.contains("api-docs");
 
-		boolean allowRequest = true;
+		boolean allowRequest = false;
 		
 		if(session == null) {
 			if(preflight) {
 				allowRequest = true;
 				
-			}else if(authentication || checkLogged || swagger) {
+			}else if(authentication || checkLogged || swagger || swaggerDocs) {
 				allowRequest = true;
 				
 			}

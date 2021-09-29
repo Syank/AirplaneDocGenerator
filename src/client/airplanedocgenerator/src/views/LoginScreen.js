@@ -91,29 +91,34 @@ class LoginScreen extends React.Component {
         // Impede o formulário de ser enviado automáticamente
         event.preventDefault();
 
-        let userLogin = document.getElementById(this.userLoginInputId).value;
-        let userPassword = document.getElementById(
-            this.userPasswordInputId
-        ).value;
+        try {
+            let userLogin = document.getElementById(this.userLoginInputId).value;
+            let userPassword = document.getElementById(
+                this.userPasswordInputId
+            ).value;
 
-        let authenticated = await this.authenticateUser(
-            userLogin,
-            userPassword
-        );
-
-        if (authenticated) {
-            let isAdmin = await this.isUserAdmin();
-
-            this.props.setUserLoggedState(true);
-            this.props.setUserLoggedType(isAdmin);
-
-            this.goToHomePage();
-        } else {
-            notification(
-                "error",
-                "Ops!",
-                "Verifique o e-mail e a senha e tente novamente!"
+            let authenticated = await this.authenticateUser(
+                userLogin,
+                userPassword
             );
+
+            if (authenticated) {
+                let isAdmin = await this.isUserAdmin();
+
+                this.props.setUserLoggedState(true);
+                this.props.setUserLoggedType(isAdmin);
+
+                this.goToHomePage();
+            } else {
+                notification(
+                    "error",
+                    "Ops!",
+                    "Verifique o e-mail e a senha e tente novamente!"
+                );
+            }
+        }
+        catch (exception) {
+            notification("error", "Ops!", "Não há conexão com o servidor. Entre em contato com a administração.  😵");
         }
     }
 

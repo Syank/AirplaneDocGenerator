@@ -1,5 +1,6 @@
 package api.crabteam.controllers;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -11,14 +12,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import api.crabteam.controllers.requestsBody.NewProject;
 import api.crabteam.controllers.requestsBody.NewProjectName;
 import api.crabteam.model.entities.Projeto;
+import api.crabteam.model.entities.builders.ProjetoBuilder;
 import api.crabteam.model.repositories.ProjetoRepository;
 
 /**
@@ -31,7 +35,9 @@ import api.crabteam.model.repositories.ProjetoRepository;
 public class ProjetoController {
 
 	@Autowired
-	ProjetoRepository projetoRepository;
+	public ProjetoRepository projetoRepository;
+	@Autowired
+	public ProjetoBuilder builder;
 	
 	
 	/**
@@ -51,6 +57,17 @@ public class ProjetoController {
 		return new ResponseEntity<List<Projeto>>(projects, HttpStatus.OK);
 	}
 	
+	@GetMapping("/findByName")
+	public ResponseEntity<?> findProjectByName(@RequestParam String projectName){
+		Projeto project = projetoRepository.findByName(projectName);
+		
+		if(project != null) {
+			return new ResponseEntity<Projeto>(project, HttpStatus.OK);
+		}
+		
+		return new ResponseEntity<Projeto>(HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+	
 	/**
 	 * Cria um nome projeto e o registra no banco de dados
 	 * 
@@ -59,22 +76,26 @@ public class ProjetoController {
 	 *                     O Spring se encarregará de fazer a associação com o objeto NewProject
 	 * @return Retorna <b>true</b> caso o projeto seja criado com sucesso, caso contrário, retorna <b>false</b>
 	 * @author Rafael Furtado
+	 * @throws IOException 
 	 */
 	@PostMapping("/create")
-	public ResponseEntity<Boolean> createNewProject(@RequestBody NewProject newProject){
-		String name = newProject.getNome().toUpperCase();
-		String description = newProject.getDescricao();
+	public ResponseEntity<?> createNewProject(@RequestParam(required = false) MultipartFile codelistFile, NewProject newProject) throws IOException {
+		builder.setRepository(projetoRepository);
 		
-		Projeto projeto = new Projeto(name, description);
-		
-		try {
-			projetoRepository.save(projeto);
+		if(codelistFile != null) {
+			newProject.setArquivoCodelist(codelistFile);
 			
-			return new ResponseEntity<Boolean>(true, HttpStatus.OK);
-		}catch (Exception e) {
-			return new ResponseEntity<Boolean>(false, HttpStatus.BAD_REQUEST);
 		}
 		
+		builder.build(newProject);
+		
+		if(builder.isPersisted()) {
+			return new ResponseEntity<Boolean>(true, HttpStatus.OK);
+		}
+		
+		String failMessage = builder.getFailMessage();
+		
+		return new ResponseEntity<String>(failMessage, HttpStatus.BAD_REQUEST);
 	}
 	
 	@PostMapping("/setName")
