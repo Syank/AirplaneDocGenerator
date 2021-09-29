@@ -1,5 +1,7 @@
 package api.crabteam.controllers;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,11 +42,19 @@ public class LinhaController {
 	@Autowired
 	LinhaBuilder linhaBuilder;
 	
+	
+	/**
+	 * Cria uma nova linha em uma codelist.
+	 * @param newLine
+	 * @param codelistName
+	 * @return ResponseEntity
+	 * @author Bárbara Port
+	 */
 	@PostMapping("/new/{codelistName}")
 	@ApiOperation("Creates a new line into a codelist.")
 	@ApiResponses({
         @ApiResponse(code = 200, message = "Line successfully created."),
-        @ApiResponse(code = 400, message = "Line wasn't created.")
+        @ApiResponse(code = 400, message = "The line wasn't created.")
     })
 	public ResponseEntity<?> createLine (@RequestBody NewLine newLine, @PathVariable String codelistName) {
 		
@@ -77,11 +87,18 @@ public class LinhaController {
 		
 	}
 	
+	/**
+	 * Atualiza as informações de uma linha.
+	 * @param updatedLine
+	 * @param line
+	 * @return ResponseEntity
+	 * @author Bárbara Port
+	 */
 	@PostMapping("/update/{line}")
 	@ApiOperation("Updates a line.")
 	@ApiResponses({
         @ApiResponse(code = 200, message = "Line successfully updated."),
-        @ApiResponse(code = 400, message = "Line wasn't updated.")
+        @ApiResponse(code = 400, message = "The line wasn't updated.")
     })
 	public ResponseEntity<?> updateLine (@RequestBody NewLine updatedLine, @PathVariable int line) {
 		
@@ -105,11 +122,17 @@ public class LinhaController {
 		return new ResponseEntity<Boolean>(true, HttpStatus.OK);
 	}
 	
+	/**
+	 * Deleta uma linha de uma codelist.
+	 * @param line
+	 * @return ResponseEntity
+	 * @author Bárbara Port
+	 */
 	@PostMapping("/delete/{line}")
 	@ApiOperation("Deletes a line.")
 	@ApiResponses({
         @ApiResponse(code = 200, message = "Line successfully deleted."),
-        @ApiResponse(code = 400, message = "Line wasn't deleted.")
+        @ApiResponse(code = 400, message = "The line wasn't deleted.")
     })
 	public ResponseEntity<?> deleteLine (@PathVariable int line) {
 		try {
@@ -118,6 +141,43 @@ public class LinhaController {
 		catch (Exception e) {
 			return new ResponseEntity<String>("A linha não foi deletada.", HttpStatus.BAD_REQUEST);
 		}
+		
+		return new ResponseEntity<Boolean>(true, HttpStatus.OK);
+	}
+	
+	/**
+	 * Associa um arquivo a uma linha de uma codelist.
+	 * @param filePath
+	 * @param line
+	 * @return ResponseEntity
+	 * @author Bárbara Port
+	 */
+	@PostMapping("/attachFile/{line}")
+	@ApiOperation("Attaches a file to a line.")
+	@ApiResponses({
+        @ApiResponse(code = 200, message = "File successfully attached."),
+        @ApiResponse(code = 400, message = "The file wasn't attached to the line."),
+        @ApiResponse(code = 404, message = "The file wasn't found.")
+    })
+	public ResponseEntity<?> attachFile (@RequestBody String filePath, @PathVariable int line) {
+		
+		try {
+			Linha linha = linhaRepository.getById(line);
+			linha.setId(line);
+			linha.setFilePath(filePath);
+			
+			try {
+				linhaRepository.save(linha);
+			}
+			catch (Exception e) {
+				return new ResponseEntity<String>("O arquivo não foi associado à linha.", HttpStatus.BAD_REQUEST);
+			}
+			
+		}
+		catch (Exception exception) {
+			return new ResponseEntity<String>("A linha não foi encontrada.", HttpStatus.NOT_FOUND);
+		}
+		
 		
 		return new ResponseEntity<Boolean>(true, HttpStatus.OK);
 	}
