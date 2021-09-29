@@ -245,7 +245,7 @@ class SelectProjectScreen extends React.Component {
 
         let searchList = this.getSearchList(valueToSearch);
 
-        if (searchList.length == 0){
+        if (searchList.length === 0){
             notification("error", "Algo deu errado 🙁", "Esse item não existe");
 
             return searchList;
@@ -362,15 +362,12 @@ class SelectProjectScreen extends React.Component {
      * 
      * @returns Retorna a lista de manuais que serão exibidas para a página em questão
      */
-    getProjectsToShow(){
+    getProjectsToShow() {
         let page = this.state["page"] - 1;
 
         let projectsToShow = this.state["projectsList"][page];
-        
-        if(projectsToShow === undefined){
-            projectsToShow = [];
 
-        if(projectsToShow === undefined){
+        if (projectsToShow === undefined) {
             projectsToShow = [];
 
         }
