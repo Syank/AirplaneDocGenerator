@@ -104,5 +104,21 @@ public class LinhaController {
 		
 		return new ResponseEntity<Boolean>(true, HttpStatus.OK);
 	}
-
+	
+	@PostMapping("/delete/{line}")
+	@ApiOperation("Deletes a line.")
+	@ApiResponses({
+        @ApiResponse(code = 200, message = "Line successfully deleted."),
+        @ApiResponse(code = 400, message = "Line wasn't deleted.")
+    })
+	public ResponseEntity<?> deleteLine (@PathVariable int line) {
+		try {
+			linhaRepository.deleteById(line);
+		}
+		catch (Exception e) {
+			return new ResponseEntity<String>("A linha não foi deletada.", HttpStatus.BAD_REQUEST);
+		}
+		
+		return new ResponseEntity<Boolean>(true, HttpStatus.OK);
+	}
 }
