@@ -2,7 +2,6 @@ package api.crabteam.controllers;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
@@ -20,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import api.crabteam.controllers.requestsBody.NewProject;
-import api.crabteam.controllers.requestsBody.NewProjectName;
 import api.crabteam.model.entities.Projeto;
 import api.crabteam.model.entities.builders.ProjetoBuilder;
 import api.crabteam.model.repositories.ProjetoRepository;
@@ -96,29 +94,6 @@ public class ProjetoController {
 		String failMessage = builder.getFailMessage();
 		
 		return new ResponseEntity<String>(failMessage, HttpStatus.BAD_REQUEST);
-	}
-	
-	@PostMapping("/setName")
-	public ResponseEntity<Boolean> changeProjectName(@RequestBody NewProjectName newProjectName){
-		String oldName=newProjectName.getOldName().toUpperCase();
-		String newName=newProjectName.getNewName().toUpperCase();
-		
-		Projeto projeto = projetoRepository.findByName(oldName);
-		
-		if(projeto==null) {
-			return new ResponseEntity<Boolean>(false, HttpStatus.BAD_REQUEST);
-		}
-		
-		projeto.setNome(newName);
-		
-		try {
-			projetoRepository.save(projeto);
-			
-			return new ResponseEntity<Boolean>(true, HttpStatus.OK);
-		}catch (Exception e) {
-			return new ResponseEntity<Boolean>(false, HttpStatus.BAD_REQUEST);
-		}
-		
 	}
 	
 }
