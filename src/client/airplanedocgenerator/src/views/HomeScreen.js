@@ -2,12 +2,11 @@ import React from "react";
 
 import CardHeader from "../assets/components/CardHeader";
 import CardOption from "../assets/components/CardOption";
+import Loader from "../assets/components/Loader";
 
 import { notification } from "../assets/components/Notifications";
 
 import { getBackgroundImage } from "../utils/pagesUtils";
-
-
 
 /**
  * Uma classe de "view" que representa a tela de login da aplicação
@@ -39,8 +38,12 @@ class HomeScreen extends React.Component {
 
         this.goToCreateNewProjectPage =
             this.goToCreateNewProjectPage.bind(this);
-        
+
         this.goToSelectProjectPage = this.goToSelectProjectPage.bind(this);
+
+        this.state = {
+            loading: true,
+        };
     }
 
     /**
@@ -89,7 +92,11 @@ class HomeScreen extends React.Component {
      * @author Rafael Furtado
      */
     goToPrintProjectPage() {
-        notification("info", "Aguarde um pouco!", "Essa funcionalidade estará disponível em breve!");
+        notification(
+            "info",
+            "Aguarde um pouco!",
+            "Essa funcionalidade estará disponível em breve!"
+        );
     }
 
     /**
@@ -165,6 +172,39 @@ class HomeScreen extends React.Component {
     }
 
     /**
+     * Constrói o Loader de pagina
+     *
+     * @returns Retorna o Loader de pagina.
+     * @author Carolina Margiotti
+     */
+    getLoaderScreen() {
+        let loaderScreen = (
+            <div id="contentDisplay" className="w-full h-full">
+                {getBackgroundImage()}
+
+                <div
+                    id="loaderScreen"
+                    className="w-full h-full flex flex-col items-center justify-center relative select-none"
+                >
+                    <Loader />
+                </div>
+            </div>
+        );
+
+        return loaderScreen;
+    }
+
+    /**
+     * É invocado imediatamente após um elemento ser montado
+     *
+     * @returns Desliga o loading após a pagina ser totalmente montada.
+     * @author Carolina Margiotti
+     */
+    componentDidMount() {
+        this.setState({ loading: false });
+    }
+
+    /**
      * Método obrigatório herdado da classe React.Component
      *
      * Renderiza a página inicial da aplicação
@@ -174,6 +214,11 @@ class HomeScreen extends React.Component {
      */
     render() {
         let homeScreen = this.getHomeScreen();
+        let loaderScreen = this.getLoaderScreen();
+
+        if (this.state.loading) {
+            return loaderScreen;
+        }
 
         return homeScreen;
     }
