@@ -39,6 +39,7 @@ class SelectProjectScreen extends React.Component {
         this.nextPage = this.nextPage.bind(this);
         this.previousPage = this.previousPage.bind(this);
         this.search = this.search.bind(this);
+        this.goToProjectView = this.goToProjectView.bind(this);
 
     }
 
@@ -320,7 +321,17 @@ class SelectProjectScreen extends React.Component {
      * @author Rafael Furtado
      */
     goToProjectView(){
-        notification("info", "Um momento! 🤔", "Este recurso ainda não está disponível no momento");
+        let projectName = this.state["selectedProject"]["nome"];
+        
+        if(projectName !== "Selecione um manual"){
+            window.sessionStorage.setItem("selectedProject", projectName);
+
+            this.props.navigation("projectAdministration");
+
+        }else{
+            notification("info", "Um momento! 😉", "Selecione um projeto antes de navegar para sua página de administração");
+            
+        }
 
     }
 
@@ -349,6 +360,11 @@ class SelectProjectScreen extends React.Component {
         let page = this.state["page"] - 1;
 
         let projectsToShow = this.state["projectsList"][page];
+
+        if(projectsToShow === undefined){
+            projectsToShow = [];
+
+        }
 
         return projectsToShow;
     }
