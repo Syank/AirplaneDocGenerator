@@ -13,7 +13,8 @@ class ProjectAdministrationScreen extends React.Component{
         this.projectName = window.sessionStorage.getItem("selectedProject");
 
         this.state = {
-            projectData: {}
+            projectData: {},
+            projectVariations: {}
         };
 
         this.headerCardTitle = "Administração do projeto";
@@ -32,7 +33,12 @@ class ProjectAdministrationScreen extends React.Component{
         let response = await serverRequester.doGet("/project/findByName", requestParameters);
 
         if(response["ok"] === true){
-            this.setState({projectData: response["responseJson"]});
+            let projectVariations = this.getVariations(response["responseJson"]);
+
+            this.setState({
+                projectData: response["responseJson"],
+                projectVariations: projectVariations
+            });
 
         }else{
             notification("error", "Algo deu errado 🙁", 
@@ -42,6 +48,32 @@ class ProjectAdministrationScreen extends React.Component{
             
         }
 
+    }
+
+    getVariations(projectData){
+        let codelist = projectData["codelist"];
+        let linhas = codelist["linhas"];
+
+        let variations = {};
+
+        for (let i = 0; i < linhas.length; i++) {
+            const linha = linhas[i];
+
+            let remarks = linha["remarks"];
+
+            for (let x = 0; x < remarks.length; x++) {
+                const remark = remarks[x];
+
+                let traco = remark["traco"];
+                let apelido = remark["apelido"];
+                
+                variations[traco] = apelido;
+
+            }
+  
+        }
+
+        return variations;
     }
 
     /**
@@ -80,10 +112,49 @@ class ProjectAdministrationScreen extends React.Component{
         return container;
     }
 
+    getVariationsToList(){
+        let variationsElements = [];
+
+        let variationsList = this.state["projectVariations"];
+
+        let keys;
+
+        if(variationsList !== undefined){
+            keys = Object.keys(variationsList);
+
+        }else{
+            keys = [];
+
+        }
+        
+        for (let i = 0; i < keys.length; i++) {
+            const key = keys[i];
+            
+            let apelido = variationsList[key];
+
+            let element = (
+                <div>
+                    <label>{this.projectName + "-" + key}</label>
+                    <label>{"(" + apelido + ")"}</label>
+                </div>
+
+            );
+
+            variationsElements.push(element);
+        }
+
+        return variationsElements;
+    }
+
     getVariationsContainer(){
         let container = (
-            <div className="flex flex-col w-1/3">
-                
+            <div className="flex flex-col w-1/3 ml-3 mr-3 pt-1 pb-1 h-full">
+                <div className="flex flex-row justify-center pb-1 border-b-2 border-black border-opacity-50">
+                   <label>Variações</label>
+                </div>
+                <div>
+                    {this.getVariationsToList()}
+                </div>
             </div>
         );
 
