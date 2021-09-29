@@ -3,6 +3,7 @@ import CardHeader from "../assets/components/CardHeader";
 import { notification } from "../assets/components/Notifications";
 import { getBackgroundImage } from "../utils/pagesUtils";
 import ServerRequester from "../utils/ServerRequester";
+import Button from "../assets/components/Button";
 
 
 class ProjectAdministrationScreen extends React.Component{
@@ -62,8 +63,17 @@ class ProjectAdministrationScreen extends React.Component{
 
     getDescriptionContainer(){
         let container = (
-            <div>
-
+            <div className="flex flex-col w-1/3 pr-3 pt-1 pb-1 h-full justify-between">
+                <div className="flex flex-row justify-center pb-1 border-b-2 border-black border-opacity-50">
+                   <label>{this.projectName}</label>
+                </div>
+                <div className="text-center">
+                    <p className="text-sm">{this.state["projectData"]["descricao"]}</p>
+                </div>
+                <div className="border-t-2 pt-2 border-black border-opacity-50 flex flex-col items-center text-sm">
+                   <Button text="Codelist" type="confirm"></Button>
+                   <Button text="Revisões" type="confirm"></Button>
+                </div>
             </div>
         );
 
@@ -72,7 +82,7 @@ class ProjectAdministrationScreen extends React.Component{
 
     getVariationsContainer(){
         let container = (
-            <div>
+            <div className="flex flex-col w-1/3">
                 
             </div>
         );
@@ -82,7 +92,7 @@ class ProjectAdministrationScreen extends React.Component{
 
     getInformationsContainer(){
         let container = (
-            <div>
+            <div className="flex flex-col w-1/3">
                 
             </div>
         );
