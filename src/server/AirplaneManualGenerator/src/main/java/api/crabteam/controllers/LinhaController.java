@@ -76,5 +76,33 @@ public class LinhaController {
 		return new ResponseEntity<Boolean>(true, HttpStatus.OK);
 		
 	}
+	
+	@PostMapping("/update/{line}")
+	@ApiOperation("Updates a line.")
+	@ApiResponses({
+        @ApiResponse(code = 200, message = "Line successfully updated."),
+        @ApiResponse(code = 400, message = "Line wasn't updated.")
+    })
+	public ResponseEntity<?> updateLine (@RequestBody NewLine updatedLine, @PathVariable int line) {
+		
+		Linha linha = linhaRepository.getById(line);
+		linha.setId(line);
+		linha.setSectionNumber(updatedLine.getSectionNumber());
+		linha.setSubsectionNumber(updatedLine.getSubsectionNumber());
+		linha.setBlockNumber(updatedLine.getBlockNumber());
+		linha.setBlockName(updatedLine.getBlockName());
+		linha.setCode(updatedLine.getCode());
+		linha.setFilePath(updatedLine.getFilePath());
+		linha.setRemarks(updatedLine.getRemarks());
+		
+		try {
+			linhaRepository.save(linha);
+		}
+		catch (Exception e) {
+			return new ResponseEntity<String>("A linha não foi atualizada.", HttpStatus.BAD_REQUEST);
+		}
+		
+		return new ResponseEntity<Boolean>(true, HttpStatus.OK);
+	}
 
 }
