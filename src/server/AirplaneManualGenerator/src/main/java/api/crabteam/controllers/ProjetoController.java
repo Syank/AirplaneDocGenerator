@@ -11,8 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -55,6 +55,17 @@ public class ProjetoController {
 		return new ResponseEntity<List<Projeto>>(projects, HttpStatus.OK);
 	}
 	
+	@GetMapping("/findByName")
+	public ResponseEntity<?> findProjectByName(@RequestParam String projectName){
+		Projeto project = projetoRepository.findByName(projectName);
+		
+		if(project != null) {
+			return new ResponseEntity<Projeto>(project, HttpStatus.OK);
+		}
+		
+		return new ResponseEntity<Projeto>(HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+	
 	/**
 	 * Cria um nome projeto e o registra no banco de dados
 	 * 
@@ -66,10 +77,13 @@ public class ProjetoController {
 	 * @throws IOException 
 	 */
 	@PostMapping("/create")
-	public ResponseEntity<?> createNewProject(@RequestParam MultipartFile codelistFile, NewProject newProject) throws IOException {
+	public ResponseEntity<?> createNewProject(@RequestParam(required = false) MultipartFile codelistFile, NewProject newProject) throws IOException {
 		builder.setRepository(projetoRepository);
 		
-		newProject.setArquivoCodelist(codelistFile);
+		if(codelistFile != null) {
+			newProject.setArquivoCodelist(codelistFile);
+			
+		}
 		
 		builder.build(newProject);
 		
