@@ -3,8 +3,11 @@ package api.crabteam.model.entities.builders;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
 import api.crabteam.model.entities.Remark;
 
+@Service
 public class LinhaBuilder {
 	
 	LinhaBuilder () {

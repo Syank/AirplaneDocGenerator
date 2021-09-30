@@ -7,6 +7,6 @@ import api.crabteam.model.entities.Codelist;
 
 public interface CodelistRepository extends JpaRepository<Codelist, Integer> {
 
-	@Query("select codelist from codelist c where c.nome = ?1")
+	@Query("select c from codelist c where c.nome = ?1")
 	Codelist findByName(String name);
 }
