@@ -1,5 +1,9 @@
 package api.crabteam.model.entities.builders;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -249,11 +253,11 @@ public class CodelistBuilder {
 		throw new Exception();
 	}
 	
-	public void build (NewCodelist newCodelist, String projectName) {
+	public void build (NewCodelist newCodelist, String projectName) throws IOException {
 		String name = newCodelist.getNome().toUpperCase();
-		byte[] codelistFile = newCodelist.getArquivoCodelist();
+		byte[] codelistBytes = newCodelist.getArquivoCodelist();
 		
-		if(codelistFile == null) {
+		if(codelistBytes == null) {
 			CodelistBuilder codelistBuilder = new CodelistBuilder(name);
 			Codelist codelist = codelistBuilder.getBuildedCodelist();
 			
@@ -261,7 +265,7 @@ public class CodelistBuilder {
 		}
 		else {
 			try {
-				CodelistBuilder codelistBuilder = new CodelistBuilder(codelistFile, name);
+				CodelistBuilder codelistBuilder = new CodelistBuilder(codelistBytes, name);
 				Codelist codelist = codelistBuilder.getBuildedCodelist();
 				
 				this.isPersisted = persistCodelist(codelist, projectName);

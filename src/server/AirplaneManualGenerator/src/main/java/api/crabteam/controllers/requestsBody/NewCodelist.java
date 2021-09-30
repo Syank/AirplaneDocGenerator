@@ -1,5 +1,7 @@
 package api.crabteam.controllers.requestsBody;
 
+import java.io.File;
+
 /**
  * Classe que mapeia a criação de uma codelist
  * @author Bárbara Port
@@ -28,8 +30,8 @@ public class NewCodelist {
 	public byte[] getArquivoCodelist() {
 		return arquivoCodelist;
 	}
-	public void setArquivoCodelist(byte[] arquivoCodelist) {
-		this.arquivoCodelist = arquivoCodelist;
+	public void setArquivoCodelist(byte[] fileBytes) {
+		this.arquivoCodelist = fileBytes;
 	}
 
 }
