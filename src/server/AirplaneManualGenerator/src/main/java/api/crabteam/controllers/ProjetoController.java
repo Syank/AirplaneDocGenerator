@@ -11,8 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,6 +22,9 @@ import api.crabteam.controllers.requestsBody.NewProject;
 import api.crabteam.model.entities.Projeto;
 import api.crabteam.model.entities.builders.ProjetoBuilder;
 import api.crabteam.model.repositories.ProjetoRepository;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 
 /**
  * Controller associado às requisições dos projetos
@@ -34,15 +37,22 @@ public class ProjetoController {
 
 	@Autowired
 	public ProjetoRepository projetoRepository;
+	
 	@Autowired
 	public ProjetoBuilder builder;
 	
 	
 	/**
-	 * Método que retorna todos os projetos
-	 * @return
+	 * Retorna todos os projetos
+	 * @param request
+	 * @return ResponseEntity
 	 */
 	@GetMapping("/all")
+    @ApiOperation("Finds all projects.")
+	@ApiResponses({
+        @ApiResponse(code = 200, message = "All projects found."),
+        @ApiResponse(code = 401, message = "Unauthorized.")
+    })
 	public ResponseEntity<?> getAllProjects (ServletRequest request) {
 		HttpSession session = ((HttpServletRequest) request).getSession(false);
 		
@@ -55,7 +65,17 @@ public class ProjetoController {
 		return new ResponseEntity<List<Projeto>>(projects, HttpStatus.OK);
 	}
 	
+	/**
+	 * Método que encontra um projeto pelo seu nome
+	 * @param projectName
+	 * @return ResponseEntity
+	 */
 	@GetMapping("/findByName")
+    @ApiOperation("Finds a project by its name.")
+	@ApiResponses({
+        @ApiResponse(code = 200, message = "Project found."),
+        @ApiResponse(code = 500, message = "Project wasn't found.")
+    })
 	public ResponseEntity<?> findProjectByName(@RequestParam String projectName){
 		Projeto project = projetoRepository.findByName(projectName);
 		
@@ -63,8 +83,44 @@ public class ProjetoController {
 			return new ResponseEntity<Projeto>(project, HttpStatus.OK);
 		}
 		
-		return new ResponseEntity<Projeto>(HttpStatus.INTERNAL_SERVER_ERROR);
+		return new ResponseEntity<Boolean>(false, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
+	
+	/**
+	 * Método que altera a descrição de um projeto
+	 * @param descricao
+	 * @param nomeProjeto
+	 * @return ResponseEntity
+	 * @author Francisco Cardoso
+	 */
+	@PutMapping("/changeDescription")
+    @ApiOperation("Finds a project by its name.")
+	@ApiResponses({
+        @ApiResponse(code = 200, message = "Description changed."),
+        @ApiResponse(code = 500, message = "Description wasn't changed."),
+        @ApiResponse(code = 400, message = "Project wasn't found.")
+    })
+	public ResponseEntity<?> atualizaProjeto(@RequestParam String descricao, @RequestParam String nomeProjeto) {
+		
+		try {
+			Projeto project = projetoRepository.findByName(nomeProjeto);
+			
+			try {
+				project.setDescricao(descricao);
+				projetoRepository.save(project);
+				return new ResponseEntity<Boolean>(true, HttpStatus.OK);
+			}
+			catch (Exception e) {
+				return new ResponseEntity<Boolean>(false, HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+		}
+		catch (Exception e) {
+			return new ResponseEntity<Boolean>(false, HttpStatus.BAD_REQUEST);
+		}
+		
+	}
+	
+	
 	
 	/**
 	 * Cria um nome projeto e o registra no banco de dados
