@@ -1,15 +1,20 @@
 package api.crabteam.controllers;
 
+import java.io.File;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import antlr.debug.NewLineListener;
 import api.crabteam.controllers.requestsBody.NewLine;
@@ -29,7 +34,7 @@ import io.swagger.annotations.ApiResponses;
  *
  */
 @RestController
-@RequestMapping("/linha")
+@RequestMapping("/line")
 @Api("Line API")
 public class LinhaController {
 	
@@ -94,7 +99,7 @@ public class LinhaController {
 	 * @return ResponseEntity
 	 * @author Bárbara Port
 	 */
-	@PostMapping("/update/{line}")
+	@PutMapping("/update/{line}")
 	@ApiOperation("Updates a line.")
 	@ApiResponses({
         @ApiResponse(code = 200, message = "Line successfully updated."),
@@ -128,7 +133,7 @@ public class LinhaController {
 	 * @return ResponseEntity
 	 * @author Bárbara Port
 	 */
-	@PostMapping("/delete/{line}")
+	@DeleteMapping("/delete/{line}")
 	@ApiOperation("Deletes a line.")
 	@ApiResponses({
         @ApiResponse(code = 200, message = "Line successfully deleted."),
@@ -159,12 +164,12 @@ public class LinhaController {
         @ApiResponse(code = 400, message = "The file wasn't attached to the line."),
         @ApiResponse(code = 404, message = "The file wasn't found.")
     })
-	public ResponseEntity<?> attachFile (@RequestBody String filePath, @PathVariable int line) {
+	public ResponseEntity<?> attachFile (@RequestParam(name = "file") MultipartFile file, @PathVariable int line) {
 		
 		try {
 			Linha linha = linhaRepository.getById(line);
 			linha.setId(line);
-			linha.setFilePath(filePath);
+			linha.setFilePath(":/");
 			
 			try {
 				linhaRepository.save(linha);
