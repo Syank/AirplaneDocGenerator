@@ -4,6 +4,8 @@ import { notification } from "../assets/components/Notifications";
 import { getBackgroundImage } from "../utils/pagesUtils";
 import ServerRequester from "../utils/ServerRequester";
 import Button from "../assets/components/Button";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faFileAlt } from "@fortawesome/free-solid-svg-icons";
 
 
 class ProjectAdministrationScreen extends React.Component{
@@ -133,9 +135,12 @@ class ProjectAdministrationScreen extends React.Component{
             let apelido = variationsList[key];
 
             let element = (
-                <div>
-                    <label>{this.projectName + "-" + key}</label>
-                    <label>{"(" + apelido + ")"}</label>
+                <div className="flex flex-row border-b-2 border-black border-opacity-50 mb-2 pr-1 pl-1 items-center justify-between">
+                    <div className="flex flex-col">
+                        <label>{this.projectName + "-" + key}</label>
+                        <label>{"(" + apelido + ")"}</label>
+                    </div>
+                    <FontAwesomeIcon className="text-2xl cursor-pointer" icon={faFileAlt} color={"#5E74D6"}/>
                 </div>
 
             );
@@ -152,7 +157,7 @@ class ProjectAdministrationScreen extends React.Component{
                 <div className="flex flex-row justify-center pb-1 border-b-2 border-black border-opacity-50">
                    <label>Variações</label>
                 </div>
-                <div>
+                <div className="text-sm pt-4 h-full overflow-auto">
                     {this.getVariationsToList()}
                 </div>
             </div>
