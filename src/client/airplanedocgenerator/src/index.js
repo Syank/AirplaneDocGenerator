@@ -3,6 +3,7 @@ import ReactDOM from "react-dom";
 import "./assets/style/index.css";
 import reportWebVitals from "./utils/reportWebVitals";
 import Application from "./Application";
+import CodelistScreen from "./views/CodelistScreen";
 
 
 // Previne o aparecimento das barras de rolagem
@@ -10,7 +11,7 @@ document.body.style.overflow = "hidden";
 
 ReactDOM.render(
     <React.StrictMode>
-        <Application/>
+        <CodelistScreen/>
     </React.StrictMode>,
     document.getElementById("root")
 );
