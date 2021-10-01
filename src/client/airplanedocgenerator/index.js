@@ -34,3 +34,11 @@ ipcMain.on("close", function () {
 ipcMain.on("maximize", function () {
     mainWindow.maximize();
 });
+
+ipcMain.on("unmaximize", function () {
+    mainWindow.unmaximize();
+});
+
+ipcMain.on("isMaximized", function () {
+    return mainWindow.isMaximized();
+});
