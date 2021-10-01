@@ -8,9 +8,6 @@ contextBridge.exposeInMainWorld('electron', {
         maximize () {
             maximizeWindow()
         },
-        isMaximized () {
-            ismaximizedWindow()
-        },
         unmaximize () {
             unmaximizeWindow()
         },
@@ -34,8 +31,4 @@ function closeWindow() {
 
 function unmaximizeWindow() {
     ipcRenderer.send("unmaximize");
-}
-
-function ismaximizedWindow() {
-    ipcRenderer.send("isMaximized");
 }
