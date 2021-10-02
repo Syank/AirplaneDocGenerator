@@ -1,56 +1,24 @@
-package api.crabteam.model.entities;
+package api.crabteam.controllers.requestsBody;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import api.crabteam.model.entities.Remark;
 
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
-
-
-@Entity(name = "linha")
-public class Linha {
+/**
+ * Classe que mapeia a criação de uma linha.
+ * @author Bárbara Port
+ *
+ */
+public class NewLine {
 	
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private int id;
-	
-	@Column(nullable = false)
 	private String sectionNumber;
-	
-	@Column
 	private String subsectionNumber;
-	
-	@Column(nullable = false)
 	private String blockNumber;
-	
-	@Column(nullable = false)
 	private String blockName;
-	
-	@Column(nullable = false)
 	private String code;
-	
-	@Column
 	private String filePath;
-	
-	@OneToMany(cascade = CascadeType.ALL)
-	@LazyCollection(LazyCollectionOption.FALSE)
 	private List<Remark> remarks = new ArrayList<Remark>();
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
 
 	public String getSectionNumber() {
 		return sectionNumber;
@@ -106,10 +74,6 @@ public class Linha {
 
 	public void setRemarks(List<Remark> remarks) {
 		this.remarks = remarks;
-	}
-	
-	public void addRemark(Remark remark) {
-		this.remarks.add(remark);
 	}
 
 }
