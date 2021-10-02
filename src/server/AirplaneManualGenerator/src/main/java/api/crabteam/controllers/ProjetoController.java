@@ -12,16 +12,19 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import api.crabteam.controllers.requestsBody.ChangeProjectDescription;
+import api.crabteam.controllers.requestsBody.ChangeProjectName;
 import api.crabteam.controllers.requestsBody.NewProject;
 import api.crabteam.model.entities.Projeto;
 import api.crabteam.model.entities.builders.ProjetoBuilder;
 import api.crabteam.model.repositories.ProjetoRepository;
+import api.crabteam.utils.FileUtils;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -92,17 +95,22 @@ public class ProjetoController {
 	 * @param nomeProjeto
 	 * @return ResponseEntity
 	 * @author Francisco Cardoso
+	 * @author Bárbara Port
+	 * @author Rafael Furtado
 	 */
-	@PutMapping("/changeDescription")
+	@PostMapping("/changeDescription")
     @ApiOperation("Finds a project by its name.")
 	@ApiResponses({
         @ApiResponse(code = 200, message = "Description changed."),
         @ApiResponse(code = 500, message = "Description wasn't changed."),
         @ApiResponse(code = 400, message = "Project wasn't found.")
     })
-	public ResponseEntity<?> atualizaProjeto(@RequestParam String descricao, @RequestParam String nomeProjeto) {
+	public ResponseEntity<?> changeDescription(@RequestBody ChangeProjectDescription newData){
 		
 		try {
+			String nomeProjeto = newData.getProjectName().toUpperCase();
+			String descricao = newData.getProjectDescription();
+			
 			Projeto project = projetoRepository.findByName(nomeProjeto);
 			
 			try {
@@ -119,8 +127,6 @@ public class ProjetoController {
 		}
 		
 	}
-	
-	
 	
 	/**
 	 * Cria um nome projeto e o registra no banco de dados
@@ -149,7 +155,36 @@ public class ProjetoController {
 		
 		String failMessage = builder.getFailMessage();
 		
-		return new ResponseEntity<String>(failMessage, HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<String>(failMessage, HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+	
+	@PostMapping("/changeName")
+	public ResponseEntity<?> changeProjectName(@RequestBody ChangeProjectName newData){
+		String newProjectName = newData.getNewName().toUpperCase();
+		String oldProjectName = newData.getOldName().toUpperCase();
+		
+		Projeto project = projetoRepository.findByName(oldProjectName);
+		
+		if(project == null) {
+			return new ResponseEntity<String>("Não foi possível encontrar o projeto para alterar seu nome", HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
+		try {
+			String filesDirectory = System.getenv("APIEmbraerCodelistFolder");
+			
+			FileUtils.renameFile(filesDirectory, oldProjectName + "_codelist.xlsx", newProjectName + "_codelist.xlsx");
+			FileUtils.renameCodelistSheet(filesDirectory, newProjectName + "_codelist.xlsx", oldProjectName, newProjectName);
+			
+			project.getCodelist().setNome(newProjectName);
+			project.setNome(newProjectName);
+			
+			projetoRepository.save(project);
+			
+		}catch (Exception e) {
+			return new ResponseEntity<String>("Não foi possivel alterar o nome do projeto", HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
+		return new ResponseEntity<Boolean>(true, HttpStatus.OK);		
 	}
 	
 }

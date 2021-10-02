@@ -9,6 +9,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 
+import api.crabteam.utils.ProjectHealthCheck;
+import api.crabteam.utils.ProjectSituation;
+
 /**
  * Classe que representa a entidade "Projeto" no banco de dados
  * 
@@ -31,6 +34,10 @@ public class Projeto {
 	@JoinColumn(name = "codelist_id", referencedColumnName = "id")
 	private Codelist codelist;
 	
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "project_situation_id", referencedColumnName = "id")
+	private ProjectSituation situation;
+	
 	public Projeto() {
 		
 	}
@@ -44,6 +51,10 @@ public class Projeto {
 		this.nome = nome;
 		this.descricao = descricao;
 		this.codelist = codelist;
+		
+		ProjectHealthCheck healthCheck = new ProjectHealthCheck(this);
+		
+		this.situation = healthCheck.getSituation();
 		
 	}
 
@@ -69,6 +80,14 @@ public class Projeto {
 
 	public void setCodelist(Codelist codelist) {
 		this.codelist = codelist;
+	}
+
+	public ProjectSituation getSituation() {
+		return situation;
+	}
+
+	public void setSituation(ProjectSituation situation) {
+		this.situation = situation;
 	}
 	
 }

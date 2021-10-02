@@ -1,18 +1,11 @@
 package api.crabteam;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import api.crabteam.model.entities.Administrador;
-import api.crabteam.model.entities.Codelist;
-import api.crabteam.model.entities.Linha;
-import api.crabteam.model.entities.Projeto;
-import api.crabteam.model.entities.Remark;
 import api.crabteam.model.entities.Usuario;
 import api.crabteam.model.repositories.ProjetoRepository;
 import api.crabteam.model.repositories.UsuarioRepository;

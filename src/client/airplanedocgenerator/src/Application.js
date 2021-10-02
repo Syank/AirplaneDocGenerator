@@ -28,7 +28,8 @@ class Application extends React.Component {
         this.previousPageMap = {
             "creation-screen": "home",
             "new-project-screen": "creation-screen",
-            "selectProject": "home"
+            "selectProject": "home",
+            "projectAdministration": "selectProject"
         };
 
         this.setPageToRender = this.setPageToRender.bind(this);
