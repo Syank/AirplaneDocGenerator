@@ -134,8 +134,8 @@ public class ProjectHealthCheck {
 		for (int i = 0; i < linhas.size(); i++) {
 			Linha linha = linhas.get(i);
 
-			String section = linha.getSecao();
-			String block = linha.getBlock();
+			String section = linha.getSectionNumber();
+			String block = linha.getBlockNumber();
 			
 			String key = section + "-" + block;
 			
