@@ -15,8 +15,15 @@ class ProjectAdministrationScreen extends React.Component{
         this.projectName = window.sessionStorage.getItem("selectedProject");
 
         this.state = {
-            projectData: {},
-            projectVariations: {}
+            projectData: {
+                situation: {
+                    situationTitle: "",
+                    situationMessage: "",
+                    ok: false
+                }
+            },
+            projectVariations: {},
+            
         };
 
         this.headerCardTitle = "Administração do projeto";
@@ -135,7 +142,7 @@ class ProjectAdministrationScreen extends React.Component{
             let apelido = variationsList[key];
 
             let element = (
-                <div className="flex flex-row border-b-2 border-black border-opacity-50 mb-2 pr-1 pl-1 items-center justify-between">
+                <div key={apelido} className="flex flex-row border-b-2 border-black border-opacity-50 mb-2 pr-1 pl-1 items-center justify-between">
                     <div className="flex flex-col">
                         <label>{this.projectName + "-" + key}</label>
                         <label>{"(" + apelido + ")"}</label>
@@ -167,9 +174,28 @@ class ProjectAdministrationScreen extends React.Component{
     }
 
     getInformationsContainer(){
+        let situationTitleColor;
+
+        if(this.state["projectData"]["situation"]["ok"]){
+            situationTitleColor = "text-green-600";
+
+        }else{
+            situationTitleColor = "text-red-600";
+
+        }
+        
         let container = (
-            <div className="flex flex-col w-1/3">
-                
+            <div className="flex flex-col w-1/3 pl-3 pt-1 pb-1 h-full justify-between">
+                <div className="flex flex-row justify-center pb-1 border-b-2 border-black border-opacity-50">
+                   <label>{"Situação"}</label>
+                </div>
+                <div className="text-center h-full pt-5">
+                    <label className={"font-bold " + situationTitleColor}>{this.state["projectData"]["situation"]["situationTitle"]}</label>
+                    <p className="text-sm mt-5">{this.state["projectData"]["situation"]["situationMessage"]}</p>
+                </div>
+                <div className="border-t-2 pt-2 border-black border-opacity-50 flex flex-col items-center text-sm">
+                   <Button text="Exportar" type="confirm"></Button>
+                </div>
             </div>
         );
 
@@ -180,9 +206,9 @@ class ProjectAdministrationScreen extends React.Component{
         let container = (
             <div className="text-xl w-10/12 h-selectProjectH bg-white flex flex-row items-center px-6 py-2 shadow-2xl justify-evenly">
                 {this.getDescriptionContainer()}
-                <div className="bg-gray-400 h-full mt-8 mb-8 w-1"></div>
+                <div className="border-black border-opacity-40 border-l-2 h-full mt-8 mb-8"></div>
                 {this.getVariationsContainer()}
-                <div className="bg-gray-400 h-full mt-8 mb-8 w-1"></div>
+                <div className="border-black border-opacity-40 border-l-2 h-full mt-8 mb-8"></div>
                 {this.getInformationsContainer()}
             </div>
         );
