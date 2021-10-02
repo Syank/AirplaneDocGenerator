@@ -246,7 +246,7 @@ class SelectProjectScreen extends React.Component {
         let searchList = this.getSearchList(valueToSearch);
 
         if (searchList.length === 0){
-            notification("error", "Algo deu errado 🙁", "Nenhum projeto encontrado para essa pesquisa");
+            notification("info", "Nenhum resultado 😮", "Nenhum projeto foi encontrado para essa pesquisa");
         
             return searchList;
         }

@@ -1,11 +1,11 @@
 import React from "react";
 import CardHeader from "../assets/components/CardHeader";
 import { notification } from "../assets/components/Notifications";
-import { getBackgroundImage } from "../utils/pagesUtils";
+import { getBackgroundImage, isValidProjectName } from "../utils/pagesUtils";
 import ServerRequester from "../utils/ServerRequester";
 import Button from "../assets/components/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFileAlt } from "@fortawesome/free-solid-svg-icons";
+import { faCheck, faFileAlt, faPen, faTimes } from "@fortawesome/free-solid-svg-icons";
 
 
 class ProjectAdministrationScreen extends React.Component{
@@ -13,6 +13,8 @@ class ProjectAdministrationScreen extends React.Component{
         super(props);
 
         this.projectName = window.sessionStorage.getItem("selectedProject");
+
+        this.projectNameInputId = "projectNameInput";
 
         this.state = {
             projectData: {
@@ -23,16 +25,25 @@ class ProjectAdministrationScreen extends React.Component{
                 }
             },
             projectVariations: {},
-            
+            editingProjectName: false
         };
 
         this.headerCardTitle = "Administração do projeto";
         this.headerCardText = "Administre o projeto do manual, " 
             + "visualizando a codelist completa ou a individual de cada variação, crie novas linhas na codelist e mais";
 
+        this.toggleEditProjectName = this.toggleEditProjectName.bind(this);
+        this.changeProjectName = this.changeProjectName.bind(this);
+        this.componentDidMount = this.componentDidMount.bind(this);
+
     }
 
     async componentDidMount(){
+        await this.loadProjectData();
+
+    }
+
+    async loadProjectData(){
         let serverRequester = new ServerRequester("http://localhost:8080");
         
         let requestParameters = {
@@ -46,7 +57,8 @@ class ProjectAdministrationScreen extends React.Component{
 
             this.setState({
                 projectData: response["responseJson"],
-                projectVariations: projectVariations
+                projectVariations: projectVariations,
+                editingProjectName: false
             });
 
         }else{
@@ -105,8 +117,8 @@ class ProjectAdministrationScreen extends React.Component{
     getDescriptionContainer(){
         let container = (
             <div className="flex flex-col w-1/3 pr-3 pt-1 pb-1 h-full justify-between">
-                <div className="flex flex-row justify-center pb-1 border-b-2 border-black border-opacity-50">
-                   <label>{this.projectName}</label>
+                <div className="pb-1 border-b-2 border-black border-opacity-50">
+                   {this.getProjectNameBox()}
                 </div>
                 <div className="text-center">
                     <p className="text-sm">{this.state["projectData"]["descricao"]}</p>
@@ -119,6 +131,77 @@ class ProjectAdministrationScreen extends React.Component{
         );
 
         return container;
+    }
+
+    getProjectNameBox(){
+        let editing = this.state["editingProjectName"];
+
+        let component;
+
+        if(editing){
+            component = (
+                <div className="flex flex-row justify-center items-center">
+                    <input id={this.projectNameInputId} className="mr-2 w-24" maxLength="8" placeholder={this.projectName}></input>
+                    <FontAwesomeIcon onClick={this.changeProjectName} className="cursor-pointer mr-3" icon={faCheck} color={"#18cb26"}/>
+                    <FontAwesomeIcon onClick={this.toggleEditProjectName} className="cursor-pointer" icon={faTimes} color={"#ef2c2c"}/>
+                </div>
+            );
+        }else{
+            component = (
+                <div className="flex flex-row justify-center items-center">
+                    <label className="mr-2">{this.projectName}</label>
+                    <FontAwesomeIcon onClick={this.toggleEditProjectName} className="cursor-pointer" icon={faPen} color={"#5E74D6"}/>
+                </div>
+            );
+        }
+
+        return component;
+    }
+
+    async changeProjectName(){
+        let projectNameInput = document.getElementById(this.projectNameInputId);
+
+        let newProjectName = projectNameInput.value;
+
+        let validName = isValidProjectName(newProjectName);
+
+        if(!validName){
+            notification(
+                "error",
+                "Nome de projeto inválido! 😵",
+                "O formato do nome de projetos devem iguais ao seguinte exemplo: ABC-1234"
+            );
+        }else{
+            let serverRequester = new ServerRequester("http://localhost:8080");
+
+            let data = {
+                oldName: this.projectName,
+                newName: newProjectName
+            };
+
+            let response = await serverRequester.doPost("/project/changeName", data);
+
+            if(response["responseJson"] === true){
+                notification("success", "Sucesso! 😄", "O nome do projeto foi alterado com sucesso!");
+
+                this.projectName = newProjectName.toUpperCase();
+
+                await this.loadProjectData();
+
+            }else{
+                notification("error", "Ops 😵", response["responseJson"]);
+
+            }
+
+        }
+
+    }
+
+    toggleEditProjectName(){
+        let state = this.state["editingProjectName"];
+
+        this.setState({editingProjectName: !state});
+
     }
 
     getVariationsToList(){

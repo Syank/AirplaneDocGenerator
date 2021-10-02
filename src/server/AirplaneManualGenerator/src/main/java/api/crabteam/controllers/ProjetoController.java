@@ -13,15 +13,19 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import api.crabteam.controllers.requestsBody.ChangeProjectName;
 import api.crabteam.controllers.requestsBody.NewProject;
 import api.crabteam.model.entities.Projeto;
 import api.crabteam.model.entities.builders.ProjetoBuilder;
 import api.crabteam.model.repositories.ProjetoRepository;
+import api.crabteam.utils.FileUtils;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -120,8 +124,6 @@ public class ProjetoController {
 		
 	}
 	
-	
-	
 	/**
 	 * Cria um nome projeto e o registra no banco de dados
 	 * 
@@ -149,7 +151,36 @@ public class ProjetoController {
 		
 		String failMessage = builder.getFailMessage();
 		
-		return new ResponseEntity<String>(failMessage, HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<String>(failMessage, HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+	
+	@PostMapping("/changeName")
+	public ResponseEntity<?> changeProjectName(@RequestBody ChangeProjectName newData){
+		String newProjectName = newData.getNewName().toUpperCase();
+		String oldProjectName = newData.getOldName().toUpperCase();
+		
+		Projeto project = projetoRepository.findByName(oldProjectName);
+		
+		if(project == null) {
+			return new ResponseEntity<String>("Não foi possível encontrar o projeto para alterar seu nome", HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
+		try {
+			String filesDirectory = System.getenv("APIEmbraerCodelistFolder");
+			
+			FileUtils.renameFile(filesDirectory, oldProjectName + "_codelist.xlsx", newProjectName + "_codelist.xlsx");
+			FileUtils.renameCodelistSheet(filesDirectory, newProjectName + "_codelist.xlsx", oldProjectName, newProjectName);
+			
+			project.getCodelist().setNome(newProjectName);
+			project.setNome(newProjectName);
+			
+			projetoRepository.save(project);
+			
+		}catch (Exception e) {
+			return new ResponseEntity<String>("Não foi possivel alterar o nome do projeto", HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
+		return new ResponseEntity<Boolean>(true, HttpStatus.OK);		
 	}
 	
 }

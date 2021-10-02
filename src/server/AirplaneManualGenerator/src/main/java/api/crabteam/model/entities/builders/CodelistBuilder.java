@@ -32,7 +32,7 @@ public class CodelistBuilder {
 	public CodelistBuilder(byte[] codelistBytesFile, String projectName) throws Exception {
 		String fileName = projectName + "_codelist.xlsx";
 		
-		FileUtils.saveFile(codelistBytesFile, fileName, PROJECTS_DIRECTORY);
+		FileUtils.saveCodelistFile(codelistBytesFile, fileName, PROJECTS_DIRECTORY, projectName);
 		
 		Workbook workbook = FileUtils.readAsExcel(PROJECTS_DIRECTORY + "\\" + fileName);
 		
