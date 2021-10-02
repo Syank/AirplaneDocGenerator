@@ -15,6 +15,7 @@ class ProjectAdministrationScreen extends React.Component{
         this.projectName = window.sessionStorage.getItem("selectedProject");
 
         this.projectNameInputId = "projectNameInput";
+        this.projectDescriptionInputId = "textAreaDescription";
 
         this.state = {
             projectData: {
@@ -25,7 +26,8 @@ class ProjectAdministrationScreen extends React.Component{
                 }
             },
             projectVariations: {},
-            editingProjectName: false
+            editingProjectName: false,
+            editingProjectDescription: false
         };
 
         this.headerCardTitle = "Administração do projeto";
@@ -35,6 +37,8 @@ class ProjectAdministrationScreen extends React.Component{
         this.toggleEditProjectName = this.toggleEditProjectName.bind(this);
         this.changeProjectName = this.changeProjectName.bind(this);
         this.componentDidMount = this.componentDidMount.bind(this);
+        this.toggleEditProjectDescription = this.toggleEditProjectDescription.bind(this);
+        this.changeProjectDescription = this.changeProjectDescription.bind(this);
 
     }
 
@@ -58,7 +62,8 @@ class ProjectAdministrationScreen extends React.Component{
             this.setState({
                 projectData: response["responseJson"],
                 projectVariations: projectVariations,
-                editingProjectName: false
+                editingProjectName: false,
+                editingProjectDescription: false
             });
 
         }else{
@@ -120,9 +125,7 @@ class ProjectAdministrationScreen extends React.Component{
                 <div className="pb-1 border-b-2 border-black border-opacity-50">
                    {this.getProjectNameBox()}
                 </div>
-                <div className="text-center">
-                    <p className="text-sm">{this.state["projectData"]["descricao"]}</p>
-                </div>
+                    {this.getProjectDescriptionBox()}
                 <div className="border-t-2 pt-2 border-black border-opacity-50 flex flex-col items-center text-sm">
                    <Button text="Codelist" type="confirm"></Button>
                    <Button text="Revisões" type="confirm"></Button>
@@ -131,6 +134,68 @@ class ProjectAdministrationScreen extends React.Component{
         );
 
         return container;
+    }
+
+    getProjectDescriptionBox(){
+        let editing = this.state["editingProjectDescription"];
+        
+        let container;
+
+        if(editing){
+            container = (
+            <div className="text-center h-full mt-5">
+                <div className="w-full flex flex-row justify-end mb-3">
+                    <FontAwesomeIcon onClick={this.changeProjectDescription} className="cursor-pointer mr-3" icon={faCheck} color={"#18cb26"}/>
+                    <FontAwesomeIcon onClick={this.toggleEditProjectDescription} className="cursor-pointer" icon={faTimes} color={"#ef2c2c"}/>
+                </div>
+                <textarea id={this.projectDescriptionInputId} className="text-sm w-full h-3/4 overflow-hidden text-center resize-none" maxLength="160" placeholder={this.state["projectData"]["descricao"]}></textarea>
+            </div>
+            );
+        }else{
+            container = (
+                <div className="text-center h-full mt-5">
+                    <div className="w-full flex flex-row justify-end mb-3">
+                        <FontAwesomeIcon onClick={this.toggleEditProjectDescription} className="cursor-pointer" icon={faPen} color={"#5E74D6"}/>
+                    </div>
+                    <p className="text-sm">{this.state["projectData"]["descricao"]}</p>
+                </div>
+            );
+        }
+
+        return container;
+    }
+
+    async changeProjectDescription(){
+        let projectDescriptionInput = document.getElementById(this.projectDescriptionInputId);
+
+        let newProjectDescription = projectDescriptionInput.value;
+
+        let serverRequester = new ServerRequester("http://localhost:8080");
+
+        let data = {
+            projectName: this.projectName,
+            projectDescription: newProjectDescription
+        };
+
+        let response = await serverRequester.doPost("/project/changeDescription", data);
+
+        if(response["responseJson"] === true){
+            notification("success", "Sucesso! 😄", "A descrição do projeto foi alterada com sucesso!");
+
+            // Lê novamente os dados do projeto para atualizar a página adequadamente
+            await this.loadProjectData();
+
+        }else{
+            notification("error", "Ops 🙁", "Algo deu errado durante a alteração da descrição do projeto");
+
+        }
+
+    }
+
+    toggleEditProjectDescription(){
+        let state = this.state["editingProjectDescription"];
+
+        this.setState({editingProjectDescription: !state})
     }
 
     getProjectNameBox(){
@@ -186,10 +251,11 @@ class ProjectAdministrationScreen extends React.Component{
 
                 this.projectName = newProjectName.toUpperCase();
 
+                // Lê novamente os dados do projeto para atualizar a página adequadamente
                 await this.loadProjectData();
 
             }else{
-                notification("error", "Ops 😵", response["responseJson"]);
+                notification("error", "Ops 🙁", "Algo deu errado enquanto o nome do projeto era alterado");
 
             }
 

@@ -12,14 +12,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import api.crabteam.controllers.requestsBody.ChangeProjectDescription;
 import api.crabteam.controllers.requestsBody.ChangeProjectName;
 import api.crabteam.controllers.requestsBody.NewProject;
 import api.crabteam.model.entities.Projeto;
@@ -96,17 +95,22 @@ public class ProjetoController {
 	 * @param nomeProjeto
 	 * @return ResponseEntity
 	 * @author Francisco Cardoso
+	 * @author Bárbara Port
+	 * @author Rafael Furtado
 	 */
-	@PutMapping("/changeDescription")
+	@PostMapping("/changeDescription")
     @ApiOperation("Finds a project by its name.")
 	@ApiResponses({
         @ApiResponse(code = 200, message = "Description changed."),
         @ApiResponse(code = 500, message = "Description wasn't changed."),
         @ApiResponse(code = 400, message = "Project wasn't found.")
     })
-	public ResponseEntity<?> atualizaProjeto(@RequestParam String descricao, @RequestParam String nomeProjeto) {
+	public ResponseEntity<?> changeDescription(@RequestBody ChangeProjectDescription newData){
 		
 		try {
+			String nomeProjeto = newData.getProjectName().toUpperCase();
+			String descricao = newData.getProjectDescription();
+			
 			Projeto project = projetoRepository.findByName(nomeProjeto);
 			
 			try {
