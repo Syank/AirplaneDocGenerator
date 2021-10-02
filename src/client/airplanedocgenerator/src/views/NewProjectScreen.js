@@ -3,7 +3,7 @@ import React from "react";
 import Button from "../assets/components/Button";
 import Tooltip from "../assets/components/Tooltip";
 
-import { getBackgroundImage } from "../utils/pagesUtils";
+import { getBackgroundImage, isValidProjectName } from "../utils/pagesUtils";
 import { notification } from "../assets/components/Notifications";
 
 import ServerRequester from "../utils/ServerRequester";
@@ -43,25 +43,22 @@ class NewProjectScreen extends React.Component {
         formData.append("descricao", "Projeto sem descrição. A descrição pode ser alterada na página de gerenciamento do projeto.");
         formData.append("codelistFile", file);
 
-        let partLetter = projectName.split("-")[0];
-        let partNumber = projectName.split("-")[1];
+        let validName = isValidProjectName(projectName);
 
-        if (partLetter === undefined ||
-            partNumber === undefined ||
-            !this.isValidPartLetter(partLetter) ||
-            !this.isValidPartNumber(partNumber)) {
+        if(!validName){
             notification(
                 "error",
                 "Nome de projeto inválido! 😵",
                 "O formato do nome de projetos devem iguais ao seguinte exemplo: ABC-1234"
             );
-        } else {
+            
+        }else{
             let response = await serverRequester.doPost(
                 "/project/create",
                 formData,
                 "multipart/form-data"
             );
-
+    
             if (response["responseJson"] === true) {
                 notification(
                     "success",
@@ -74,8 +71,11 @@ class NewProjectScreen extends React.Component {
                     "Ops...",
                     "Não foi possível criar o projeto. Tente novamente."
                 );
+
             }
+
         }
+
     }
 
     /**
@@ -203,6 +203,10 @@ class NewProjectScreen extends React.Component {
                                     className="hidden"
                                     accept=".xls,.xlsx"
                                 ></input>
+                                <Tooltip
+                                    id="codelistImport"
+                                    text="O arquivo da codelist deve ser da extensão .xlsx (arquivo do Excel) e uma de suas abas de planilhas deve ter exatamente o mesmo nome declarado no campo de nome acima"
+                                />
 
                                 <p className="text-xs ml-12 mr-12 mt-4">
                                     A escolha de um Codelist no momento da

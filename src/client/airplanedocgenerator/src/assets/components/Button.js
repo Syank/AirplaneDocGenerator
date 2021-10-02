@@ -20,9 +20,9 @@ class Button extends React.Component {
         this.onClick = props.onClick;
 
         this.confirmTypeStyle =
-            "bg-green-500 hover:bg-green-400 active:bg-green-600 focus:bg-green-400 text-white";
+            "bg-green-500 hover:bg-green-400 active:bg-green-600 focus:bg-green-400 text-white m-2";
         this.cancelTypeStyle =
-            "bg-red-500 hover:bg-red-400 active:bg-red-600 focus:bg-red-400 text-white";
+            "bg-red-500 hover:bg-red-400 active:bg-red-600 focus:bg-red-400 text-white m-2";
     }
 
     /**
