@@ -226,13 +226,7 @@ class LoginScreen extends React.Component {
                     id="loginScreen"
                     className="w-full h-full flex flex-col items-center justify-center relative select-none"
                 >
-                    <div
-                        id="loginForm"
-                        className="w-loginFormW h-loginFormH bg-white shadow-loginFormShadow"
-                    >
-                        {this.getLoginHeader()}
-                        {this.getLoginForm()}
-                    </div>
+                    {this.getLoginComponents()}
                 </div>
             </div>
         );
@@ -243,24 +237,23 @@ class LoginScreen extends React.Component {
     /**
      * Constrói o Loader de pagina
      *
-     * @returns Retorna o Loader de pagina.
+     * @returns Retorna o Loader de pagina caso esteja carregando a pagina.
      * @author Carolina Margiotti
      */
-    getLoaderScreen() {
-        let loaderScreen = (
-            <div id="contentDisplay" className="w-full h-full">
-                {getBackgroundImage()}
-
-                <div
-                    id="loaderScreen"
-                    className="w-full h-full flex flex-col items-center justify-center relative select-none"
-                >
-                    <Loader />
-                </div>
-            </div>
-        );
-
-        return loaderScreen;
+    getLoginComponents() {
+        if(this.state.loading){
+            return <Loader />
+        }
+        else{
+            return (
+            <div
+                id="loginForm"
+                className="w-loginFormW h-loginFormH bg-white shadow-loginFormShadow"
+            >
+                {this.getLoginHeader()}
+                {this.getLoginForm()}
+            </div>)
+        }
     }
 
     /**
@@ -283,13 +276,7 @@ class LoginScreen extends React.Component {
      */
     render() {
         let loginScreen = this.getLoginScreen();
-        let loaderScreen = this.getLoaderScreen();
-
-        if (this.state.loading) {
-            return loaderScreen;
-        } else {
-            return loginScreen;
-        }
+        return loginScreen;
     }
 }
 

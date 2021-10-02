@@ -169,71 +169,84 @@ class NewProjectScreen extends React.Component {
                     className="w-full h-full flex justify-center items-center"
                 >
                     <div className="bg-white lg:w-5/12 md:w-10/12 h-5/6 relative flex justify-start text-center flex-col border-r-8 border-b-8 border-accent">
-                        <div className="m-8">
-                            <p className="text-2xl font-bold">
-                                Crie um novo projeto de manual
-                            </p>
-                            <hr></hr>
-                            <p className="text-lg mt-4">
-                                Esta sessão irá lhe auxiliar na criação de um
-                                novo projeto de manual, preencha os campos e
-                                siga as instruções!
-                            </p>
-                        </div>
-                        <form onSubmit={this.sendFormData}>
-                            <div className="m-10">
-                                <label
-                                    htmlFor="project-name"
-                                    className="text-lg"
-                                >
-                                    Nome:{" "}
-                                </label>
-                                <input
-                                    type="text"
-                                    id="project-name"
-                                    className="border-b border-black focus:bg-gray-200 outline-none"
-                                    placeholder="XXX-YYYY"
-                                ></input>
-                                <Tooltip text="O nome deve ter o seguinte formato: 3 letras - 4 números. Ex.: ABC-1234. Não é possível utilizar o mesmo nome em mais de um projeto." />
-                            </div>
-                            <div className="m-8">
-                                <label className="text-lg">Codelist: </label>
-                                <label
-                                    htmlFor="codelist-file"
-                                    id="codelist-file-name"
-                                    className="w-68 p-1 px-4 rounded-lg bg-inputFileColor text-white cursor-pointer hover:bg-blue-300 active:bg-blue-300"
-                                >
-                                    Selecionar Codelist em sua máquina
-                                </label>
-                                <input
-                                    type="file"
-                                    id="codelist-file"
-                                    onChange={this.setFileName}
-                                    className="hidden"
-                                    accept=".xls,.xlsx"
-                                ></input>
-                                <Tooltip
-                                    id="codelistImport"
-                                    text="O arquivo da codelist deve ser da extensão .xlsx (arquivo do Excel) e uma de suas abas de planilhas deve ter exatamente o mesmo nome declarado no campo de nome acima"
-                                />
-
-                                <p className="text-xs ml-12 mr-12 mt-4">
-                                    A escolha de um Codelist no momento da
-                                    criação não é obrigatória, ele pode ser
-                                    importado ou criado no gerenciamento do
-                                    documento.
-                                </p>
-                            </div>
-                            <div className="mt-20">
-                                {this.getCreateButton()}
-                            </div>
-                        </form>
+                        {this.getNewProjectScreenComponents()}
                     </div>
                 </div>
             </div>
         );
 
         return newProjectScreen;
+    }
+
+    /**
+     * Retorna componentes da pagina NewProject caso não esteja carregando, caso esteja mostra Loader.
+     *
+     * @returns Retorna componentes da NewProjectScreen ou Loader.
+     * @author Carolina Margiotti
+     */
+    getNewProjectScreenComponents(){
+        if(this.state.loading) return <Loader />
+
+        return(<div>
+                <div className="m-8">
+                <p className="text-2xl font-bold">
+                    Crie um novo projeto de manual
+                </p>
+                <hr></hr>
+                <p className="text-lg mt-4">
+                    Esta sessão irá lhe auxiliar na criação de um
+                    novo projeto de manual, preencha os campos e
+                    siga as instruções!
+                </p>
+            </div>
+            <form onSubmit={this.sendFormData}>
+                <div className="m-10">
+                    <label
+                        htmlFor="project-name"
+                        className="text-lg"
+                    >
+                        Nome:{" "}
+                    </label>
+                    <input
+                        type="text"
+                        id="project-name"
+                        className="border-b border-black focus:bg-gray-200 outline-none"
+                        placeholder="XXX-YYYY"
+                    ></input>
+                    <Tooltip text="O nome deve ter o seguinte formato: 3 letras - 4 números. Ex.: ABC-1234. Não é possível utilizar o mesmo nome em mais de um projeto." />
+                </div>
+                <div className="m-8">
+                    <label className="text-lg">Codelist: </label>
+                    <label
+                        htmlFor="codelist-file"
+                        id="codelist-file-name"
+                        className="w-68 p-1 px-4 rounded-lg bg-inputFileColor text-white cursor-pointer hover:bg-blue-300 active:bg-blue-300"
+                    >
+                        Selecionar Codelist em sua máquina
+                    </label>
+                    <input
+                        type="file"
+                        id="codelist-file"
+                        onChange={this.setFileName}
+                        className="hidden"
+                        accept=".xls,.xlsx"
+                    ></input>
+                    <Tooltip
+                        id="codelistImport"
+                        text="O arquivo da codelist deve ser da extensão .xlsx (arquivo do Excel) e uma de suas abas de planilhas deve ter exatamente o mesmo nome declarado no campo de nome acima"
+                    />
+                    <p className="text-xs ml-12 mr-12 mt-4">
+                        A escolha de um Codelist no momento da
+                        criação não é obrigatória, ele pode ser
+                        importado ou criado no gerenciamento do
+                        documento.
+                    </p>
+                </div>
+                <div className="mt-20">
+                    {this.getCreateButton()}
+                </div>
+            </form>
+        </div>)
     }
 
     /**
@@ -246,29 +259,6 @@ class NewProjectScreen extends React.Component {
             return <Loader />;
         }
         return <Button text="Criar" type="confirm"></Button>;
-    }
-
-    /**
-     * Constrói o Loader de pagina
-     *
-     * @returns Retorna o Loader de pagina.
-     * @author Carolina Margiotti
-     */
-    getLoaderScreen() {
-        let loaderScreen = (
-            <div id="contentDisplay" className="w-full h-full">
-                {getBackgroundImage()}
-
-                <div
-                    id="loaderScreen"
-                    className="w-full h-full flex flex-col items-center justify-center relative select-none"
-                >
-                    <Loader />
-                </div>
-            </div>
-        );
-
-        return loaderScreen;
     }
 
     /**
@@ -287,12 +277,6 @@ class NewProjectScreen extends React.Component {
      * @author Bárbara Port
      */
     render() {
-        let loaderScreen = this.getLoaderScreen();
-
-        if (this.state.loading) {
-            return loaderScreen;
-        }
-
         return this.getNewProjectScreen();
     }
 }

@@ -149,17 +149,31 @@ class SelectProjectScreen extends React.Component {
                     id="selectProjectScreen"
                     className="w-full h-full flex flex-col items-center justify-center relative select-none"
                 >
-                    <div className="w-full h-2/4 flex flex-row justify-center items-start">
-                        {this.getHeaderCard()}
-                    </div>
-                    <div className="w-full h-full flex flex-row items-center justify-evenly">
-                        {this.getSelectContainer()}
-                    </div>
+                    {this.getSelectProjectScreen()}
                 </div>
             </div>
         );
 
         return selectProjectScreen;
+    }
+
+    /**
+     * Retorna componentes da pagina SelectProject caso não esteja carregando, caso esteja mostra Loader.
+     *
+     * @returns Retorna componentes da SelectProjectScreen ou Loader.
+     * @author Carolina Margiotti
+     */
+    getSelectProjectScreen(){
+        if(this.state.loading) return <Loader />
+
+        return(<div>
+            <div className="w-full h-2/4 flex flex-row justify-center items-start">
+                {this.getHeaderCard()}
+            </div>
+            <div className="w-full h-full flex flex-row items-center justify-evenly">
+                {this.getSelectContainer()}
+            </div>
+        </div>)
     }
 
     /**
@@ -284,7 +298,7 @@ class SelectProjectScreen extends React.Component {
 
         if (searchList.length == 0){
             notification("error", "Algo deu errado 🙁", "Nenhum projeto encontrado para essa pesquisa");
-        
+
             return searchList;
         }
         else{
@@ -379,7 +393,7 @@ class SelectProjectScreen extends React.Component {
      */
     goToProjectView(){
         let projectName = this.state["selectedProject"]["nome"];
-        
+
         if(projectName !== "Selecione um manual"){
             window.sessionStorage.setItem("selectedProject", projectName);
 
@@ -387,7 +401,7 @@ class SelectProjectScreen extends React.Component {
 
         }else{
             notification("info", "Um momento! 😉", "Selecione um projeto antes de navegar para sua página de administração");
-            
+
         }
 
     }
@@ -509,29 +523,6 @@ class SelectProjectScreen extends React.Component {
     }
 
     /**
-     * Constrói o Loader de pagina
-     *
-     * @returns Retorna o Loader de pagina.
-     * @author Carolina Margiotti
-     */
-    getLoaderScreen() {
-        let loaderScreen = (
-            <div id="contentDisplay" className="w-full h-full">
-                {getBackgroundImage()}
-
-                <div
-                    id="loaderScreen"
-                    className="w-full h-full flex flex-col items-center justify-center relative select-none"
-                >
-                    <Loader />
-                </div>
-            </div>
-        );
-
-        return loaderScreen;
-    }
-
-    /**
      * Método obrigatório herdado da classe React.Component
      *
      * Renderiza a página inicial da aplicação
@@ -541,11 +532,6 @@ class SelectProjectScreen extends React.Component {
      */
     render() {
         let selectProjectScreen = this.getSelectProjectScreen();
-        let loaderScreen = this.getLoaderScreen();
-
-        if (this.state.loading) {
-            return loaderScreen;
-        }
         return selectProjectScreen;
     }
 }

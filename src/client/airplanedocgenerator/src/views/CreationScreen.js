@@ -112,6 +112,31 @@ class CreationScreen extends React.Component {
      * @author Carolina Margiotti
      */
     getCreationScreen() {
+        let creationScreen = (
+            <div id="contentDisplay" className="w-full h-full">
+                {getBackgroundImage()}
+
+                <div
+                    id="homeScreen"
+                    className="w-full h-full flex flex-col items-center justify-center relative select-none"
+                >
+                    {this.getCreationScreenComponents()}
+                </div>
+            </div>
+        );
+
+        return creationScreen;
+    }
+
+    /**
+     * Retorna componentes da pagina Creation caso não esteja carregando, caso esteja mostra Loader.
+     *
+     * @returns Retorna componentes da CreationScreen ou Loader.
+     * @author Carolina Margiotti
+     */
+     getCreationScreenComponents(){
+        if(this.state.loading) return <Loader />
+
         let cardOption1 = this.getCardOption(
             this.cardOptionTexts["newProject"],
             this.cardOptionButtonsText["newProject"],
@@ -125,14 +150,7 @@ class CreationScreen extends React.Component {
             "file-upload"
         );
 
-        let creationScreen = (
-            <div id="contentDisplay" className="w-full h-full">
-                {getBackgroundImage()}
-
-                <div
-                    id="homeScreen"
-                    className="w-full h-full flex flex-col items-center justify-center relative select-none"
-                >
+        return (<div>
                     <div className="w-full h-2/4 flex flex-row justify-center items-start">
                         {this.getHeaderCard()}
                     </div>
@@ -140,34 +158,7 @@ class CreationScreen extends React.Component {
                         {cardOption1}
                         {cardOption2}
                     </div>
-                </div>
-            </div>
-        );
-
-        return creationScreen;
-    }
-
-    /**
-     * Constrói o Loader de pagina
-     *
-     * @returns Retorna o Loader de pagina.
-     * @author Carolina Margiotti
-     */
-    getLoaderScreen() {
-        let loaderScreen = (
-            <div id="contentDisplay" className="w-full h-full">
-                {getBackgroundImage()}
-
-                <div
-                    id="loaderScreen"
-                    className="w-full h-full flex flex-col items-center justify-center relative select-none"
-                >
-                    <Loader />
-                </div>
-            </div>
-        );
-
-        return loaderScreen;
+        </div>)
     }
 
     /**
@@ -190,12 +181,6 @@ class CreationScreen extends React.Component {
      */
     render() {
         let creationScreen = this.getCreationScreen();
-        let loaderScreen = this.getLoaderScreen();
-
-        if (this.state.loading) {
-            return loaderScreen;
-        }
-
         return creationScreen;
     }
 }

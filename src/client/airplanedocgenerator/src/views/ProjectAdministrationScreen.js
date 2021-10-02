@@ -4,6 +4,7 @@ import { notification } from "../assets/components/Notifications";
 import { getBackgroundImage } from "../utils/pagesUtils";
 import ServerRequester from "../utils/ServerRequester";
 import Button from "../assets/components/Button";
+import Loader from "../assets/components/Loader";
 
 
 class ProjectAdministrationScreen extends React.Component{
@@ -13,18 +14,19 @@ class ProjectAdministrationScreen extends React.Component{
         this.projectName = window.sessionStorage.getItem("selectedProject");
 
         this.state = {
-            projectData: {}
+            projectData: {},
+            loading: true
         };
 
         this.headerCardTitle = "Administração do projeto";
-        this.headerCardText = "Administre o projeto do manual, " 
+        this.headerCardText = "Administre o projeto do manual, "
             + "visualizando a codelist completa ou a individual de cada variação, crie novas linhas na codelist e mais";
 
     }
 
     async componentDidMount(){
         let serverRequester = new ServerRequester("http://localhost:8080");
-        
+
         let requestParameters = {
             projectName: this.projectName
         }
@@ -35,13 +37,14 @@ class ProjectAdministrationScreen extends React.Component{
             this.setState({projectData: response["responseJson"]});
 
         }else{
-            notification("error", "Algo deu errado 🙁", 
+            notification("error", "Algo deu errado 🙁",
                 "Não foi possível carregar as informações do projeto, você será redirecionado para a página de escolha de projetos");;
-            
+
             this.props.navigation("selectProject");
-            
+
         }
 
+            this.setState({loading:false});
     }
 
     /**
@@ -83,7 +86,7 @@ class ProjectAdministrationScreen extends React.Component{
     getVariationsContainer(){
         let container = (
             <div className="flex flex-col w-1/3">
-                
+
             </div>
         );
 
@@ -93,7 +96,7 @@ class ProjectAdministrationScreen extends React.Component{
     getInformationsContainer(){
         let container = (
             <div className="flex flex-col w-1/3">
-                
+
             </div>
         );
 
@@ -123,17 +126,31 @@ class ProjectAdministrationScreen extends React.Component{
                     id="projectAdministrationScreen"
                     className="w-full h-full flex flex-col items-center justify-center relative select-none"
                 >
-                    <div className="w-full h-2/4 flex flex-row justify-center items-start">
-                        {this.getHeaderCard()}
-                    </div>
-                    <div className="w-full h-full flex flex-row items-center justify-evenly">
-                        {this.getProjectAdministrationContainer()}
-                    </div>
+                    {this.getAdministrationComponents()}
                 </div>
             </div>
         );
 
         return selectProjectScreen;
+    }
+
+    /**
+     * Retorna componentes da pagina ProjectAdminstration caso não esteja carregando, caso esteja mostra Loader.
+     *
+     * @returns Retorna componentes da ProjectAdminsitrationScreen ou Loader.
+     * @author Carolina Margiotti
+     */
+    getAdministrationComponents(){
+        if(this.state.loading) return <Loader />
+
+        return (<div>
+            <div className="w-full h-2/4 flex flex-row justify-center items-start">
+                {this.getHeaderCard()}
+            </div>
+            <div className="w-full h-full flex flex-row items-center justify-evenly">
+                {this.getProjectAdministrationContainer()}
+            </div>
+        </div>)
     }
 
     /**

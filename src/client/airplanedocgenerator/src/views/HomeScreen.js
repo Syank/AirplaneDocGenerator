@@ -129,6 +129,33 @@ class HomeScreen extends React.Component {
      * @author Rafael Furtado
      */
     getHomeScreen() {
+        let homeScreen = (
+            <div id="contentDisplay" className="w-full h-full">
+                {getBackgroundImage()}
+
+                <div
+                    id="homeScreen"
+                    className="w-full h-full flex flex-col items-center justify-center relative select-none"
+                >
+                    {this.getHomeScreenComponents()}
+                </div>
+            </div>
+        );
+
+        return homeScreen;
+    }
+
+     /**
+     * Retorna componentes da pagina Home caso não esteja carregando, caso esteja mostra Loader.
+     *
+     * @returns Retorna componentes da HomeScreen ou Loader.
+     * @author Carolina Margiotti
+     */
+    getHomeScreenComponents(){
+        if(this.state.loading){
+            return <Loader />
+        }
+
         let cardOption1 = this.getCardOption(
             this.cardOptionTexts["newProject"],
             this.cardOptionButtonsText["newProject"],
@@ -148,51 +175,19 @@ class HomeScreen extends React.Component {
             "print"
         );
 
-        let homeScreen = (
-            <div id="contentDisplay" className="w-full h-full">
-                {getBackgroundImage()}
-
-                <div
-                    id="homeScreen"
-                    className="w-full h-full flex flex-col items-center justify-center relative select-none"
-                >
-                    <div className="w-full h-2/4 flex flex-row justify-center items-start">
-                        {this.getHeaderCard()}
-                    </div>
-                    <div className="w-full h-full flex flex-row items-center justify-evenly">
-                        {cardOption1}
-                        {cardOption2}
-                        {cardOption3}
-                    </div>
-                </div>
+        return (
+        <div>
+            <div className="w-full h-2/4 flex flex-row justify-center items-start">
+                {this.getHeaderCard()}
             </div>
-        );
-
-        return homeScreen;
+            <div className="w-full h-full flex flex-row items-center justify-evenly">
+                {cardOption1}
+                {cardOption2}
+                {cardOption3}
+            </div>
+        </div>)
     }
 
-    /**
-     * Constrói o Loader de pagina
-     *
-     * @returns Retorna o Loader de pagina.
-     * @author Carolina Margiotti
-     */
-    getLoaderScreen() {
-        let loaderScreen = (
-            <div id="contentDisplay" className="w-full h-full">
-                {getBackgroundImage()}
-
-                <div
-                    id="loaderScreen"
-                    className="w-full h-full flex flex-col items-center justify-center relative select-none"
-                >
-                    <Loader />
-                </div>
-            </div>
-        );
-
-        return loaderScreen;
-    }
 
     /**
      * É invocado imediatamente após um elemento ser montado
@@ -201,7 +196,7 @@ class HomeScreen extends React.Component {
      * @author Carolina Margiotti
      */
     componentDidMount() {
-        this.setState({ loading: false });
+            this.setState({ loading: false });
     }
 
     /**
@@ -214,12 +209,6 @@ class HomeScreen extends React.Component {
      */
     render() {
         let homeScreen = this.getHomeScreen();
-        let loaderScreen = this.getLoaderScreen();
-
-        if (this.state.loading) {
-            return loaderScreen;
-        }
-
         return homeScreen;
     }
 }
