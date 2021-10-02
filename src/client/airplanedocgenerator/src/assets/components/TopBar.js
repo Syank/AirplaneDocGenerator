@@ -3,7 +3,7 @@ import React from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 // Icones do FontAwesome
-import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
+import { faArrowLeft, faWindowRestore } from '@fortawesome/free-solid-svg-icons'
 import { faHome } from '@fortawesome/free-solid-svg-icons'
 import { faBars } from '@fortawesome/free-solid-svg-icons'
 import { faTimes } from '@fortawesome/free-solid-svg-icons'
@@ -34,6 +34,7 @@ class TopBar extends React.Component{
         this.closeIcon = <FontAwesomeIcon icon={faTimes} color={white}/>;
         this.minimizeIcon = <FontAwesomeIcon icon={faWindowMinimize} color={white}/>;
         this.maximizeIcon = <FontAwesomeIcon icon={faWindowMaximize} color={white}/>;
+        this.unmaximizeIcon = <FontAwesomeIcon icon={faWindowRestore} color={white}/>;
 
         // Como todos os botões são iguais, declarei aqui para evitar repetição de código
         this.iconBoxStyle = "h-full w-auto flex flex-row items-center text-20px pr-3 pl-3 "
@@ -49,7 +50,8 @@ class TopBar extends React.Component{
 
         this.state = {
             showRegisterUser: false, 
-            showMenu: false
+            showMenu: false,
+            isMaximized: false
         };
 
     }
@@ -78,8 +80,14 @@ class TopBar extends React.Component{
      * 
      */
     maximizeApplication(){
-        window.electron.windowControll.maximize();
-
+        if (this.state.isMaximized){
+            window.electron.windowControll.unmaximize();
+            this.setState({isMaximized: false});
+        }
+        else{
+            window.electron.windowControll.maximize();
+            this.setState({isMaximized: true});
+        }
     }
 
     /**
@@ -164,6 +172,13 @@ class TopBar extends React.Component{
      * @author Rafael Furtado
      */
     getTopBar(){
+        let maximizeIcon;
+        if (this.state.isMaximized){
+            maximizeIcon = this.unmaximizeIcon;
+        }
+        else {
+            maximizeIcon = this.maximizeIcon;
+        }
         let topBarBox = (
             <div>
                 <div className="bg-topBar w-screen h-8 flex justify-between items-center shadow-topBarShadow">
@@ -182,7 +197,7 @@ class TopBar extends React.Component{
 
                         <div className={this.iconBoxStyle}
                             onClick={this.maximizeApplication}>
-                            {this.maximizeIcon}
+                            {maximizeIcon}
                         </div>
 
                         <div className={this.iconBoxStyle}

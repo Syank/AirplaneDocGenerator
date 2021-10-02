@@ -1,5 +1,9 @@
 package api.crabteam.model.entities.builders;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -8,18 +12,35 @@ import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.springframework.stereotype.Service;
 
+import api.crabteam.controllers.requestsBody.NewCodelist;
 import api.crabteam.model.entities.Codelist;
 import api.crabteam.model.entities.Linha;
+import api.crabteam.model.entities.Projeto;
 import api.crabteam.model.entities.Remark;
 import api.crabteam.model.enumarations.CodelistColumn;
+import api.crabteam.model.repositories.CodelistRepository;
+import api.crabteam.model.repositories.ProjetoRepository;
 import api.crabteam.utils.FileUtils;
 
+@Service
 public class CodelistBuilder {
+	
+	private boolean isPersisted = false;
+	
+	private String failMessage;
+	
+	private CodelistRepository codelistRepository;
+	private ProjetoRepository projectRepository;
+	
 	private static final String PROJECTS_DIRECTORY = System.getenv("APIEmbraerCodelistFolder");
 	
 	private Codelist codelist;
 	
+	public CodelistBuilder() {
+		
+	}
 	
 	public CodelistBuilder(String projectName) {
 		Codelist codelist = new Codelist();
@@ -29,10 +50,11 @@ public class CodelistBuilder {
 		
 	}
 
+
 	public CodelistBuilder(byte[] codelistBytesFile, String projectName) throws Exception {
 		String fileName = projectName + "_codelist.xlsx";
 		
-		FileUtils.saveFile(codelistBytesFile, fileName, PROJECTS_DIRECTORY);
+		FileUtils.saveCodelistFile(codelistBytesFile, fileName, PROJECTS_DIRECTORY, projectName);
 		
 		Workbook workbook = FileUtils.readAsExcel(PROJECTS_DIRECTORY + "\\" + fileName);
 		
@@ -81,15 +103,15 @@ public class CodelistBuilder {
 						CodelistColumn columnType = (CodelistColumn) type;
 						switch (columnType) {
 							case SECAO:
-								linha.setSecao(cellValue);
+								linha.setSectionNumber(cellValue);
 	
 								break;
 							case SUB_SECAO:
-								linha.setSubSecao(cellValue);
+								linha.setSubsectionNumber(cellValue);
 	
 								break;
 							case BLOCK:
-								linha.setBlock(cellValue);
+								linha.setBlockNumber(cellValue);
 	
 								break;
 							case BLOCK_NAME:
@@ -229,6 +251,77 @@ public class CodelistBuilder {
 		}
 		
 		throw new Exception();
+	}
+	
+	public void build (NewCodelist newCodelist, String projectName) throws IOException {
+		String name = newCodelist.getNome().toUpperCase();
+		byte[] codelistBytes = newCodelist.getArquivoCodelist();
+		
+		if(codelistBytes == null) {
+			CodelistBuilder codelistBuilder = new CodelistBuilder(name);
+			Codelist codelist = codelistBuilder.getBuildedCodelist();
+			
+			this.isPersisted = persistCodelist(codelist, projectName);
+		}
+		else {
+			try {
+				CodelistBuilder codelistBuilder = new CodelistBuilder(codelistBytes, name);
+				Codelist codelist = codelistBuilder.getBuildedCodelist();
+				
+				this.isPersisted = persistCodelist(codelist, projectName);
+			}
+			catch (Exception e) {
+				this.failMessage = e.getMessage();
+			}
+		}
+	}
+	
+	private boolean persistCodelist(Codelist codelist, String projectName) {
+		try {
+			this.codelistRepository.save(codelist);
+			
+			Projeto project = projectRepository.findByName(projectName);
+			project.setCodelist(codelist);
+			
+			this.projectRepository.save(project);
+			return true;
+		}
+		catch (Exception e) {
+			return false;
+		}
+		
+	}
+
+	public boolean isPersisted() {
+		return isPersisted;
+	}
+
+	public void setPersisted(boolean isPersisted) {
+		this.isPersisted = isPersisted;
+	}
+
+	public String getFailMessage() {
+		return failMessage;
+	}
+
+	public void setFailMessage(String failMessage) {
+		this.failMessage = failMessage;
+	}
+
+	public CodelistRepository getCodelistRepository() {
+		return codelistRepository;
+	}
+
+	public void setCodelistRepository(CodelistRepository codelistRepository) {
+		this.codelistRepository = codelistRepository;
+	}
+
+	public Codelist getCodelist() {
+		return codelist;
+	}
+
+	public void setCodelist(Codelist codelist) {
+		this.codelist = codelist;
 	}
 	
 }

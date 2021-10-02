@@ -4,7 +4,7 @@ import Button from "../assets/components/Button";
 import Tooltip from "../assets/components/Tooltip";
 import Loader from "../assets/components/Loader";
 
-import { getBackgroundImage } from "../utils/pagesUtils";
+import { getBackgroundImage, isValidProjectName } from "../utils/pagesUtils";
 import { notification } from "../assets/components/Notifications";
 
 import ServerRequester from "../utils/ServerRequester";
@@ -50,19 +50,16 @@ class NewProjectScreen extends React.Component {
         formData.append("descricao", "Projeto sem descrição. A descrição pode ser alterada na página de gerenciamento do projeto.");
         formData.append("codelistFile", file);
 
-        let partLetter = projectName.split("-")[0];
-        let partNumber = projectName.split("-")[1];
+        let validName = isValidProjectName(projectName);
 
-        if (partLetter === undefined ||
-            partNumber === undefined ||
-            !this.isValidPartLetter(partLetter) ||
-            !this.isValidPartNumber(partNumber)) {
+        if(!validName){
             notification(
                 "error",
                 "Nome de projeto inválido! 😵",
                 "O formato do nome de projetos devem iguais ao seguinte exemplo: ABC-1234"
             );
-        } else {
+
+        }else{
             let response = await serverRequester.doPost(
                 "/project/create",
                 formData,
@@ -81,7 +78,9 @@ class NewProjectScreen extends React.Component {
                     "Ops...",
                     "Não foi possível criar o projeto. Tente novamente."
                 );
+
             }
+
         }
 
         this.setState({ loadingCreation: false });

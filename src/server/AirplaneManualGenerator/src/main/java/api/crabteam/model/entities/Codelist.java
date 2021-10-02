@@ -10,9 +10,10 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+
+import api.crabteam.controllers.requestsBody.NewLine;
 
 @Entity(name = "codelist")
 public class Codelist {
@@ -54,8 +55,8 @@ public class Codelist {
 		this.linhas = linhas;
 	}
 
-	public void addLinha(Linha linha) {
-		this.linhas.add(linha);
+	public void addLinha(Linha newLine) {
+		this.linhas.add(newLine);
 	}
 
 }
