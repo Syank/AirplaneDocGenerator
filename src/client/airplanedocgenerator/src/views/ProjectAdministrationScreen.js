@@ -39,6 +39,7 @@ class ProjectAdministrationScreen extends React.Component{
         this.componentDidMount = this.componentDidMount.bind(this);
         this.toggleEditProjectDescription = this.toggleEditProjectDescription.bind(this);
         this.changeProjectDescription = this.changeProjectDescription.bind(this);
+        this.showCodelist = this.showCodelist.bind(this);
 
     }
 
@@ -52,7 +53,7 @@ class ProjectAdministrationScreen extends React.Component{
         
         let requestParameters = {
             projectName: this.projectName
-        }
+        };
 
         let response = await serverRequester.doGet("/project/findByName", requestParameters);
 
@@ -68,7 +69,7 @@ class ProjectAdministrationScreen extends React.Component{
 
         }else{
             notification("error", "Algo deu errado 🙁", 
-                "Não foi possível carregar as informações do projeto, você será redirecionado para a página de escolha de projetos");;
+                "Não foi possível carregar as informações do projeto, você será redirecionado para a página de escolha de projetos");
             
             this.props.navigation("selectProject");
             
@@ -127,13 +128,43 @@ class ProjectAdministrationScreen extends React.Component{
                 </div>
                     {this.getProjectDescriptionBox()}
                 <div className="border-t-2 pt-2 border-black border-opacity-50 flex flex-col items-center text-sm">
-                   <Button text="Codelist" type="confirm"></Button>
-                   <Button text="Revisões" type="confirm"></Button>
+                   <Button text="Codelist" type="confirm" onClick={this.showCodelist}></Button>
+                   <Button text="Revisões" type="confirm" onClick={this.showRevisions}></Button>
                 </div>
             </div>
         );
 
         return container;
+    }
+
+    getCodelistRemarkToShow(event){
+        let filterCriteria = event.target.parentElement.getAttribute("attributeName");
+
+        if(filterCriteria === null){
+            filterCriteria = event.target.getAttribute("attributeName");
+
+        }
+
+        return filterCriteria;
+    }
+
+    showCodelist(event){
+        let filterCriteria = this.getCodelistRemarkToShow(event);
+
+        if(filterCriteria === null){
+            console.log("Exibindo codelist completa");
+
+        }else{
+            console.log("Exibindo codelist para o traço " + filterCriteria);
+        }
+
+        notification("info", "Aguarde um pouco! 🤓", "Essa funcionalidade estará disponível em breve!");
+
+    }
+
+    showRevisions(){
+        notification("info", "Aguarde um pouco! 🤓", "Essa funcionalidade estará disponível em breve!");
+
     }
 
     getProjectDescriptionBox(){
@@ -296,7 +327,7 @@ class ProjectAdministrationScreen extends React.Component{
                         <label>{this.projectName + "-" + key}</label>
                         <label>{"(" + apelido + ")"}</label>
                     </div>
-                    <FontAwesomeIcon className="text-2xl cursor-pointer" icon={faFileAlt} color={"#5E74D6"}/>
+                    <FontAwesomeIcon attributeName={key} className="text-2xl cursor-pointer" onClick={this.showCodelist} icon={faFileAlt} color={"#5E74D6"}/>
                 </div>
 
             );
@@ -343,12 +374,17 @@ class ProjectAdministrationScreen extends React.Component{
                     <p className="text-sm mt-5">{this.state["projectData"]["situation"]["situationMessage"]}</p>
                 </div>
                 <div className="border-t-2 pt-2 border-black border-opacity-50 flex flex-col items-center text-sm">
-                   <Button text="Exportar" type="confirm"></Button>
+                   <Button text="Exportar" type="confirm" onClick={this.exportProject}></Button>
                 </div>
             </div>
         );
 
         return container;
+    }
+
+    exportProject(){
+        notification("info", "Aguarde um pouco! 🤓", "Essa funcionalidade estará disponível em breve!");
+
     }
 
     getProjectAdministrationContainer(){
