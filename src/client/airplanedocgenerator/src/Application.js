@@ -7,7 +7,6 @@ import NewProjectScreen from "./views/NewProjectScreen";
 import ServerRequester from "./utils/ServerRequester";
 import SelectProjectScreen from "./views/SelectProjectScreen";
 import ProjectAdministrationScreen from "./views/ProjectAdministrationScreen";
-import CodelistScreen from "./views/CodelistScreen";
 
 
 
@@ -75,10 +74,6 @@ class Application extends React.Component {
                 pageToDisplay = this.getProjectAdministrationScreen();
 
                 break;
-            case "codelistScreen":
-                pageToDisplay = this.getCodelistScreen();
-
-                break;
             default:
                 pageToDisplay = this.getLoginScreen();
 
@@ -99,14 +94,6 @@ class Application extends React.Component {
     getProjectAdministrationScreen(){
         let screen = (
             <ProjectAdministrationScreen navigation={this.setPageToRender}></ProjectAdministrationScreen>
-        );
-
-        return screen;
-    }
-
-    getCodelistScreen(){
-        let screen = (
-            <CodelistScreen navigation={this.setPageToRender}></CodelistScreen>
         );
 
         return screen;
