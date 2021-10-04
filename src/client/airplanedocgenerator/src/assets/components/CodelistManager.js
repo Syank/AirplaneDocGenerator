@@ -1,6 +1,6 @@
 import React from "react";
 import Button from "./Button";
-import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import { faPen, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 
@@ -49,78 +49,114 @@ class CodelistManager extends React.Component {
         return component;
     }
 
+    getCodelistTable(){
+        let table = (
+            <table className="w-full table-fixed border-collapse border border-gray-300 text-center">
+                <thead>
+                    <tr>
+                        <th className="border border-gray-300 bg-yellow-200">Nº seção</th>
+                        <th className="border border-gray-300 bg-yellow-200	">Nº subseção</th>
+                        <th className="border border-gray-300 bg-yellow-200	">Nº bloco</th>
+                        <th className="border border-gray-300 bg-yellow-200	">Nome do bloco</th>
+                        <th className="border border-gray-300 bg-yellow-200	">Código</th>
+                        <th className="border border-gray-300 bg-gray-300">Remarks</th>
+                        <th className="border border-gray-300 bg-accent text-white">Ações</th>
+                        {/*a partir daqui pode ser que tenham colunas de acordo com os dados */}
+                    </tr>
+                </thead>
+                <tbody id="codelist-lines">
+                    <tr>
+                        <td className="border border-gray-300">00</td>
+                        <td className="border border-gray-300"></td>
+                        <td className="border border-gray-300">00</td>
+                        <td className="border border-gray-300">Letter</td>
+                        <td className="border border-gray-300">50</td>
+                        <td className="border border-gray-300">-50</td>
+                        <td className="border border-gray-300"><FontAwesomeIcon icon={faPen} color={"#5E74D6"} className="cursor-pointer"/></td>
+                        {/*a partir daqui teremos linhas de acordo com os dados */}
+                    </tr>
+                </tbody>
+            </table>
+        );
+
+        return table;
+    }
+
+    getSearchSide(){
+        let component = (
+            <div>
+                <div className="text-center flex flex-row">
+                    <input id="codelistSearch" type="text" placeholder="Pesquisar" className="text-center outline-none border-b-2 mr-2"></input>
+                    <FontAwesomeIcon onClick={this.search} icon={faSearch} className="cursor-pointer"></FontAwesomeIcon><br></br>
+                </div>
+                <div className="w-full flex flex-row">
+                    <div className="w-3/6">
+                        <div>
+                            <input value="sessionNumber" type="radio" id="sessionNumber" name="searchCriteria"></input>
+                            <label htmlFor="sessionNumber" className="pl-1">Nº seção</label>
+                        </div>
+                        <div>
+                            <input value="blockName" type="radio" id="blockName" name="searchCriteria"></input>
+                            <label htmlFor="blockName" className="pl-1">Nome do bloco</label>
+                        </div>
+                        <div>
+                            <input value="remark" type="radio" id="remark" name="searchCriteria"></input>
+                            <label htmlFor="remark" className="pl-1">Remark</label>
+                        </div>
+                    </div>
+                    <div className="w-3/6">
+                        <div>
+                            <input value="blockNumber" type="radio" id="blockNumber" name="searchCriteria"></input>
+                            <label htmlFor="blockNumber" className="pl-1">Nº bloco</label>
+                        </div>
+                        <div>
+                            <input value="code" type="radio" id="code" name="searchCriteria"></input>
+                            <label htmlFor="code" className="pl-1">Código</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+
+        return component;
+    }
+
+    getManageButtons(){
+        let component = (
+            <div className="flex flex-row w-full">
+                <div>
+                    <Button text="Nova Linha" type="codelistControl"></Button>
+                </div>
+                    <Button text="Exportar Codelist" type="codelistControl"></Button>
+                    <Button text="Importar Codelist" type="codelistControl"></Button>
+            </div>
+        );
+
+        return component;
+    }
+
+    getCodelistAndSearchComponents(){
+        let component = (
+            <div className="flex flex-row h-full">
+                <div className="mr-5">
+                    <h1 className="text-2xl	font-bold text-center leading-loose">{this.getNomeCodelist()}</h1>
+                    {this.getCodelistTable()}
+                </div>
+                <div className="mt-12">
+                    {this.getSearchSide()}
+                </div>
+            </div>
+        );
+
+        return component;
+    }
+
     getContent() {
         let content = (
-            <div className="h-full">
-                <h1 className="text-2xl	font-bold text-center leading-loose">{this.getNomeCodelist()}</h1>
-                <div className="h-5/6 flex flex-row justify-around">
-                    <div className="w-1/5 flex flex-col place-content-between">
-                        <div>
-                            <Button text="Nova Linha" type="codelistControl"></Button>
-                        </div>
-                        <div className="flex flex-col place-content-end">
-                            <Button text="Exportar Codelist" type="codelistControl"></Button>
-                            <Button text="Importar Codelist" type="codelistControl"></Button>
-                        </div>
-                    </div>
-                    <div className="w-6/12">
-                        <table className="w-full table-fixed border-collapse border border-gray-300 text-center">
-                            <thead>
-                                <tr>
-                                    <th className="border border-gray-300 bg-yellow-200">Nº seção</th>
-                                    <th className="border border-gray-300 bg-yellow-200	">Nº subseção</th>
-                                    <th className="border border-gray-300 bg-yellow-200	">Nº bloco</th>
-                                    <th className="border border-gray-300 bg-yellow-200	">Nome do bloco</th>
-                                    <th className="border border-gray-300 bg-yellow-200	">Código</th>
-                                    <th className="border border-gray-300 bg-gray-300">Remarks</th>
-                                    {/*a partir daqui pode ser que tenham colunas de acordo com os dados */}
-                                </tr>
-                            </thead>
-                            <tbody id="codelist-lines">
-                                <tr>
-                                    <td className="border border-gray-300">00</td>
-                                    <td className="border border-gray-300"></td>
-                                    <td className="border border-gray-300">00</td>
-                                    <td className="border border-gray-300">Letter</td>
-                                    <td className="border border-gray-300">50</td>
-                                    <td className="border border-gray-300">-50</td>
-                                    {/*a partir daqui teremos linhas de acordo com os dados */}
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div className="w-3/12">
-                        <div className="text-center">
-                            <input id="codelistSearch" type="text" placeholder="Pesquisar" className="text-center outline-none border-b-2 mr-2"></input>
-                            <FontAwesomeIcon onClick={this.search} icon={faSearch} className="cursor-pointer"></FontAwesomeIcon><br></br>
-                        </div>
-                        <div className="w-full flex flex-row">
-                            <div className="w-3/6">
-                                <div>
-                                    <input type="checkbox" id="sessionNumber" name="sessionNumber"></input>
-                                    <label htmlFor="sessionNumber" className="pl-1">Nº seção</label>
-                                </div>
-                                <div>
-                                    <input type="checkbox" id="blockName" name="blockName"></input>
-                                    <label htmlFor="sessionNumber" className="pl-1">Nome do bloco</label>
-                                </div>
-                                <div>
-                                    <input type="checkbox" id="remark" name="remark"></input>
-                                    <label htmlFor="sessionNumber" className="pl-1">Remark</label>
-                                </div>
-                            </div>
-                            <div className="w-3/6">
-                                <div>
-                                    <input type="checkbox" id="blockNumber" name="blockNumber"></input>
-                                    <label htmlFor="sessionNumber" className="pl-1">Nº bloco</label>
-                                </div>
-                                <div>
-                                    <input type="checkbox" id="code" name="code"></input>
-                                    <label htmlFor="sessionNumber" className="pl-1">Código</label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+            <div className="h-full p-5">
+                <div className="flex flex-col w-full h-full justify-between">
+                    {this.getCodelistAndSearchComponents()}
+                    {this.getManageButtons()}
                 </div>
             </div>
         );
