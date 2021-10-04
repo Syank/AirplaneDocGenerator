@@ -1,8 +1,8 @@
 import React from "react";
 import Button from "./Button";
-import { faPen, faSearch } from "@fortawesome/free-solid-svg-icons";
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
+import Table from "./Table";
 
 /**
  * Classe de componente que representa a tela para visualizar a codelist de um manual
@@ -13,12 +13,16 @@ class CodelistManager extends React.Component {
     constructor(props) {
         super(props);
 
+        this.projectName = window.sessionStorage.getItem("selectedProject");
+
         this.projectData = this.props.projectData;
         this.filter = this.props.filter;
 
         this.id = "codelistManager";
 
         this.close = this.close.bind(this);
+
+        this.codelistLines = [];
 
     }
 
@@ -49,40 +53,7 @@ class CodelistManager extends React.Component {
         return component;
     }
 
-    getCodelistTable(){
-        let table = (
-            <table className="w-full table-fixed border-collapse border border-gray-300 text-center">
-                <thead>
-                    <tr>
-                        <th className="border border-gray-300 bg-yellow-200">Nº seção</th>
-                        <th className="border border-gray-300 bg-yellow-200	">Nº subseção</th>
-                        <th className="border border-gray-300 bg-yellow-200	">Nº bloco</th>
-                        <th className="border border-gray-300 bg-yellow-200	">Nome do bloco</th>
-                        <th className="border border-gray-300 bg-yellow-200	">Código</th>
-                        <th className="border border-gray-300 bg-gray-300">Remarks</th>
-                        <th className="border border-gray-300 bg-accent text-white">Ações</th>
-                        {/*a partir daqui pode ser que tenham colunas de acordo com os dados */}
-                    </tr>
-                </thead>
-                <tbody id="codelist-lines">
-                    <tr>
-                        <td className="border border-gray-300">00</td>
-                        <td className="border border-gray-300"></td>
-                        <td className="border border-gray-300">00</td>
-                        <td className="border border-gray-300">Letter</td>
-                        <td className="border border-gray-300">50</td>
-                        <td className="border border-gray-300">-50</td>
-                        <td className="border border-gray-300"><FontAwesomeIcon icon={faPen} color={"#5E74D6"} className="cursor-pointer"/></td>
-                        {/*a partir daqui teremos linhas de acordo com os dados */}
-                    </tr>
-                </tbody>
-            </table>
-        );
-
-        return table;
-    }
-
-    getSearchSide(){
+    getSearchSide() {
         let component = (
             <div>
                 <div className="text-center flex flex-row">
@@ -121,26 +92,26 @@ class CodelistManager extends React.Component {
         return component;
     }
 
-    getManageButtons(){
+    getManageButtons() {
         let component = (
             <div className="flex flex-row w-full">
                 <div>
                     <Button text="Nova Linha" type="codelistControl"></Button>
                 </div>
-                    <Button text="Exportar Codelist" type="codelistControl"></Button>
-                    <Button text="Importar Codelist" type="codelistControl"></Button>
+                <Button text="Exportar Codelist" type="codelistControl"></Button>
+                <Button text="Importar Codelist" type="codelistControl"></Button>
             </div>
         );
 
         return component;
     }
 
-    getCodelistAndSearchComponents(){
+    getCodelistAndSearchComponents() {
         let component = (
             <div className="flex flex-row h-full">
                 <div className="mr-5">
                     <h1 className="text-2xl	font-bold text-center leading-loose">{this.getNomeCodelist()}</h1>
-                    {this.getCodelistTable()}
+                    <Table></Table>
                 </div>
                 <div className="mt-12">
                     {this.getSearchSide()}

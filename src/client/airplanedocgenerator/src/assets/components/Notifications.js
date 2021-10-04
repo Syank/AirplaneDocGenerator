@@ -13,6 +13,7 @@ export function notification(nStatus, nTitle, nMessage) {
           icon: nStatus,
           title: nTitle,
           text: nMessage,
+          confirmButtonColor: '#56EA6D',
      })
 }
 
@@ -29,7 +30,7 @@ export function withConfirmation(cTitle, cMessage, cIcon, sOption) {
           text: cMessage,
           icon: cIcon,
           showCancelButton: true,
-          confirmButtonColor: '#3085d6',
+          confirmButtonColor: '#56EA6D',
           cancelButtonColor: '#d33',
           cancelButtonText: "Cancelar",
           confirmButtonText: "OK!"
