@@ -3,11 +3,14 @@ package api.crabteam.controllers;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,6 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import api.crabteam.controllers.requestsBody.NewCodelist;
+import api.crabteam.model.entities.Codelist;
+import api.crabteam.model.entities.Linha;
 import api.crabteam.model.entities.builders.CodelistBuilder;
 import api.crabteam.model.repositories.CodelistRepository;
 import io.swagger.annotations.Api;
@@ -66,6 +71,20 @@ public class CodelistController {
 		String failMessage = codelistBuilder.getFailMessage();
 		
 		return new ResponseEntity<String>(failMessage, HttpStatus.BAD_REQUEST);
+	}
+	
+	@GetMapping("/getLines")
+    @ApiOperation("Get all codelists' lines.")
+	@ApiResponses({
+        @ApiResponse(code = 200, message = "The codelist lines were found.")
+    })
+	public ResponseEntity<?> getCodelistLines (@RequestParam(name = "codelist") String name) {
+		
+		Codelist codelist = codelistRepository.findByName(name);
+		List<?> linhas = codelistRepository.findAllLines(codelist.getId());
+		
+		return new ResponseEntity<List<?>>(linhas, HttpStatus.OK);
+		
 	}
 
 }
