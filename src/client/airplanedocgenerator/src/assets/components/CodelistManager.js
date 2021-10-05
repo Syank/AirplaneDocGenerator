@@ -2,6 +2,7 @@ import React from "react";
 import Button from "./Button";
 import { faSearch, faPen, faFileAlt, faCheck, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { addFile } from "../components/Notifications";
 
 /**
  * Classe de componente que representa a tela para visualizar a codelist de um manual
@@ -62,7 +63,7 @@ class CodelistManager extends React.Component {
     }
 
     search() {
-
+        
     }
 
     getNomeCodelist() {
@@ -171,6 +172,13 @@ class CodelistManager extends React.Component {
         return remarkText;
     }
 
+    addFileToLine (event) {
+        let lineId = event.currentTarget.parentElement.id;
+        let justId = lineId.split("-").pop();
+
+        addFile(justId);
+    }
+
     getLineActions(lineId){
         let lineSituation = this.state["linesSituation"][lineId];
 
@@ -188,10 +196,9 @@ class CodelistManager extends React.Component {
 
             }else{
                 iconColor = "#f43a3a";
-
             }
 
-            let fileButton = (<FontAwesomeIcon key={"file-line-" + lineId} icon={faFileAlt} color={iconColor} className="cursor-pointer"/>);
+            let fileButton = (<FontAwesomeIcon key={"file-line-" + lineId} icon={faFileAlt} color={iconColor} className="cursor-pointer" onClick={this.addFileToLine}/> );
             
             actions.push(editButton);
             actions.push(fileButton);
@@ -227,14 +234,14 @@ class CodelistManager extends React.Component {
                 let lineId = "codelist-line-" + id;
 
                 let component = (
-                    <tr key={lineId}>
+                    <tr key={"id-linha-" + lineId}>
                         <td className="border border-gray-300">{linhaData["sectionNumber"]}</td>
                         <td className="border border-gray-300">{linhaData["sectionNumber"]}</td>
                         <td className="border border-gray-300">{linhaData["blockNumber"]}</td>
                         <td className="border border-gray-300">{linhaData["blockName"]}</td>
                         <td className="border border-gray-300">{linhaData["code"]}</td>
                         <td className="border border-gray-300">{remarks}</td>
-                        <td className="border border-gray-300">{actions}</td>
+                        <td id={"actions-line-id-" + id} className="border border-gray-300">{actions}</td>
                     </tr>
                 );
 

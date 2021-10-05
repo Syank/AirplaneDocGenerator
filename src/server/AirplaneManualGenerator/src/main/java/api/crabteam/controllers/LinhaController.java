@@ -157,14 +157,14 @@ public class LinhaController {
 	 * @return ResponseEntity
 	 * @author Bárbara Port
 	 */
-	@PostMapping("/attachFile/{line}")
+	@PostMapping("/attachFile")
 	@ApiOperation("Attaches a file to a line.")
 	@ApiResponses({
         @ApiResponse(code = 200, message = "File successfully attached."),
         @ApiResponse(code = 400, message = "The file wasn't attached to the line."),
         @ApiResponse(code = 404, message = "The file wasn't found.")
     })
-	public ResponseEntity<?> attachFile (@RequestParam(name = "file") MultipartFile file, @PathVariable int line) {
+	public ResponseEntity<?> attachFile (@RequestParam(name = "file") MultipartFile file, @RequestParam(name = "line") int line) {
 		
 		try {
 			Linha linha = linhaRepository.getById(line);
