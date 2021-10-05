@@ -1,8 +1,7 @@
 import React from "react";
 import Button from "./Button";
-import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import { faSearch, faPen } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Table from "./Table";
 
 /**
  * Classe de componente que representa a tela para visualizar a codelist de um manual
@@ -106,12 +105,93 @@ class CodelistManager extends React.Component {
         return component;
     }
 
+    needRenderRow(remarks) {
+        if (this.filter === "all") {
+            return true;
+        }
+        else {
+            for (let i = 0; i < remarks.length; i++) {
+                const remark = remarks[i];
+
+                let traco = remark["traco"];
+
+                if (traco === this.filter) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    getRemarksText(remarks) {
+        let remarkText = "";
+
+        for (let i = 0; i < remarks.length; i++) {
+            const remark = remarks[i];
+            remarkText += "-" + remark["traco"] + "\n";
+        }
+
+        return remarkText;
+    }
+
+    getRows() {
+        let linhas = [];
+        let linhasProjectData = this.projectData["codelist"]["linhas"];
+
+        for (let i = 0; i < linhasProjectData.length; i++) {
+            let linhaData = linhasProjectData[i];
+
+            let remarks = this.getRemarksText(linhaData["remarks"]);
+
+            let needRender = this.needRenderRow(linhaData["remarks"]);
+            if (needRender) {
+                let component = (
+                    <tr key={linhaData["id"]}>
+                        <td className="border border-gray-300">{linhaData["sectionNumber"]}</td>
+                        <td className="border border-gray-300">{linhaData["sectionNumber"]}</td>
+                        <td className="border border-gray-300">{linhaData["blockNumber"]}</td>
+                        <td className="border border-gray-300">{linhaData["blockName"]}</td>
+                        <td className="border border-gray-300">{linhaData["code"]}</td>
+                        <td className="border border-gray-300">{remarks}</td>
+                        <td className="border border-gray-300"><FontAwesomeIcon icon={faPen} color={"#5E74D6"} className="cursor-pointer" /></td>
+                    </tr>
+                );
+                linhas.push(component);
+            }
+        }
+        return linhas;
+    }
+
+    getTable() {
+        let tableLines = (
+            <table className="w-full table-fixed border-collapse border border-gray-300 text-center">
+                <thead>
+                    <tr>
+                        <th className="border border-gray-300 bg-yellow-200">Nº seção</th>
+                        <th className="border border-gray-300 bg-yellow-200">Nº subseção</th>
+                        <th className="border border-gray-300 bg-yellow-200">Nº bloco</th>
+                        <th className="border border-gray-300 bg-yellow-200">Nome do bloco</th>
+                        <th className="border border-gray-300 bg-yellow-200">Código</th>
+                        <th className="border border-gray-300 bg-gray-300">Remarks</th>
+                        <th className="border border-gray-300 bg-accent text-white">Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {this.getRows()}
+                </tbody>
+            </table>
+        );
+
+        return tableLines;
+    }
+
     getCodelistAndSearchComponents() {
         let component = (
-            <div className="flex flex-row h-full">
+            <div className="flex flex-row h-full overflow-auto">
                 <div className="mr-5">
                     <h1 className="text-2xl	font-bold text-center leading-loose">{this.getNomeCodelist()}</h1>
-                    <Table></Table>
+                    {this.getTable()}
                 </div>
                 <div className="mt-12">
                     {this.getSearchSide()}
