@@ -1,6 +1,6 @@
 import React from "react";
 import Button from "./Button";
-import { faSearch, faPen } from "@fortawesome/free-solid-svg-icons";
+import { faSearch, faPen, faFileAlt, faCheck, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 /**
@@ -21,6 +21,44 @@ class CodelistManager extends React.Component {
 
         this.close = this.close.bind(this);
 
+        let linesSituationMap = this.createLinesSituationMap();
+
+        this.state = {
+            linesSituation: linesSituationMap
+        }
+
+    }
+
+    createLinesSituationMap(){
+        let map = {};
+
+        let codelistLines = this.projectData["codelist"]["linhas"];
+
+        for (let i = 0; i < codelistLines.length; i++) {
+            const line = codelistLines[i];
+            
+            let lineId = line["id"];
+
+            let filePath = line["filePath"];
+
+            let hasFile;
+
+            if(filePath !== null){
+                hasFile = true;
+
+            }else{
+                hasFile = false;
+
+            }
+
+            map[lineId] = {
+                editing: false,
+                hasFile: hasFile
+            };
+
+        }
+
+        return map;
     }
 
     search() {
@@ -133,6 +171,43 @@ class CodelistManager extends React.Component {
         return remarkText;
     }
 
+    getLineActions(lineId){
+        let lineSituation = this.state["linesSituation"][lineId];
+
+        let actions = [];
+
+        if(lineSituation["editing"] === false){
+            let editButton = (<FontAwesomeIcon key={"edit-line-" + lineId} icon={faPen} color={"#5E74D6"} className="cursor-pointer mr-3"/>);
+
+            let hasFile = lineSituation["hasFile"];
+
+            let iconColor;
+
+            if(hasFile === true){
+                iconColor = "#32da1f";
+
+            }else{
+                iconColor = "#f43a3a";
+
+            }
+
+            let fileButton = (<FontAwesomeIcon key={"file-line-" + lineId} icon={faFileAlt} color={iconColor} className="cursor-pointer"/>);
+            
+            actions.push(editButton);
+            actions.push(fileButton);
+
+        }else{
+            let confirmButton = (<FontAwesomeIcon key={"confirm-line-" + lineId} icon={faCheck} color="#18cb26" className="cursor-pointer mr-3"/>);
+            let discardButton = (<FontAwesomeIcon key={"discard-line-" + lineId} icon={faTimes} color="#ef2c2c" className="cursor-pointer"/>);
+
+            actions.push(confirmButton);
+            actions.push(discardButton);
+
+        }
+
+        return actions;
+    }
+
     getRows() {
         let linhas = [];
         let linhasProjectData = this.projectData["codelist"]["linhas"];
@@ -159,7 +234,7 @@ class CodelistManager extends React.Component {
                         <td className="border border-gray-300">{linhaData["blockName"]}</td>
                         <td className="border border-gray-300">{linhaData["code"]}</td>
                         <td className="border border-gray-300">{remarks}</td>
-                        <td className="border border-gray-300"><FontAwesomeIcon icon={faPen} color={"#5E74D6"} className="cursor-pointer" /></td>
+                        <td className="border border-gray-300">{actions}</td>
                     </tr>
                 );
 
