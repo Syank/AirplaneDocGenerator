@@ -21,8 +21,6 @@ class CodelistManager extends React.Component {
 
         this.close = this.close.bind(this);
 
-        this.codelistLines = [];
-
     }
 
     search() {
@@ -142,12 +140,19 @@ class CodelistManager extends React.Component {
         for (let i = 0; i < linhasProjectData.length; i++) {
             let linhaData = linhasProjectData[i];
 
-            let remarks = this.getRemarksText(linhaData["remarks"]);
-
             let needRender = this.needRenderRow(linhaData["remarks"]);
+
             if (needRender) {
+                let remarks = this.getRemarksText(linhaData["remarks"]);
+
+                let id = linhaData["id"];
+
+                let actions = this.getLineActions(id);
+
+                let lineId = "codelist-line-" + id;
+
                 let component = (
-                    <tr key={linhaData["id"]}>
+                    <tr key={lineId}>
                         <td className="border border-gray-300">{linhaData["sectionNumber"]}</td>
                         <td className="border border-gray-300">{linhaData["sectionNumber"]}</td>
                         <td className="border border-gray-300">{linhaData["blockNumber"]}</td>
@@ -157,9 +162,13 @@ class CodelistManager extends React.Component {
                         <td className="border border-gray-300"><FontAwesomeIcon icon={faPen} color={"#5E74D6"} className="cursor-pointer" /></td>
                     </tr>
                 );
+
                 linhas.push(component);
+
             }
+
         }
+
         return linhas;
     }
 
