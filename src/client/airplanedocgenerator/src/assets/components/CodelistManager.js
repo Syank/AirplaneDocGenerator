@@ -135,6 +135,11 @@ class CodelistManager extends React.Component {
         return component;
     }
 
+    importCodelist(event) {
+        let name = document.getElementById("nomeProjeto").textContent;
+        addCodelist(name);
+    }
+
     getManageButtons() {
         let component = (
             <div className="flex flex-row w-full">
@@ -142,7 +147,7 @@ class CodelistManager extends React.Component {
                     <Button text="Nova Linha" type="codelistControl"></Button>
                 </div>
                 <Button text="Exportar Codelist" type="codelistControl"></Button>
-                <Button text="Importar Codelist" type="codelistControl"></Button>
+                <Button text="Importar Codelist" type="codelistControl" onClick={this.importCodelist}></Button>
             </div>
         );
 
@@ -440,7 +445,7 @@ class CodelistManager extends React.Component {
         let component = (
             <div className="flex flex-row h-full overflow-auto">
                 <div className="mr-5">
-                    <h1 className="text-2xl	font-bold text-center leading-loose">{this.getNomeCodelist()}</h1>
+                    <h1 id="nomeProjeto" className="text-2xl	font-bold text-center leading-loose">{this.getNomeCodelist()}</h1>
                     {this.getTable()}
                 </div>
                 <div className="mt-12">

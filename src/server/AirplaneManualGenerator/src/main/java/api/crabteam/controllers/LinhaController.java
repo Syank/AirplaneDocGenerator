@@ -198,11 +198,6 @@ public class LinhaController {
 		File destinationAbsolutePath = new File(PROJECTS_DIRECTORY + "/line_" + line.toString() + "_file.pdf");
 		file.transferTo(destinationAbsolutePath);
 
-		System.err.println(file.getName());
-		System.err.println(line);
-		System.err.println(destinationAbsolutePath.getPath());
-
-		System.err.println(destinationAbsolutePath.getAbsolutePath());
 		Optional<Linha> optionalLinha = linhaRepository.findById(line);
 
 		Linha linha = optionalLinha.get();
