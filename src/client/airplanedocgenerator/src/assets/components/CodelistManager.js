@@ -2,7 +2,8 @@ import React from "react";
 import Button from "./Button";
 import { faSearch, faPen, faFileAlt, faCheck, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { addFile } from "../components/Notifications";
+import { addFile, notification } from "../components/Notifications";
+import ServerRequester from "../../utils/ServerRequester";
 
 /**
  * Classe de componente que representa a tela para visualizar a codelist de um manual
@@ -12,28 +13,34 @@ import { addFile } from "../components/Notifications";
 class CodelistManager extends React.Component {
     constructor(props) {
         super(props);
-
-        this.projectName = window.sessionStorage.getItem("selectedProject");
-
-        this.projectData = this.props.projectData;
+        
         this.filter = this.props.filter;
 
         this.id = "codelistManager";
 
         this.close = this.close.bind(this);
 
-        let linesSituationMap = this.createLinesSituationMap();
+        this.toggleEditLine = this.toggleEditLine.bind(this);
+        this.updateLine = this.updateLine.bind(this);
+        this.createLinesSituationMap = this.createLinesSituationMap.bind(this);
+        this.getLineActions = this.getLineActions.bind(this);
+
+        let projectData = this.props.projectData;
 
         this.state = {
-            linesSituation: linesSituationMap
+            projectData: projectData
         }
+
+        let linesSituationMap = this.createLinesSituationMap();
+
+        this.state["linesSituation"] = linesSituationMap;
 
     }
 
     createLinesSituationMap(){
         let map = {};
 
-        let codelistLines = this.projectData["codelist"]["linhas"];
+        let codelistLines = this.state["projectData"]["codelist"]["linhas"];
 
         for (let i = 0; i < codelistLines.length; i++) {
             const line = codelistLines[i];
@@ -67,7 +74,7 @@ class CodelistManager extends React.Component {
     }
 
     getNomeCodelist() {
-        let name = this.projectData["nome"];
+        let name = this.state["projectData"]["nome"];
 
         if (this.filter !== "all") {
             name += "-" + this.filter;
@@ -161,12 +168,28 @@ class CodelistManager extends React.Component {
         return false;
     }
 
-    getRemarksText(remarks) {
+    getRemarksText(remarks, editingId) {
         let remarkText = "";
 
-        for (let i = 0; i < remarks.length; i++) {
-            const remark = remarks[i];
-            remarkText += "-" + remark["traco"] + "\n";
+        if(editingId === undefined){
+            for (let i = 0; i < remarks.length; i++) {
+                const remark = remarks[i];
+                remarkText += "-" + remark["traco"] + ", ";
+
+            }
+
+        }else{
+            for (let i = 0; i < remarks.length; i++) {
+                const remark = remarks[i];
+                remarkText += "-" + remark["traco"] + " (" + remark["apelido"] + "), ";
+
+            }
+
+        }
+
+        if(remarkText.endsWith(", ")){
+            remarkText = remarkText.slice(0, remarkText.length - 2);
+
         }
 
         return remarkText;
@@ -179,13 +202,31 @@ class CodelistManager extends React.Component {
         addFile(justId);
     }
 
+    toggleEditLine(event){
+        let lineId = this.getLineId(event);
+
+        let linesSituation = this.state["linesSituation"]
+
+        // Inverte o valor booleano
+        linesSituation[lineId]["editing"] = !linesSituation[lineId]["editing"];
+
+        this.setState(linesSituation);
+
+    }
+
+    getLineId(event){
+        let lineId = event.target.parentElement.parentElement.id.split("-")[2];
+
+        return lineId
+    }
+
     getLineActions(lineId){
         let lineSituation = this.state["linesSituation"][lineId];
 
         let actions = [];
 
         if(lineSituation["editing"] === false){
-            let editButton = (<FontAwesomeIcon key={"edit-line-" + lineId} icon={faPen} color={"#5E74D6"} className="cursor-pointer mr-3"/>);
+            let editButton = (<FontAwesomeIcon key={"edit-line-" + lineId} onClick={this.toggleEditLine} icon={faPen} color={"#5E74D6"} className="cursor-pointer mr-3"/>);
 
             let hasFile = lineSituation["hasFile"];
 
@@ -204,8 +245,8 @@ class CodelistManager extends React.Component {
             actions.push(fileButton);
 
         }else{
-            let confirmButton = (<FontAwesomeIcon key={"confirm-line-" + lineId} icon={faCheck} color="#18cb26" className="cursor-pointer mr-3"/>);
-            let discardButton = (<FontAwesomeIcon key={"discard-line-" + lineId} icon={faTimes} color="#ef2c2c" className="cursor-pointer"/>);
+            let confirmButton = (<FontAwesomeIcon key={"confirm-line-" + lineId} onClick={this.updateLine} icon={faCheck} color="#18cb26" className="cursor-pointer mr-3"/>);
+            let discardButton = (<FontAwesomeIcon key={"discard-line-" + lineId} onClick={this.toggleEditLine} icon={faTimes} color="#ef2c2c" className="cursor-pointer"/>);
 
             actions.push(confirmButton);
             actions.push(discardButton);
@@ -215,9 +256,93 @@ class CodelistManager extends React.Component {
         return actions;
     }
 
+    checkIsValidRemarksText(remarksText){
+        if(remarksText === ""){
+            return false;
+        }
+
+        let remarksParts = remarksText.split(",");
+
+        for (let i = 0; i < remarksParts.length; i++) {
+            const part = remarksParts[i];
+            
+            let remarkInfo = part.split("(");
+
+            if(remarkInfo.length !== 2){
+                return false;
+            }
+
+            if(!remarkInfo[0].includes("-")){
+                return false;
+            }
+            
+            if(remarkInfo[1].charAt(remarkInfo[1].length - 1) !== ")"){
+                return false;
+            }
+
+        }
+
+        return true;
+    }
+
+    async updateLine(event){
+        let lineId = this.getLineId(event);
+
+        let newSection = document.getElementById("line-sectionNumber-" + lineId).value;
+        let newSubSection = document.getElementById("line-subsectionNumber-" + lineId).value;
+        let newBlockNumber = document.getElementById("line-blockNumber-" + lineId).value;
+        let newBlockName = document.getElementById("line-blockName-" + lineId).value;
+        let newCode = document.getElementById("line-code-" + lineId).value;
+        let newRemarks = document.getElementById("line-remarks-" + lineId).value;
+
+        let isValidRemarks = this.checkIsValidRemarksText(newRemarks);
+
+        if(!isValidRemarks){
+            notification("error", "Texto de Remarks (traços) inválido! 😤",
+                "Para atualizar o campo de remark, o texto deve ter o seguinte formato: -XX (APELIDO). "
+                + "Onde X são os números do traço. Múltiplos remarks devem ser separados por vírgula, como: "
+                + "-XX (APELIDO), -XX (APELIDO)");
+
+        }else{
+            let updatedLine = {
+                id: lineId,
+                sectionNumber: newSection,
+                subsectionNumber: newSubSection,
+                blockNumber: newBlockNumber,
+                blockName: newBlockName,
+                code: newCode,
+                remarksText: newRemarks
+            }
+
+            let serverRequester = new ServerRequester("http://localhost:8080");
+
+            let response = await serverRequester.doPost("/codelistLine/update", updatedLine);
+
+            if(response["responseJson"] === true){
+                notification("success", "Sucesso! 😀", "Os dados da linha foram atualizados");
+
+                let newData = await this.props.reloadData();
+
+                let situationsMap = this.state["linesSituation"];
+
+                let editing = situationsMap[lineId]["editing"];
+
+                situationsMap[lineId]["editing"] = !editing;
+
+                this.setState({linesSituation:situationsMap, projectData: newData});
+
+            }else{
+                notification("error", "Ops 🤨", "Algo deu errado durante a atualização dos dados da linha");
+
+            }
+
+        }
+
+    }
+
     getRows() {
         let linhas = [];
-        let linhasProjectData = this.projectData["codelist"]["linhas"];
+        let linhasProjectData = this.state["projectData"]["codelist"]["linhas"];
 
         for (let i = 0; i < linhasProjectData.length; i++) {
             let linhaData = linhasProjectData[i];
@@ -225,25 +350,59 @@ class CodelistManager extends React.Component {
             let needRender = this.needRenderRow(linhaData["remarks"]);
 
             if (needRender) {
-                let remarks = this.getRemarksText(linhaData["remarks"]);
-
                 let id = linhaData["id"];
 
                 let actions = this.getLineActions(id);
 
                 let lineId = "codelist-line-" + id;
 
-                let component = (
-                    <tr key={"id-linha-" + lineId}>
-                        <td className="border border-gray-300">{linhaData["sectionNumber"]}</td>
-                        <td className="border border-gray-300">{linhaData["sectionNumber"]}</td>
-                        <td className="border border-gray-300">{linhaData["blockNumber"]}</td>
-                        <td className="border border-gray-300">{linhaData["blockName"]}</td>
-                        <td className="border border-gray-300">{linhaData["code"]}</td>
-                        <td className="border border-gray-300">{remarks}</td>
-                        <td id={"actions-line-id-" + id} className="border border-gray-300">{actions}</td>
-                    </tr>
-                );
+                let component;
+
+                let editing = this.state["linesSituation"][id]["editing"];
+
+                if(editing === false){
+                    let remarks = this.getRemarksText(linhaData["remarks"]);
+
+                    component = (
+                        <tr id={lineId} key={"id-linha-" + lineId}>
+                            <td className="border border-gray-300">{linhaData["sectionNumber"]}</td>
+                            <td className="border border-gray-300">{linhaData["subsectionNumber"]}</td>
+                            <td className="border border-gray-300">{linhaData["blockNumber"]}</td>
+                            <td className="border border-gray-300">{linhaData["blockName"]}</td>
+                            <td className="border border-gray-300">{linhaData["code"]}</td>
+                            <td className="border border-gray-300">{remarks}</td>
+                            <td id={"actions-line-" + id} className="border border-gray-300">{actions}</td>
+                        </tr>
+                    );
+
+                }else{
+                    let remarks = this.getRemarksText(linhaData["remarks"], id);
+
+                    component = (
+                        <tr id={lineId} key={"id-linha-" + lineId}>
+                            <td className="border border-gray-300">
+                                <input className="w-full text-center" type="text" id={"line-sectionNumber-" + id} placeholder={linhaData["sectionNumber"]}></input>
+                            </td>
+                            <td className="border border-gray-300">
+                                <input className="w-full text-center" type="text" id={"line-subsectionNumber-" + id} placeholder={linhaData["subsectionNumber"]}></input>
+                            </td>
+                            <td className="border border-gray-300">
+                                <input className="w-full text-center" type="text" id={"line-blockNumber-" + id} placeholder={linhaData["blockNumber"]}></input>
+                            </td>
+                            <td className="border border-gray-300">
+                                <input className="w-full text-center" type="text" id={"line-blockName-" + id} placeholder={linhaData["blockName"]}></input>
+                            </td>
+                            <td className="border border-gray-300">
+                                <input className="w-full text-center" type="text" id={"line-code-" + id} placeholder={linhaData["code"]}></input>
+                            </td>
+                            <td className="border border-gray-300">
+                                <textarea className="w-full text-center" type="text" id={"line-remarks-" + id} placeholder={remarks}></textarea>
+                            </td>
+                            <td id={"actions-line-" + id} className="border border-gray-300">{actions}</td>
+                        </tr>
+                    );
+
+                }
 
                 linhas.push(component);
 
