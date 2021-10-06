@@ -58,6 +58,7 @@ export function withConfirmation(cTitle, cMessage, cIcon, sOption) {
  */
 
 export async function addFile(lineId) {
+
      const { value: uploadedFile } = await Swal.fire({
           title: 'Escolha um arquivo!',
           input: 'file',
@@ -67,8 +68,7 @@ export async function addFile(lineId) {
           },
           showCancelButton: true,
           confirmButtonText: 'Pronto',
-          confirmButtonColor: '#56EA6D',
-          showLoaderOnConfirm: true,
+          confirmButtonColor: '#56EA6D'
      })
 
      if (uploadedFile) {
@@ -78,19 +78,22 @@ export async function addFile(lineId) {
           formData.append("file", uploadedFile);
           formData.append("line", lineId);
 
+          console.log(formData);
+
           let response = await serverRequester.doPost(
-               "/line/attachFile",
+               "/codelistLine/attachFile",
                formData,
                "multipart/form-data"
           );
 
           console.log(response);
 
-          if (response.status === "ok") {
+          if (response.status === 200) {
                notification("success", "Sucesso! 😄", "O arquivo foi associado com sucesso!");
           }
           else {
                notification("error", "Ops 🙁", "Não foi possível associar o arquivo a essa linha.");
           }
+
      }
 }
