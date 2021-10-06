@@ -97,3 +97,44 @@ export async function addFile(lineId) {
 
      }
 }
+
+export async function addCodelist(projectName) {
+
+     const { value: uploadedFile } = await Swal.fire({
+          title: 'Escolha um arquivo!',
+          input: 'file',
+          inputAttributes: {
+               autocapitalize: 'off',
+               'accept': '.xls,.xlsx',
+          },
+          showCancelButton: true,
+          confirmButtonText: 'Pronto',
+          confirmButtonColor: '#56EA6D'
+     })
+
+     if (uploadedFile) {
+          let serverRequester = new ServerRequester("http://localhost:8080");
+
+          let formData = new FormData();
+          formData.append("newCodelist", uploadedFile);
+          formData.append("projectName", projectName);
+
+          console.log(formData);
+
+          // let response = await serverRequester.doPost(
+          //      "/codelistLine/attachFile",
+          //      formData,
+          //      "multipart/form-data"
+          // );
+
+          // console.log(response);
+
+          // if (response.status === 200) {
+          //      notification("success", "Sucesso! 😄", "O arquivo foi associado com sucesso!");
+          // }
+          // else {
+          //      notification("error", "Ops 🙁", "Não foi possível associar o arquivo a essa linha.");
+          // }
+
+     }
+}
