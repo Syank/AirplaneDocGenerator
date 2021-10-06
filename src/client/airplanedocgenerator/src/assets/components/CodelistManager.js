@@ -2,7 +2,7 @@ import React from "react";
 import Button from "./Button";
 import { faSearch, faPen, faFileAlt, faCheck, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { addFile, notification } from "../components/Notifications";
+import { addCodelist, addFile, notification } from "../components/Notifications";
 import ServerRequester from "../../utils/ServerRequester";
 
 /**
