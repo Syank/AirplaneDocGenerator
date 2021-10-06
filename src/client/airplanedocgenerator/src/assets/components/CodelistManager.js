@@ -130,7 +130,6 @@ class CodelistManager extends React.Component {
 
     importCodelist(event) {
         let name = document.getElementById("nomeProjeto").textContent;
-        console.log(name);
         addCodelist(name);
     }
 

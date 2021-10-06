@@ -58,7 +58,6 @@ export function withConfirmation(cTitle, cMessage, cIcon, sOption) {
  */
 
 export async function addFile(lineId) {
-
      const { value: uploadedFile } = await Swal.fire({
           title: 'Escolha um arquivo!',
           input: 'file',
@@ -67,10 +66,9 @@ export async function addFile(lineId) {
                'accept': 'application/pdf',
           },
           showCancelButton: true,
-          confirmButtonText: 'Pronto',
+          confirmButtonText: 'Pronto!',
           confirmButtonColor: '#56EA6D'
      })
-
      if (uploadedFile) {
           let serverRequester = new ServerRequester("http://localhost:8080");
 
@@ -78,15 +76,11 @@ export async function addFile(lineId) {
           formData.append("file", uploadedFile);
           formData.append("line", lineId);
 
-          console.log(formData);
-
           let response = await serverRequester.doPost(
                "/codelistLine/attachFile",
                formData,
                "multipart/form-data"
           );
-
-          console.log(response);
 
           if (response.status === 200) {
                notification("success", "Sucesso! 😄", "O arquivo foi associado com sucesso!");
@@ -99,7 +93,6 @@ export async function addFile(lineId) {
 }
 
 export async function addCodelist(projectName) {
-
      const { value: uploadedFile } = await Swal.fire({
           title: 'Escolha um arquivo!',
           input: 'file',
@@ -108,10 +101,9 @@ export async function addCodelist(projectName) {
                'accept': '.xls,.xlsx',
           },
           showCancelButton: true,
-          confirmButtonText: 'Pronto',
+          confirmButtonText: 'Pronto!',
           confirmButtonColor: '#56EA6D'
      })
-
      if (uploadedFile) {
           let serverRequester = new ServerRequester("http://localhost:8080");
 
@@ -119,22 +111,18 @@ export async function addCodelist(projectName) {
           formData.append("newCodelist", uploadedFile);
           formData.append("projectName", projectName);
 
-          console.log(formData);
+          let response = await serverRequester.doPost(
+               "/codelist/upload",
+               formData,
+               "multipart/form-data"
+          );
 
-          // let response = await serverRequester.doPost(
-          //      "/codelistLine/attachFile",
-          //      formData,
-          //      "multipart/form-data"
-          // );
-
-          // console.log(response);
-
-          // if (response.status === 200) {
-          //      notification("success", "Sucesso! 😄", "O arquivo foi associado com sucesso!");
-          // }
-          // else {
-          //      notification("error", "Ops 🙁", "Não foi possível associar o arquivo a essa linha.");
-          // }
+          if (response.status === 200) {
+               notification("success", "Sucesso! 😄", "A codelist foi adicionada com sucesso!");
+          }
+          else {
+               notification("error", "Ops 🙁", "Não foi possível adicionar a codelist ao manual.");
+          }
 
      }
 }
