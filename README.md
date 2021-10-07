@@ -28,40 +28,36 @@
                      <li><a href="#equipe">Integrantes da equipe</a>
               </ul>
               <section id="entrega">
-                     <h2 align="center">:rainbow::spiral_calendar: Primeira entrega :star:</h3>
+                     <h2 align="center">:rainbow::spiral_calendar: Segunda entrega :star:</h3>
                      <h3>:question: O que fizemos?</h2>
-                     <p align="justify">A primeira entrega conteve todo o planejamento das <i>sprints</i> do nosso projeto, além de termos desenvolvido as primeiras funcionalidades, que foram planejadas e validadas. Os usuários já poderão acessar o sistema e podem criar um novo projeto. Todos os projetos criados também serão listados a eles.</p>
-                     <img src="https://raw.githubusercontent.com/Syank/AirplaneDocGenerator/main/doc/cards/sprint%201/card01.png" width="550px" height="300px">
+                     <p align="justify">Na segunda entrega conforme planejado foi desenvolvida as funcionalidades de criação, importação de uma codelist, além do mais a possibilidade de importar arquivos para composição do manual.</p>
+                     <img src="https://raw.githubusercontent.com/Syank/AirplaneDocGenerator/main/doc/cards/sprint%202/card02.png" width="550px" height="300px">
                      <h3>:grey_question: Por quê?</h2>
-                     <p align="justify">Nossa plataforma seguirá o processo que usuário realiza desde a criação do projeto até a geração do arquivo formado. Portanto, decidimos e validamos que a primeira entrega de valor englobaria a criação de um projeto. Sendo assim, a cada entrega, o processo como um todo evoluirá.</p>
+                     <p align="justify">lorem ipsum dolor sit amet</p>
               </section>
               <section id="funcionamento">
                      <h2 align="center">:desktop_computer::computer_mouse: AirplaneDocGenerator em funcionamento :checkered_flag:</h3>
                      <p align="center">
-                            <img src="https://raw.githubusercontent.com/Syank/AirplaneDocGenerator/main/doc/gifs/sprint1/Apresenta%C3%A7%C3%A3o%20Sprint%201%20%20%20GIF.gif"
+                            ~~gif do sistema dessa entrega funcionando~~
                      </p>
               </section>
               <section id="backlogEntrega">
                      <h2 align="center"><i>User stories</i> entregues :pilot:</h3>
-                     <p align="justify">Nessa entrega, o usuário poderá criar o projeto e visualizar todos aqueles que foram criados.</p>
-                     <img src="https://raw.githubusercontent.com/Syank/AirplaneDocGenerator/main/doc/backlog/sprint%201/Sprint%201%20cropped.png">
+                     <p align="justify">A segunda entrega conteve a criação, importação e edição de uma codelist e a adição de arquivos para composição do manual. </p>
+                    ~~imagem das user stories~~
               </section>
               <section id="mockups">
                      <h2 align="center">:bookmark_tabs: <i>Mockups</i> :memo:</h3>
-                     <img src="https://raw.githubusercontent.com/Syank/AirplaneDocGenerator/main/doc/mockups/sprint%201/Login.png">
-                     <img src="https://raw.githubusercontent.com/Syank/AirplaneDocGenerator/main/doc/mockups/sprint%201/Home.png">
-                     <img src="https://raw.githubusercontent.com/Syank/AirplaneDocGenerator/main/doc/mockups/sprint%201/MenuNovoDoc.png">
-                     <img src="https://raw.githubusercontent.com/Syank/AirplaneDocGenerator/main/doc/mockups/sprint%201/NovoDoc.png">
-                     <img src="https://raw.githubusercontent.com/Syank/AirplaneDocGenerator/main/doc/mockups/sprint%201/AdministrarDocs.png">
+                     ~~mock ups dessa entrega~~
               </section>
               <section id="banco">
                      <h2 align="center">Modelo conceitual do banco de dados :open_file_folder:</h3>
-                     <img src="https://raw.githubusercontent.com/Syank/AirplaneDocGenerator/main/doc/database/sprint%201/conceitual/conceitual.png">
+                     ~~não sei se vai ter modelo conceitual de novo de banco nessa~~
               </section>
               <section id="burndown">
                      <h2 align="center"><i>Burndown</i> :date::chart_with_downwards_trend:</h3>
-                     <p align="justify">Nossa <i>sprint</i> foi bastante intensa. Foi necessário um grande esforço de todos os membros para que tudo ocorresse como o planejado. Conseguimos consolidar o <i>backlog</i> antes do dia 9 da <i>sprint</i> e a partir desse dia desenvolvemos persistentemente para realizar a entrega com a melhor qualidade possível.</p>
-                     <img src="https://raw.githubusercontent.com/Syank/AirplaneDocGenerator/main/doc/burndown/sprint%201/burndown-s1.png">
+                     <p align="justify">~~descrição falando como foi a sprint~~</p>
+                     ~~imagem do burndown da sprint~~
               </section>
               <section id="equipe">
                      <h2>Integrantes da equipe :girl::boy:</h2>
