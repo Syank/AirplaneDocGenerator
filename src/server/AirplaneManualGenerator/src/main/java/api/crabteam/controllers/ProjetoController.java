@@ -159,29 +159,32 @@ public class ProjetoController {
 	}
 	
 	@PostMapping("/changeName")
-	public ResponseEntity<?> changeProjectName(@RequestBody ChangeProjectName newData) throws IOException{
+	public ResponseEntity<?> changeProjectName(@RequestBody ChangeProjectName newData){
 		String newProjectName = newData.getNewName().toUpperCase();
 		String oldProjectName = newData.getOldName().toUpperCase();
-
+		
 		Projeto project = projetoRepository.findByName(oldProjectName);
-
-		if (project == null) {
-			return new ResponseEntity<String>("Não foi possível encontrar o projeto para alterar seu nome",
-					HttpStatus.INTERNAL_SERVER_ERROR);
+		
+		if(project == null) {
+			return new ResponseEntity<String>("Não foi possível encontrar o projeto para alterar seu nome", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-
-		String filesDirectory = System.getenv("APIEmbraerCodelistFolder");
-
-		FileUtils.renameFile(filesDirectory, oldProjectName + "_codelist.xlsx", newProjectName + "_codelist.xlsx");
-		FileUtils.renameCodelistSheet(filesDirectory, newProjectName + "_codelist.xlsx", oldProjectName,
-				newProjectName);
-
-		project.getCodelist().setNome(newProjectName);
-		project.setNome(newProjectName);
-
-		projetoRepository.save(project);
-
-		return new ResponseEntity<Boolean>(true, HttpStatus.OK);	
+		
+		try {
+			String filesDirectory = System.getenv("APIEmbraerCodelistFolder");
+			
+			FileUtils.renameFile(filesDirectory, oldProjectName + "_codelist.xlsx", newProjectName + "_codelist.xlsx");
+			FileUtils.renameCodelistSheet(filesDirectory, newProjectName + "_codelist.xlsx", oldProjectName, newProjectName);
+			
+			project.getCodelist().setNome(newProjectName);
+			project.setNome(newProjectName);
+			
+			projetoRepository.save(project);
+			
+		}catch (Exception e) {
+			return new ResponseEntity<String>("Não foi possivel alterar o nome do projeto", HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
+		return new ResponseEntity<Boolean>(true, HttpStatus.OK);		
 	}
 	
 }

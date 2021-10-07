@@ -40,7 +40,7 @@ public class Linha {
 	@Column
 	private String filePath;
 	
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(cascade = CascadeType.ALL)
 	@LazyCollection(LazyCollectionOption.FALSE)
 	private List<Remark> remarks = new ArrayList<Remark>();
 

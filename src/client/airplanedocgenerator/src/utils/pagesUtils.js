@@ -50,7 +50,7 @@ export function isValidProjectName(supposedProjectName) {
 * @param {String} supposedPartLetter String da parte de letras do nome do projeto
 * @author Rafael Furtado
 */
-export function isValidPartLetter(supposedPartLetter) {
+function isValidPartLetter(supposedPartLetter) {
      if (supposedPartLetter === undefined || !isNaN(supposedPartLetter) || supposedPartLetter.length !== 3) {
           return false;
      }
@@ -76,7 +76,7 @@ export function isValidPartLetter(supposedPartLetter) {
 * @param {String} supposedPartNumber String da parte de números do nome de um projeto
 * @author Rafael Furtado
 */
-export function isValidPartNumber(supposedPartNumber) {
+function isValidPartNumber(supposedPartNumber) {
      if (supposedPartNumber === undefined || supposedPartNumber.length !== 4 || supposedPartNumber.includes(".")) {
           return false;
      }

@@ -46,7 +46,6 @@ class ProjectAdministrationScreen extends React.Component{
         this.changeProjectDescription = this.changeProjectDescription.bind(this);
         this.showCodelist = this.showCodelist.bind(this);
         this.hideCodelistManager = this.hideCodelistManager.bind(this);
-        this.loadProjectData = this.loadProjectData.bind(this);
 
     }
 
@@ -73,8 +72,6 @@ class ProjectAdministrationScreen extends React.Component{
                 editingProjectName: false,
                 editingProjectDescription: false
             });
-
-            return response["responseJson"];
 
         }else{
             notification("error", "Algo deu errado 🙁",
@@ -424,7 +421,6 @@ class ProjectAdministrationScreen extends React.Component{
                 {getBackgroundImage()}
                 {this.state["showCodelist"] &&
                     <CodelistManager
-                        reloadData={this.loadProjectData}
                         projectData={this.state["projectData"]}
                         filter={this.state["codelistFilter"]}
                         hide={this.hideCodelistManager}/>

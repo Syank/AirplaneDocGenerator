@@ -1,6 +1,5 @@
 import Swal from 'sweetalert2';
-
-
+import ServerRequester from '../../utils/ServerRequester';
 
 /**
  * Função que notificará o usuário de acordo com os parâmetros passados
@@ -67,25 +66,31 @@ export async function addFile(lineId) {
                'accept': 'application/pdf',
           },
           showCancelButton: true,
-          confirmButtonText: 'Pronto!',
-          confirmButtonColor: '#56EA6D'
+          confirmButtonText: 'Pronto',
+          confirmButtonColor: '#56EA6D',
+          showLoaderOnConfirm: true,
      })
 
-     return uploadedFile;
-}
+     if (uploadedFile) {
+          let serverRequester = new ServerRequester("http://localhost:8080");
 
-export async function addCodelist(projectName) {
-     const { value: uploadedFile } = await Swal.fire({
-          title: 'Escolha um arquivo!',
-          input: 'file',
-          inputAttributes: {
-               autocapitalize: 'off',
-               'accept': '.xls,.xlsx',
-          },
-          showCancelButton: true,
-          confirmButtonText: 'Pronto!',
-          confirmButtonColor: '#56EA6D'
-     })
+          let formData = new FormData();
+          formData.append("file", uploadedFile);
+          formData.append("line", lineId);
 
-     return uploadedFile;
+          let response = await serverRequester.doPost(
+               "/line/attachFile",
+               formData,
+               "multipart/form-data"
+          );
+
+          console.log(response);
+
+          if (response.status === "ok") {
+               notification("success", "Sucesso! 😄", "O arquivo foi associado com sucesso!");
+          }
+          else {
+               notification("error", "Ops 🙁", "Não foi possível associar o arquivo a essa linha.");
+          }
+     }
 }
