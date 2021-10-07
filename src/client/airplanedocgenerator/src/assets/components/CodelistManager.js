@@ -262,7 +262,7 @@ class CodelistManager extends React.Component {
 
             this.setState({linesSituation: linesSituation, projectData: newData});
 
-        }else {
+        }else if(file !== null && file !== undefined) {
             notification("error", "Ops 🙁", "Não foi possível associar o arquivo a essa linha.");
 
         }
