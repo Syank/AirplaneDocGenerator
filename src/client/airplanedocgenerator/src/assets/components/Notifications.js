@@ -69,27 +69,8 @@ export async function addFile(lineId) {
           confirmButtonText: 'Pronto!',
           confirmButtonColor: '#56EA6D'
      })
-     if (uploadedFile) {
-          let serverRequester = new ServerRequester("http://localhost:8080");
 
-          let formData = new FormData();
-          formData.append("file", uploadedFile);
-          formData.append("line", lineId);
-
-          let response = await serverRequester.doPost(
-               "/codelistLine/attachFile",
-               formData,
-               "multipart/form-data"
-          );
-
-          if (response.status === 200) {
-               notification("success", "Sucesso! 😄", "O arquivo foi associado com sucesso!");
-          }
-          else {
-               notification("error", "Ops 🙁", "Não foi possível associar o arquivo a essa linha.");
-          }
-
-     }
+     return uploadedFile;
 }
 
 export async function addCodelist(projectName) {

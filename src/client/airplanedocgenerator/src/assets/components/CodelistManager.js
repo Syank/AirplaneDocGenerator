@@ -24,6 +24,7 @@ class CodelistManager extends React.Component {
         this.updateLine = this.updateLine.bind(this);
         this.createLinesSituationMap = this.createLinesSituationMap.bind(this);
         this.getLineActions = this.getLineActions.bind(this);
+        this.addFileToLine = this.addFileToLine.bind(this);
 
         let projectData = this.props.projectData;
 
@@ -200,11 +201,38 @@ class CodelistManager extends React.Component {
         return remarkText;
     }
 
-    addFileToLine (event) {
+    async addFileToLine (event) {
         let lineId = event.currentTarget.parentElement.id;
         let justId = lineId.split("-").pop();
 
-        addFile(justId);
+        let file = await addFile(justId);
+
+        let serverRequester = new ServerRequester("http://localhost:8080");
+
+        let formData = new FormData();
+        formData.append("file", file);
+        formData.append("line", justId);
+
+        let response = await serverRequester.doPost(
+            "/codelistLine/attachFile",
+            formData,
+            "multipart/form-data"
+        );
+
+        if (response.status === 200) {
+            notification("success", "Sucesso! 😄", "O arquivo foi associado com sucesso!");
+
+            let newData = await this.props.reloadData();
+
+            let linesSituationMap = this.createLinesSituationMap();
+
+            this.setState({linesSituation: linesSituationMap, projectData: newData});
+
+        }else {
+            notification("error", "Ops 🙁", "Não foi possível associar o arquivo a essa linha.");
+
+        }
+       
     }
 
     toggleEditLine(event){
@@ -226,7 +254,9 @@ class CodelistManager extends React.Component {
     }
 
     getLineActions(lineId){
-        let lineSituation = this.state["linesSituation"][lineId];
+        let linesSituationMap = this.createLinesSituationMap();
+
+        let lineSituation = linesSituationMap[lineId];
 
         let actions = [];
 
