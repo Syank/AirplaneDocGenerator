@@ -1,5 +1,6 @@
 import Swal from 'sweetalert2';
-import ServerRequester from '../../utils/ServerRequester';
+
+
 
 /**
  * Função que notificará o usuário de acordo com os parâmetros passados
@@ -85,25 +86,6 @@ export async function addCodelist(projectName) {
           confirmButtonText: 'Pronto!',
           confirmButtonColor: '#56EA6D'
      })
-     if (uploadedFile) {
-          let serverRequester = new ServerRequester("http://localhost:8080");
 
-          let formData = new FormData();
-          formData.append("newCodelist", uploadedFile);
-          formData.append("projectName", projectName);
-
-          let response = await serverRequester.doPost(
-               "/codelist/upload",
-               formData,
-               "multipart/form-data"
-          );
-
-          if (response.status === 200) {
-               notification("success", "Sucesso! 😄", "A codelist foi adicionada com sucesso!");
-          }
-          else {
-               notification("error", "Ops 🙁", "Não foi possível adicionar a codelist ao manual.");
-          }
-
-     }
+     return uploadedFile;
 }

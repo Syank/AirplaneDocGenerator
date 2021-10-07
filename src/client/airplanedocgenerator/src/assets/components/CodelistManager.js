@@ -25,6 +25,7 @@ class CodelistManager extends React.Component {
         this.createLinesSituationMap = this.createLinesSituationMap.bind(this);
         this.getLineActions = this.getLineActions.bind(this);
         this.addFileToLine = this.addFileToLine.bind(this);
+        this.importCodelist = this.importCodelist.bind(this);
 
         let projectData = this.props.projectData;
 
@@ -71,7 +72,7 @@ class CodelistManager extends React.Component {
     }
 
     search() {
-        
+        notification("info", "Aguarde um pouco! 🤓", "Essa funcionalidade estará disponível em breve!");
     }
 
     getNomeCodelist() {
@@ -136,9 +137,40 @@ class CodelistManager extends React.Component {
         return component;
     }
 
-    importCodelist(event) {
+    async importCodelist(event) {
         let name = document.getElementById("nomeProjeto").textContent;
-        addCodelist(name);
+
+        let file = await addCodelist(name);
+
+        let serverRequester = new ServerRequester("http://localhost:8080");
+
+        let formData = new FormData();
+        formData.append("newCodelist", file);
+        formData.append("projectName", name);
+
+        let response = await serverRequester.doPost(
+            "/codelist/upload",
+            formData,
+            "multipart/form-data"
+        );
+
+        if (response.status === 200) {
+            notification("success", "Sucesso! 😄", "A codelist foi substituída!");
+
+            await this.props.reloadData();
+
+            this.props.hide();
+
+        }else {
+            notification("error", "Ops 🙁", "Não foi possível alterar a codelist do manual");
+
+        }
+       
+    }
+
+    exportCodelist(){
+        notification("info", "Aguarde um pouco! 🤓", "Essa funcionalidade estará disponível em breve!");
+
     }
 
     getManageButtons() {
@@ -147,7 +179,7 @@ class CodelistManager extends React.Component {
                 <div>
                     <Button text="Nova Linha" type="codelistControl"></Button>
                 </div>
-                <Button text="Exportar Codelist" type="codelistControl"></Button>
+                <Button text="Exportar Codelist" type="codelistControl" onClick={this.exportCodelist}></Button>
                 <Button text="Importar Codelist" type="codelistControl" onClick={this.importCodelist}></Button>
             </div>
         );
@@ -224,9 +256,11 @@ class CodelistManager extends React.Component {
 
             let newData = await this.props.reloadData();
 
-            let linesSituationMap = this.createLinesSituationMap();
+            let linesSituation = this.state["linesSituation"];
 
-            this.setState({linesSituation: linesSituationMap, projectData: newData});
+            linesSituation[justId]["hasFile"] = true;
+
+            this.setState({linesSituation: linesSituation, projectData: newData});
 
         }else {
             notification("error", "Ops 🙁", "Não foi possível associar o arquivo a essa linha.");
@@ -254,9 +288,7 @@ class CodelistManager extends React.Component {
     }
 
     getLineActions(lineId){
-        let linesSituationMap = this.createLinesSituationMap();
-
-        let lineSituation = linesSituationMap[lineId];
+        let lineSituation = this.state["linesSituation"][lineId];
 
         let actions = [];
 
