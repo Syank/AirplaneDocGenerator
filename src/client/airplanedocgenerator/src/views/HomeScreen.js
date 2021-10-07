@@ -79,7 +79,6 @@ class HomeScreen extends React.Component {
     goToSelectProjectPage() {
         this.props.navigation("selectProject");
 
-        //notification("info", "Aguarde um pouco!", "Essa funcionalidade estará disponível em breve!");
     }
 
     /**
@@ -90,6 +89,7 @@ class HomeScreen extends React.Component {
      */
     goToPrintProjectPage() {
         notification("info", "Aguarde um pouco!", "Essa funcionalidade estará disponível em breve!");
+        
     }
 
     /**

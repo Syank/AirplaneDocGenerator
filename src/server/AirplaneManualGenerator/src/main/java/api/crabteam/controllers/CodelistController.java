@@ -3,6 +3,7 @@ package api.crabteam.controllers;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,8 +24,12 @@ import org.springframework.web.multipart.MultipartFile;
 import api.crabteam.controllers.requestsBody.NewCodelist;
 import api.crabteam.model.entities.Codelist;
 import api.crabteam.model.entities.Linha;
+import api.crabteam.model.entities.Projeto;
 import api.crabteam.model.entities.builders.CodelistBuilder;
+import api.crabteam.model.entities.builders.ProjetoBuilder;
 import api.crabteam.model.repositories.CodelistRepository;
+import api.crabteam.model.repositories.LinhaRepository;
+import api.crabteam.model.repositories.ProjetoRepository;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -46,13 +51,24 @@ public class CodelistController {
 	@Autowired
 	CodelistBuilder codelistBuilder;
 	
+	@Autowired
+	ProjetoRepository projetoRepository;
+	
+	@Autowired
+	ProjetoBuilder projetoBuilder;
+	
+	@Autowired
+	LinhaRepository linhaRepository;
+	
+	private static final String PROJECTS_DIRECTORY = System.getenv("APIEmbraerCodelistFolder");
+	
 	/**
 	 * Realiza o upload de um arquivo de codelist para um projeto de manual
 	 * @param newCodelist
 	 * @param projectName
 	 * @return ResponseEntity
 	 * @author Bárbara Port
-	 * @throws IOException 
+	 * @throws Exception 
 	 */
 	@PostMapping("/upload")
     @ApiOperation("Creates a new codelist by uploading it.")
@@ -60,17 +76,35 @@ public class CodelistController {
         @ApiResponse(code = 200, message = "Codelist successfully created."),
         @ApiResponse(code = 400, message = "Codelist wasn't created.")
     })
-	public ResponseEntity<?> uploadCodelist (@RequestParam(name = "newCodelist") NewCodelist newCodelist) throws IOException {
-		codelistBuilder.setCodelistRepository(codelistRepository);
-		codelistBuilder.build(newCodelist, newCodelist.getNome());
+	public ResponseEntity<?> uploadCodelist (@RequestParam(name = "newCodelist") MultipartFile newCodelist, @RequestParam(name = "projectName") String projectName) throws Exception {
 		
-		if(codelistBuilder.isPersisted()) {
-			return new ResponseEntity<Boolean>(true, HttpStatus.OK);
+		CodelistBuilder codelistBuilder = new CodelistBuilder(newCodelist.getBytes(), projectName);
+		Codelist codelist = codelistBuilder.getBuildedCodelist();
+		
+		File destinationAbsolutePath = new File(PROJECTS_DIRECTORY + "\\" + projectName + "_codelist.xlsx");
+		newCodelist.transferTo(destinationAbsolutePath);
+		
+		List<Linha> linhas = codelist.getLinhas();
+		
+		Projeto projeto = projetoRepository.findByName(projectName);
+		Codelist projectCodelist = projeto.getCodelist();
+		
+		codelistRepository.deleteAllCodelistLines(projectCodelist.getId());
+		List<Linha> linhasCodelist = projectCodelist.getLinhas();
+		for (Linha linha : linhasCodelist) {
+			linhaRepository.deleteById(linha.getId());
 		}
 		
-		String failMessage = codelistBuilder.getFailMessage();
+		projeto = projetoRepository.findByName(projectName);
+		projectCodelist = projeto.getCodelist();
+		linhasCodelist = projectCodelist.getLinhas();
+		for (Linha linha : linhas) {
+			projectCodelist.addLinha(linha);
+		}
+		projeto.setCodelist(projectCodelist);
+		projetoRepository.save(projeto);
 		
-		return new ResponseEntity<String>(failMessage, HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<Boolean>(true, HttpStatus.OK);
 	}
 	
 	@GetMapping("/getLines")
