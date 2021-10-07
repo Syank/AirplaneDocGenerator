@@ -18,10 +18,10 @@ import TopBarMenu from "./TopBarMenu";
 
 /**
  * Classe do componente TopBar
- * 
- * A TopBar é responsável por fornecer ao usuário o controle da janela, como arrastar, minimizar ou fechar a aplicação e, 
+ *
+ * A TopBar é responsável por fornecer ao usuário o controle da janela, como arrastar, minimizar ou fechar a aplicação e,
  * caso esteja logado, acesso ao menu, voltar a página inicial ou à anterior
- * 
+ *
  * @author Rafael Furtado
  */
 class TopBar extends React.Component{
@@ -49,7 +49,7 @@ class TopBar extends React.Component{
         this.maximizeApplication = this.maximizeApplication.bind(this);
 
         this.state = {
-            showRegisterUser: false, 
+            showRegisterUser: false,
             showMenu: false,
             isMaximized: false
         };
@@ -58,7 +58,7 @@ class TopBar extends React.Component{
 
     /**
      * Fecha a aplicação
-     * 
+     *
      * @author Rafael Furtado
      */
     closeApplication(){
@@ -68,7 +68,7 @@ class TopBar extends React.Component{
 
     /**
      * Minimiza a aplicação
-     * 
+     *
      * @author Rafael Furtado
      */
     minimizeApplication(){
@@ -77,7 +77,7 @@ class TopBar extends React.Component{
     }
     /**
      * Maximiza a aplicação
-     * 
+     *
      */
     maximizeApplication(){
         if (this.state.isMaximized){
@@ -92,17 +92,16 @@ class TopBar extends React.Component{
 
     /**
      * Abre o menu de funcionalidades extras disponíveis ao usuário
-     * 
+     *
      * @author Rafael Furtado
      */
     toggleTopBarMenu(){
        this.setState({showMenu: !this.state["showMenu"]});
-
     }
 
     /**
      * Retorna a página inicial da aplicação
-     * 
+     *
      * @author Rafael Furtado
      */
     returnToHomePage(){
@@ -112,7 +111,7 @@ class TopBar extends React.Component{
 
     /**
      * Retorna para a página anterior
-     * 
+     *
      * @author Rafael Furtado
      */
     returnToPreviousPage(){
@@ -122,26 +121,25 @@ class TopBar extends React.Component{
 
     /**
      * Função de controle para exibir ou esconder o componente de registro de usuários
-     * 
+     *
      * @param {Boolean} show Valor booleano para decidir se deve ou não exibir a tela de registro de usuários
      * @author Rafael Furtado
      */
     setRegisterUserState(show){
         this.setState({showRegisterUser: show});
-
     }
 
     /**
      * Retorna os componentes extras para a tob bar acessíveis apenas quando o usuário está logado na aplicação
-     * 
+     *
      * @returns Retorna funcionalidades extras para a top bar para um usuário logado
      * @author Rafael Furtado
      */
     getUserLoggedFunctions(){
         let userLoggedFunctions =
         <div className="flex flex-row items-center h-full w-auto">
-            {this.state["showMenu"] && 
-                <TopBarMenu adminOptions={this.props.userLoggedType} 
+            {this.state["showMenu"] &&
+                <TopBarMenu adminOptions={this.props.userLoggedType}
                             loggoutFunction={this.props.loggoutFunction}
                             setShowRegisterUser={this.setRegisterUserState}
                             toggleMenu={this.toggleTopBarMenu}/>
@@ -165,9 +163,9 @@ class TopBar extends React.Component{
     }
 
     /**
-     * Constroí o componente da top bar em si, contendo sempre os botões de controle da janela e, caso um usuário 
+     * Constroí o componente da top bar em si, contendo sempre os botões de controle da janela e, caso um usuário
      * esteja logado na aplicação, retorna também as funcionalidades extras
-     * 
+     *
      * @returns Retorna a top bar em si para ser renderizada
      * @author Rafael Furtado
      */
@@ -184,7 +182,7 @@ class TopBar extends React.Component{
                 <div className="bg-topBar w-screen h-8 flex justify-between items-center shadow-topBarShadow">
                     <div className="h-full w-auto flex flex-row">
                     {// Caso tenha um usuário logado, chama a função que retorna os botões das funcionalidades extras
-                        this.props["userLoggedState"] && 
+                        this.props["userLoggedState"] &&
                             this.getUserLoggedFunctions()
                     }
                     </div>
@@ -220,7 +218,7 @@ class TopBar extends React.Component{
 
     /**
      * Verifica se existe um usuário logado na aplicação
-     * 
+     *
      * @returns Caso exista um usuário logado, retorna true, se não, retorna false
      * @author Rafael Furtado
      */
@@ -236,9 +234,9 @@ class TopBar extends React.Component{
 
     /**
      * Método obrigatório herdado da classe React.Component
-     * 
+     *
      * Renderiza o componente na janela
-     * 
+     *
      * @returns Retorna o elemento a ser renderizado na janela
      * @author Rafael Furtado
      */
