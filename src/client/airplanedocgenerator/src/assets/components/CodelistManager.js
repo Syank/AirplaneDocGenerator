@@ -1,6 +1,5 @@
 import React from "react";
 import Button from "./Button";
-import CreateNewLine from "./CreateNewLine";
 import { faSearch, faPen, faFileAlt, faCheck, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { addFile } from "../components/Notifications";
@@ -26,16 +25,9 @@ class CodelistManager extends React.Component {
         let linesSituationMap = this.createLinesSituationMap();
 
         this.state = {
-            linesSituation: linesSituationMap,
-            showCreateNewLine: false
+            linesSituation: linesSituationMap
         }
 
-        this.setRegisterLine = this.setRegisterLine.bind(this);
-
-    }
-
-    setRegisterLine(show){
-        this.setState({showCreateNewLine: show});
     }
 
     createLinesSituationMap(){
@@ -45,7 +37,7 @@ class CodelistManager extends React.Component {
 
         for (let i = 0; i < codelistLines.length; i++) {
             const line = codelistLines[i];
-
+            
             let lineId = line["id"];
 
             let filePath = line["filePath"];
@@ -57,6 +49,7 @@ class CodelistManager extends React.Component {
 
             }else{
                 hasFile = false;
+
             }
 
             map[lineId] = {
@@ -70,7 +63,7 @@ class CodelistManager extends React.Component {
     }
 
     search() {
-
+        
     }
 
     getNomeCodelist() {
@@ -87,9 +80,6 @@ class CodelistManager extends React.Component {
     getCodelistManagerComponent() {
         let component = (
             <div id={this.id} className="z-10 w-full h-full absolute flex flex-row items-center justify-center backdrop-filter backdrop-blur-blurLogin" onClick={this.close}>
-                {
-                    this.state.showCreateNewLine && <CreateNewLine control={this.setRegisterLine} />
-                }
                 <div className="h-5/6 w-5/6 bg-white">
                     {this.getContent()}
                 </div>
@@ -142,7 +132,7 @@ class CodelistManager extends React.Component {
         let component = (
             <div className="flex flex-row w-full">
                 <div>
-                    <Button text="Nova Linha" onClick={this.setRegisterLine} type="codelistControl"></Button>
+                    <Button text="Nova Linha" type="codelistControl"></Button>
                 </div>
                 <Button text="Exportar Codelist" type="codelistControl"></Button>
                 <Button text="Importar Codelist" type="codelistControl"></Button>
@@ -209,7 +199,7 @@ class CodelistManager extends React.Component {
             }
 
             let fileButton = (<FontAwesomeIcon key={"file-line-" + lineId} icon={faFileAlt} color={iconColor} className="cursor-pointer" onClick={this.addFileToLine}/> );
-
+            
             actions.push(editButton);
             actions.push(fileButton);
 
@@ -305,15 +295,11 @@ class CodelistManager extends React.Component {
 
     getContent() {
         let content = (
-            <div>
-                <div className="h-full p-5">
-                    <div className="flex flex-col w-full h-full justify-between">
-                        {this.getCodelistAndSearchComponents()}
-                        {this.getManageButtons()}
-                    </div>
-
+            <div className="h-full p-5">
+                <div className="flex flex-col w-full h-full justify-between">
+                    {this.getCodelistAndSearchComponents()}
+                    {this.getManageButtons()}
                 </div>
-
             </div>
         );
 
@@ -322,7 +308,7 @@ class CodelistManager extends React.Component {
 
     /**
      * Fecha o formulário de registro de usuário ao clicar fora dele
-     *
+     * 
      * @param {Event} event Evento ao clicar fora do formulário de registro
      * @author Rafael Furtado
      */
@@ -343,6 +329,7 @@ class CodelistManager extends React.Component {
     */
     render() {
         let codelistScreen = this.getCodelistManagerComponent();
+
         return codelistScreen;
     }
 

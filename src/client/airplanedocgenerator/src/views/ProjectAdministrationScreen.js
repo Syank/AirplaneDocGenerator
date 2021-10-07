@@ -7,8 +7,6 @@ import Button from "../assets/components/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faFileAlt, faPen, faTimes } from "@fortawesome/free-solid-svg-icons";
 import CodelistManager from "../assets/components/CodelistManager";
-import CreateNewLine from "../assets/components/CreateNewLine";
-
 
 
 class ProjectAdministrationScreen extends React.Component{
@@ -36,7 +34,7 @@ class ProjectAdministrationScreen extends React.Component{
         };
 
         this.headerCardTitle = "Administração do projeto";
-        this.headerCardText = "Administre o projeto do manual, "
+        this.headerCardText = "Administre o projeto do manual, " 
             + "visualizando a codelist completa ou a individual de cada variação, crie novas linhas na codelist e mais";
 
         this.toggleEditProjectName = this.toggleEditProjectName.bind(this);
@@ -56,7 +54,7 @@ class ProjectAdministrationScreen extends React.Component{
 
     async loadProjectData(){
         let serverRequester = new ServerRequester("http://localhost:8080");
-
+        
         let requestParameters = {
             projectName: this.projectName
         };
@@ -74,11 +72,11 @@ class ProjectAdministrationScreen extends React.Component{
             });
 
         }else{
-            notification("error", "Algo deu errado 🙁",
+            notification("error", "Algo deu errado 🙁", 
                 "Não foi possível carregar as informações do projeto, você será redirecionado para a página de escolha de projetos");
-
+            
             this.props.navigation("selectProject");
-
+            
         }
 
     }
@@ -99,11 +97,11 @@ class ProjectAdministrationScreen extends React.Component{
 
                 let traco = remark["traco"];
                 let apelido = remark["apelido"];
-
+                
                 variations[traco] = apelido;
 
             }
-
+  
         }
 
         return variations;
@@ -151,7 +149,7 @@ class ProjectAdministrationScreen extends React.Component{
 
             if(filterCriteria === null){
                 filterCriteria = "all";
-
+    
             }
 
         }
@@ -176,7 +174,7 @@ class ProjectAdministrationScreen extends React.Component{
 
     getProjectDescriptionBox(){
         let editing = this.state["editingProjectDescription"];
-
+        
         let container;
 
         if(editing){
@@ -322,10 +320,10 @@ class ProjectAdministrationScreen extends React.Component{
             keys = [];
 
         }
-
+        
         for (let i = 0; i < keys.length; i++) {
             const key = keys[i];
-
+            
             let apelido = variationsList[key];
 
             let element = (
@@ -370,7 +368,7 @@ class ProjectAdministrationScreen extends React.Component{
             situationTitleColor = "text-red-600";
 
         }
-
+        
         let container = (
             <div className="flex flex-col w-1/3 pl-3 pt-1 pb-1 h-full justify-between">
                 <div className="flex flex-row justify-center pb-1 border-b-2 border-black border-opacity-50">
@@ -419,8 +417,8 @@ class ProjectAdministrationScreen extends React.Component{
         let selectProjectScreen = (
             <div id="contentDisplay" className="w-full h-full">
                 {getBackgroundImage()}
-                {this.state["showCodelist"] &&
-                    <CodelistManager
+                {this.state["showCodelist"] && 
+                    <CodelistManager 
                         projectData={this.state["projectData"]}
                         filter={this.state["codelistFilter"]}
                         hide={this.hideCodelistManager}/>

@@ -11,7 +11,7 @@ import { notification } from "./Notifications";
 /**
  * Classe de componente que será utilizado quando o usuário requisitar a abertura do formulária para o
  * cadastro de novos usuários
- *
+ * 
  * @author Rafael Furtado
  */
 class RegisterUser extends React.Component{
@@ -35,7 +35,7 @@ class RegisterUser extends React.Component{
 
     /**
      * Função chamada no momento da submissão do formulário de cadastro
-     *
+     * 
      * @param {Event} event Evento da submissão do formulário
      * @author Rafael Furtado
      */
@@ -64,13 +64,14 @@ class RegisterUser extends React.Component{
 
         }else{
             notification("error", "Ops!", "Não foi possível cadastrar o usuário, talvez o e-mail já esteja em uso 😥");
+
         }
 
     }
 
     /**
      * Fecha o formulário de registro de usuário ao clicar fora dele
-     *
+     * 
      * @param {Event} event Evento ao clicar fora do formulário de registro
      * @author Rafael Furtado
      */
@@ -81,11 +82,12 @@ class RegisterUser extends React.Component{
             this.props.control(false);
 
         }
+            
     }
 
     /**
      * Constrói o componente de formulário para o registro de novos usuários
-     *
+     * 
      * @returns Retorna o componente do formulário de registro de usuários pronto para ser renderizado
      * @author Rafael Furtado
      */
@@ -118,9 +120,9 @@ class RegisterUser extends React.Component{
 
     /**
      * Método obrigatório herdado da classe React.Component
-     *
+     * 
      * Renderiza o formulário de cadastro de novos usuários na tela
-     *
+     * 
      * @returns Retorna o elemento a ser renderizado na janela
      * @author Rafael Furtado
      */
