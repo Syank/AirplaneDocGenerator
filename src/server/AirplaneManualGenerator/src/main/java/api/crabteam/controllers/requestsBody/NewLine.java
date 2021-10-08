@@ -1,10 +1,5 @@
 package api.crabteam.controllers.requestsBody;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import api.crabteam.model.entities.Remark;
-
 /**
  * Classe que mapeia a criação de uma linha.
  * @author Bárbara Port
@@ -17,8 +12,8 @@ public class NewLine {
 	private String blockNumber;
 	private String blockName;
 	private String code;
-	private String filePath;
-	private List<Remark> remarks = new ArrayList<Remark>();
+	private String remarksText;
+	private String codelistName;
 
 	public String getSectionNumber() {
 		return sectionNumber;
@@ -60,20 +55,20 @@ public class NewLine {
 		this.code = code;
 	}
 
-	public String getFilePath() {
-		return filePath;
+	public String getRemarksText() {
+		return remarksText;
 	}
 
-	public void setFilePath(String filePath) {
-		this.filePath = filePath;
+	public void setRemarksText(String remarksText) {
+		this.remarksText = remarksText;
 	}
 
-	public List<Remark> getRemarks() {
-		return remarks;
+	public String getCodelistName() {
+		return codelistName;
 	}
 
-	public void setRemarks(List<Remark> remarks) {
-		this.remarks = remarks;
+	public void setCodelistName(String codelistName) {
+		this.codelistName = codelistName;
 	}
 
 }

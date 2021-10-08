@@ -218,14 +218,7 @@ class Application extends React.Component {
     async logoutUser(){
         let serverRequester = new ServerRequester("http://localhost:8080");
 
-        let response = await serverRequester.doGet("/authentication/logout");
-
-        if(response["responseJson"] === true){
-            console.log("Redirecionando para login");
-
-        }else{
-            console.log("O servidor está offline 😥\nVocê será redirecionado para a página de login");
-        }
+        await serverRequester.doGet("/authentication/logout");
 
         this.setState({userLogged: false, isUserAdmin: false, pageToRender: "login"})
 

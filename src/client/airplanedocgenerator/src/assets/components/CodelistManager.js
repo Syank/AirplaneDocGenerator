@@ -4,7 +4,7 @@ import { faSearch, faPen, faFileAlt, faCheck, faTimes } from "@fortawesome/free-
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { addCodelist, addFile, notification } from "../components/Notifications";
 import ServerRequester from "../../utils/ServerRequester";
-import SimpleInput from "./SimpleInput";
+
 
 /**
  * Classe de componente que representa a tela para visualizar a codelist de um manual
@@ -29,6 +29,7 @@ class CodelistManager extends React.Component {
         this.importCodelist = this.importCodelist.bind(this);
         this.toggleAddNewLine = this.toggleAddNewLine.bind(this);
         this.closeAddNewLineComponent = this.closeAddNewLineComponent.bind(this);
+        this.createNewLine = this.createNewLine.bind(this);
 
         let projectData = this.props.projectData;
 
@@ -114,7 +115,7 @@ class CodelistManager extends React.Component {
                                 <input type="file" id="newLineFile" onChange={this.changeInputFileName} className="hidden" accept=".pdf"></input>
                             </div>
                             <div className="w-full text-sm">
-                                <Button text="Criar linha"/>
+                                <Button onClick={this.createNewLine} text="Criar linha"/>
                             </div>
                         </div>
                     </div>
@@ -123,6 +124,59 @@ class CodelistManager extends React.Component {
         );
 
         return component;
+    }
+
+    async createNewLine(){
+        let newSection = document.getElementById("newLineSection").value;
+        let newSubSection = document.getElementById("newLineSubsection").value;
+        let newBlockNumber = document.getElementById("newLineBlockNumber").value;
+        let newBlockName = document.getElementById("newLineBlock").value;
+        let newCode = document.getElementById("newLineCode").value;
+        let newRemarks = document.getElementById("newLineRemarks").value;
+        let file = document.getElementById("newLineFile").files[0];
+
+        if(file === undefined){
+            notification("error", "Um momento! 🤨", "Para criar uma nova linha, é necessário também atribuir um arquivo a ela, por favor, escolha um");
+
+        }else if(!this.checkIsValidRemarksText(newRemarks)){
+            notification("error", "Texto de Remarks (traços) inválido! 😤",
+            "O campo de remarks é obrigatório e o texto deve ter o seguinte formato: -XX (APELIDO). "
+            + "Onde X são os números do traço. Múltiplos remarks devem ser separados por vírgula, como: "
+            + "-XX (APELIDO), -XX (APELIDO)");
+
+        }else{
+            let formData = new FormData();
+            formData.append("sectionNumber", newSection);
+            formData.append("subsectionNumber", newSubSection);
+            formData.append("blockNumber", newBlockNumber);
+            formData.append("blockName", newBlockName);
+            formData.append("code", newCode);
+            formData.append("remarksText", newRemarks);
+            formData.append("lineFile", file);
+            formData.append("codelistName", this.state["projectData"]["codelist"]["nome"]);
+    
+            let serverRequester = new ServerRequester("http://localhost:8080");
+
+            let response = await serverRequester.doPost("/codelistLine/new", formData, "multipart/form-data");
+
+            if(response["responseJson"] === true){
+                notification("success", "Linha criada! 🙂", "A nova linha foi adicionada à codelist");
+
+                let newData = await this.props.reloadData();
+
+                this.state["projectData"] = newData;
+
+                let linesSituation = this.createLinesSituationMap();
+
+                this.setState({linesSituation: linesSituation});
+
+            }else{
+                notification("error", "Algo deu errado! 😢", "Não foi possível criar a nova linha");
+
+            }
+
+        }
+
     }
 
     changeInputFileName(){

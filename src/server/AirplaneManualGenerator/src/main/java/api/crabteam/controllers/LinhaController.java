@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +27,7 @@ import api.crabteam.model.entities.builders.LinhaBuilder;
 import api.crabteam.model.entities.builders.RemarkBuilder;
 import api.crabteam.model.repositories.CodelistRepository;
 import api.crabteam.model.repositories.LinhaRepository;
+import api.crabteam.utils.FileUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -63,38 +63,68 @@ public class LinhaController {
 	 * @return ResponseEntity
 	 * @author Bárbara Port
 	 */
-	@PostMapping("/new/{codelistName}")
+	@PostMapping("/new")
 	@ApiOperation("Creates a new line into a codelist.")
-	@ApiResponses({ @ApiResponse(code = 200, message = "Line successfully created."),
-			@ApiResponse(code = 400, message = "The line wasn't created.") })
-	public ResponseEntity<?> createLine(@RequestBody NewLine newLine, @PathVariable String codelistName) {
-
-		Codelist codelist = codelistRepository.findByName(codelistName);
+	@ApiResponses({
+		@ApiResponse(code = 200, message = "Line successfully created"),
+		@ApiResponse(code = 400, message = "The line wasn't created")
+		}
+	)
+	public ResponseEntity<?> createLine(@RequestParam MultipartFile lineFile, NewLine newLine) {
+		Codelist codelist = codelistRepository.findByName(newLine.getCodelistName());
 
 		Linha linha = new Linha();
+		
 		linha.setSectionNumber(newLine.getSectionNumber());
 		linha.setSubsectionNumber(newLine.getSubsectionNumber());
 		linha.setBlockNumber(newLine.getBlockNumber());
 		linha.setBlockName(newLine.getBlockName());
 		linha.setCode(newLine.getCode());
-		linha.setFilePath(newLine.getFilePath());
-		linha.setRemarks(newLine.getRemarks());
-
-		try {
-			linhaRepository.save(linha);
-			try {
-				codelist.addLinha(linha);
-				codelistRepository.save(codelist);
-			} catch (Exception e) {
-				return new ResponseEntity<String>("A linha não foi adicionada à codelist.", HttpStatus.BAD_REQUEST);
-			}
-		} catch (Exception e) {
-			return new ResponseEntity<String>("A linha não foi criada.", HttpStatus.BAD_REQUEST);
+		
+		ArrayList<Remark> newRemarks = new ArrayList<Remark>();
+		
+		String[] remarksText = newLine.getRemarksText().split(",");
+		
+		for (int i = 0; i < remarksText.length; i++) {
+			String text = remarksText[i];
+			
+			HashMap<String, String> remarkMap = new HashMap<String, String>();
+			
+			String[] textParts = text.split("[\\(||//)]");
+			
+			String traco = textParts[0].replace("-", "").trim();
+			String apelido =  textParts[1].trim();
+			
+			remarkMap.put(traco, apelido);
+			
+			RemarkBuilder builder = new RemarkBuilder(remarkMap);
+			
+			Remark remark = builder.getBuildedRemark();
+			
+			newRemarks.add(remark);
+			
 		}
 
-		return new ResponseEntity<Boolean>(true, HttpStatus.OK);
+		linha.setRemarks(newRemarks);
+
+		try {
+			String fileName = "line-" + linha.getSectionNumber() + linha.getSubsectionNumber() + linha.getBlockNumber() + linha.getBlockName(); 
+			
+			FileUtils.saveFile(lineFile.getBytes(), fileName + ".pdf" , PROJECTS_DIRECTORY);
+			
+			linha.setFilePath(PROJECTS_DIRECTORY + "\\" + fileName + ".pdf");
+			
+			codelist.addLinha(linha);
+			
+			codelistRepository.save(codelist);
+			
+			return new ResponseEntity<Boolean>(true, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<String>("A linha não foi adicionada à codelist.", HttpStatus.BAD_REQUEST);
+		}
 
 	}
+
 
 	/**
 	 * Atualiza as informações de uma linha.
