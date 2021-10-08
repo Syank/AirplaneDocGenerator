@@ -4,6 +4,7 @@ import { faSearch, faPen, faFileAlt, faCheck, faTimes } from "@fortawesome/free-
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { addCodelist, addFile, notification } from "../components/Notifications";
 import ServerRequester from "../../utils/ServerRequester";
+import SimpleInput from "./SimpleInput";
 
 /**
  * Classe de componente que representa a tela para visualizar a codelist de um manual
@@ -26,11 +27,16 @@ class CodelistManager extends React.Component {
         this.getLineActions = this.getLineActions.bind(this);
         this.addFileToLine = this.addFileToLine.bind(this);
         this.importCodelist = this.importCodelist.bind(this);
+        this.toggleAddNewLine = this.toggleAddNewLine.bind(this);
+        this.closeAddNewLineComponent = this.closeAddNewLineComponent.bind(this);
 
         let projectData = this.props.projectData;
 
+        this.newLineComponentId = "newLineComponent";
+
         this.state = {
-            projectData: projectData
+            projectData: projectData,
+            showAddNewLineComponent: false
         }
 
         let linesSituationMap = this.createLinesSituationMap();
@@ -86,9 +92,67 @@ class CodelistManager extends React.Component {
         return name;
     }
 
+    getAddNewLineComponent(){
+        let component = (
+            <div id={this.newLineComponentId} className="z-20 w-full h-full absolute flex flex-row items-center justify-center backdrop-filter backdrop-blur-blurLogin" onClick={this.closeAddNewLineComponent}>
+                <div className="flex flex-col bg-white p-5 w-loginFormW items-center text-center shadow-registerUser">
+                    <label className="mb-10">Preencha os campos para adicionar uma nova linha à codelist</label>
+                    <div className="w-full">
+                        <div>
+                            <div>
+                                <input className="text-center mb-2 border-b-2 outline-none focus:bg-gray-200" type="text" placeholder="Seção" id="newLineSection"></input>
+                                <input className="text-center mb-2 border-b-2 outline-none focus:bg-gray-200" type="text" placeholder="Subseção" id="newLineSubsection"></input>
+                                <input className="text-center mb-2 border-b-2 outline-none focus:bg-gray-200" type="text" placeholder="Bloco" id="newLineBlock"></input>
+                                <input className="text-center mb-2 border-b-2 outline-none focus:bg-gray-200" type="text" placeholder="Nome do bloco" id="newLineBlockNumber"></input>
+                                <input className="text-center mb-2 border-b-2 outline-none focus:bg-gray-200" type="text" placeholder="Código" id="newLineCode"></input>
+                                <input className="text-center mb-5 border-b-2 outline-none focus:bg-gray-200" type="text" placeholder="Remarks" id="newLineRemarks"></input>
+                            </div>
+                            <div className="mb-7">
+                                <label htmlFor="newLineFile" id="newLineFileName" 
+                                    className="w-68 p-1 px-4 rounded-lg bg-inputFileColor text-white cursor-pointer hover:bg-blue-300 active:bg-blue-300"
+                                    >Selecione o arquivo</label>
+                                <input type="file" id="newLineFile" onChange={this.changeInputFileName} className="hidden" accept=".pdf"></input>
+                            </div>
+                            <div className="w-full text-sm">
+                                <Button text="Criar linha"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+
+        return component;
+    }
+
+    changeInputFileName(){
+        let files = document.getElementById("newLineFile").files;
+
+        if (files.length !== 0) {
+            let fileName = files[0].name;
+            let labelFileName = document.getElementById("newLineFileName");
+            labelFileName.textContent = fileName;
+
+        }
+
+    }
+
+    closeAddNewLineComponent(event){
+        let clickTargetId = event.target.id;
+
+        if (clickTargetId === this.newLineComponentId) {
+            this.toggleAddNewLine();
+
+        }
+
+    }
+
     getCodelistManagerComponent() {
         let component = (
             <div id={this.id} className="z-10 w-full h-full absolute flex flex-row items-center justify-center backdrop-filter backdrop-blur-blurLogin" onClick={this.close}>
+                {this.state["showAddNewLineComponent"] &&
+                    this.getAddNewLineComponent()    
+                }
                 <div className="h-5/6 w-5/6 bg-white">
                     {this.getContent()}
                 </div>
@@ -173,11 +237,17 @@ class CodelistManager extends React.Component {
 
     }
 
+    toggleAddNewLine(){
+        let showAddNewLineComponent = this.state["showAddNewLineComponent"];
+
+        this.setState({showAddNewLineComponent: !showAddNewLineComponent})
+    }
+
     getManageButtons() {
         let component = (
             <div className="flex flex-row w-full">
                 <div>
-                    <Button text="Nova Linha" type="codelistControl"></Button>
+                    <Button text="Nova Linha" onClick={this.toggleAddNewLine} type="codelistControl"></Button>
                 </div>
                 <Button text="Exportar Codelist" type="codelistControl" onClick={this.exportCodelist}></Button>
                 <Button text="Importar Codelist" type="codelistControl" onClick={this.importCodelist}></Button>

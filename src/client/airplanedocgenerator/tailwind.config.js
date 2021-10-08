@@ -16,7 +16,8 @@ module.exports = {
             width: {
                 loginFormW: "300px",
                 topBarMenuW: "160px",
-                selectProjectW: "650px"
+                selectProjectW: "650px",
+                fitContent: "fit-content"
             },
             height: {
                 loginFormH: "400px",

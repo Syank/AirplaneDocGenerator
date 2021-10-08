@@ -93,7 +93,7 @@ class RegisterUser extends React.Component{
      */
     getRegisterComponent(){
         let component = (
-            <div id={this.id} className="z-20 w-full h-full absolute flex flex-row items-center justify-center backdrop-filter backdrop-blur-blurLogin" onClick={this.close}>
+            <div id={this.id} className="z-30 w-full h-full absolute flex flex-row items-center justify-center backdrop-filter backdrop-blur-blurLogin" onClick={this.close}>
                 <form className="bg-white w-loginFormW h-loginFormH flex flex-col justify-evenly items-center p-5 shadow-registerUser" onSubmit={this.registerNewUser}>
                     <label className="text-accent text-2xl text-center font-bold select-none">Cadastro de novo usuário</label>
 

@@ -144,6 +144,7 @@ class NewProjectScreen extends React.Component {
             let labelFileName = document.getElementById("codelist-file-name");
             labelFileName.textContent = fileName;
         }
+        
     }
 
     /**
@@ -192,8 +193,7 @@ class NewProjectScreen extends React.Component {
                                 <label
                                     htmlFor="codelist-file"
                                     id="codelist-file-name"
-                                    className="w-68 p-1 px-4 rounded-lg bg-inputFileColor text-white cursor-pointer hover:bg-blue-300 active:bg-blue-300"
-                                >
+                                    className="w-68 p-1 px-4 rounded-lg bg-inputFileColor text-white cursor-pointer hover:bg-blue-300 active:bg-blue-300">
                                     Selecionar Codelist em sua máquina
                                 </label>
                                 <input
