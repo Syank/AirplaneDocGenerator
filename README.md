@@ -30,10 +30,10 @@
               <section id="entrega">
                      <h2 align="center">:rainbow::spiral_calendar: Segunda entrega :star:</h3>
                      <h3>:question: O que fizemos?</h2>
-                     <p align="justify">Na segunda entrega conforme planejado foi desenvolvida as funcionalidades de criação, importação de uma codelist, além do mais a possibilidade de importar arquivos para composição do manual.</p>
+                     <p align="justify">Na segunda entrega, conforme planejado, foram desenvolvidas as funcionalidades de criação e importação de uma codelist, incluindo também a possibilidade de importar arquivos para composição do manual.</p>
                      <img src="https://raw.githubusercontent.com/Syank/AirplaneDocGenerator/main/doc/cards/sprint%202/card02.png" width="550px" height="300px">
                      <h3>:grey_question: Por quê?</h2>
-                     <p align="justify">lorem ipsum dolor sit amet</p>
+                     <p align="justify">Seguindo as exigências de nosso cliente, a Codelist é peça fundamental para o projeto. Assim, decidimos que na segunda entrega, seriam adicionadas e demostradas as funcionalidades de criação e importação da codelist, podendo também adicionar arquivos para inclusão de linhas.</p>
               </section>
               <section id="funcionamento">
                      <h2 align="center">:desktop_computer::computer_mouse: AirplaneDocGenerator em funcionamento :checkered_flag:</h3>
@@ -67,6 +67,7 @@
                             <li><a href="https://www.linkedin.com/in/alberto-de-mattos-piedade-neto-2b758035/">Alberto de Mattos Piedade Neto</a> (<i>Development Team</i>)
                             <li><a href="https://www.linkedin.com/in/carolina-margiotti-703897193/">Carolina Margiotti de Abreu</a> (<i>Development Team</i>)
                             <li><a href="https://www.linkedin.com/in/francisco-cardoso-1954651b2/">Francisco Norberto Cardoso Neto</a> (<i>Development Team</i>)
+			    <li><a href="https://www.linkedin.com/in/anna-yukimi-yamada-6ba23b149/">Anna Yukimi Yamada</a> (<i>Development Team</i>)
                      </ul>
               </section>
        </body>
