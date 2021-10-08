@@ -1,5 +1,7 @@
 import Swal from 'sweetalert2';
 
+
+
 /**
  * Função que notificará o usuário de acordo com os parâmetros passados
  * @param {String} status Tipos: https://sweetalert2.github.io/#icons
@@ -13,6 +15,7 @@ export function notification(nStatus, nTitle, nMessage) {
           icon: nStatus,
           title: nTitle,
           text: nMessage,
+          confirmButtonColor: '#56EA6D',
      })
 }
 
@@ -29,7 +32,7 @@ export function withConfirmation(cTitle, cMessage, cIcon, sOption) {
           text: cMessage,
           icon: cIcon,
           showCancelButton: true,
-          confirmButtonColor: '#3085d6',
+          confirmButtonColor: '#56EA6D',
           cancelButtonColor: '#d33',
           cancelButtonText: "Cancelar",
           confirmButtonText: "OK!"
@@ -39,7 +42,7 @@ export function withConfirmation(cTitle, cMessage, cIcon, sOption) {
                     case "example":
                          notification("success", "Uhu!", "Exemplo exibido!");
                          break;
-                    
+
                     default:
                          break;
                }
@@ -54,3 +57,35 @@ export function withConfirmation(cTitle, cMessage, cIcon, sOption) {
           "example"
      );
  */
+
+export async function addFile(lineId) {
+     const { value: uploadedFile } = await Swal.fire({
+          title: 'Escolha um arquivo!',
+          input: 'file',
+          inputAttributes: {
+               autocapitalize: 'off',
+               'accept': 'application/pdf',
+          },
+          showCancelButton: true,
+          confirmButtonText: 'Pronto!',
+          confirmButtonColor: '#56EA6D'
+     })
+
+     return uploadedFile;
+}
+
+export async function addCodelist(projectName) {
+     const { value: uploadedFile } = await Swal.fire({
+          title: 'Escolha um arquivo!',
+          input: 'file',
+          inputAttributes: {
+               autocapitalize: 'off',
+               'accept': '.xls,.xlsx',
+          },
+          showCancelButton: true,
+          confirmButtonText: 'Pronto!',
+          confirmButtonColor: '#56EA6D'
+     })
+
+     return uploadedFile;
+}

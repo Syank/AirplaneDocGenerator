@@ -10,7 +10,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
@@ -32,9 +31,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import api.crabteam.controllers.requestsBody.NewProject;
-import api.crabteam.model.entities.Codelist;
 import api.crabteam.model.entities.Projeto;
-import api.crabteam.model.entities.builders.CodelistBuilder;
 import api.crabteam.model.repositories.ProjetoRepository;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)

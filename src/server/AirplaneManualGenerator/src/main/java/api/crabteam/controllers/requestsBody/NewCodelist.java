@@ -1,7 +1,5 @@
 package api.crabteam.controllers.requestsBody;
 
-import java.io.File;
-
 /**
  * Classe que mapeia a criação de uma codelist
  * @author Bárbara Port

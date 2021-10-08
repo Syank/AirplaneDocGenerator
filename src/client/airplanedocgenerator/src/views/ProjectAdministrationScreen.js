@@ -6,6 +6,7 @@ import ServerRequester from "../utils/ServerRequester";
 import Button from "../assets/components/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faFileAlt, faPen, faTimes } from "@fortawesome/free-solid-svg-icons";
+import CodelistManager from "../assets/components/CodelistManager";
 
 
 class ProjectAdministrationScreen extends React.Component{
@@ -27,7 +28,9 @@ class ProjectAdministrationScreen extends React.Component{
             },
             projectVariations: {},
             editingProjectName: false,
-            editingProjectDescription: false
+            editingProjectDescription: false,
+            showCodelist: false,
+            codelistFilter: "all"
         };
 
         this.headerCardTitle = "Administração do projeto";
@@ -40,6 +43,8 @@ class ProjectAdministrationScreen extends React.Component{
         this.toggleEditProjectDescription = this.toggleEditProjectDescription.bind(this);
         this.changeProjectDescription = this.changeProjectDescription.bind(this);
         this.showCodelist = this.showCodelist.bind(this);
+        this.hideCodelistManager = this.hideCodelistManager.bind(this);
+        this.loadProjectData = this.loadProjectData.bind(this);
 
     }
 
@@ -66,6 +71,8 @@ class ProjectAdministrationScreen extends React.Component{
                 editingProjectName: false,
                 editingProjectDescription: false
             });
+
+            return response["responseJson"];
 
         }else{
             notification("error", "Algo deu errado 🙁", 
@@ -143,6 +150,11 @@ class ProjectAdministrationScreen extends React.Component{
         if(filterCriteria === null){
             filterCriteria = event.target.getAttribute("attributeName");
 
+            if(filterCriteria === null){
+                filterCriteria = "all";
+    
+            }
+
         }
 
         return filterCriteria;
@@ -151,14 +163,10 @@ class ProjectAdministrationScreen extends React.Component{
     showCodelist(event){
         let filterCriteria = this.getCodelistRemarkToShow(event);
 
-        if(filterCriteria === null){
-            console.log("Exibindo codelist completa");
-
-        }else{
-            console.log("Exibindo codelist para o traço " + filterCriteria);
-        }
-
-        notification("info", "Aguarde um pouco! 🤓", "Essa funcionalidade estará disponível em breve!");
+        this.setState({
+            codelistFilter: filterCriteria,
+            showCodelist: true
+        });
 
     }
 
@@ -401,11 +409,24 @@ class ProjectAdministrationScreen extends React.Component{
         return container;
     }
 
+    async hideCodelistManager(){
+        this.setState({showCodelist: false});
+
+        await this.loadProjectData();
+
+    }
+
     getAdministrationScreen(){
         let selectProjectScreen = (
             <div id="contentDisplay" className="w-full h-full">
                 {getBackgroundImage()}
-
+                {this.state["showCodelist"] && 
+                    <CodelistManager 
+                        reloadData={this.loadProjectData}
+                        projectData={this.state["projectData"]}
+                        filter={this.state["codelistFilter"]}
+                        hide={this.hideCodelistManager}/>
+                }
                 <div
                     id="projectAdministrationScreen"
                     className="w-full h-full flex flex-col items-center justify-center relative select-none"
@@ -426,13 +447,14 @@ class ProjectAdministrationScreen extends React.Component{
     /**
      * Renderiza a página de criação de um novo projeto
      * @returns Elemento a ser renderizado
-     * @author Bárbara Port
+     * @author Rafael Furtado
      */
      render() {
          let  administrationScreen = this.getAdministrationScreen();
 
         return administrationScreen;
     }
+
 }
 
 export default ProjectAdministrationScreen;

@@ -1,19 +1,30 @@
 package api.crabteam.controllers.requestsBody;
 
-/**
- * Classe que mapeia a criação de uma linha.
- * @author Bárbara Port
- *
- */
-public class NewLine {
+public class UpdatedLine {
+
+	private int id;
 	
 	private String sectionNumber;
+	
 	private String subsectionNumber;
+	
 	private String blockNumber;
+	
 	private String blockName;
+	
 	private String code;
+	
 	private String remarksText;
-	private String codelistName;
+
+	
+	
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
 
 	public String getSectionNumber() {
 		return sectionNumber;
@@ -62,13 +73,5 @@ public class NewLine {
 	public void setRemarksText(String remarksText) {
 		this.remarksText = remarksText;
 	}
-
-	public String getCodelistName() {
-		return codelistName;
-	}
-
-	public void setCodelistName(String codelistName) {
-		this.codelistName = codelistName;
-	}
-
+	
 }
