@@ -33,7 +33,7 @@
                      <p align="justify">Na segunda entrega, conforme planejado, foram desenvolvidas as funcionalidades de criação e importação de uma codelist, incluindo também a possibilidade de importar arquivos para composição do manual.</p>
                      <img src="https://raw.githubusercontent.com/Syank/AirplaneDocGenerator/main/doc/cards/sprint%202/card02.png" width="550px" height="300px">
                      <h3>:grey_question: Por quê?</h2>
-                     <p align="justify">Seguindo as exigências de nosso cliente, a Codelist é peça fundamental para o projeto. Assim, decidimos que na segunda entrega, seriam adicionadas e demostradas as funcionalidades de criação e importação da codelist, podendo também adicionar arquivos para inclusão de linhas.</p>
+                     <p align="justify">Seguindo as exigências de nosso cliente, a codelist é peça fundamental para o projeto como um todo. Sendo assim, decidimos que na segunda entrega seriam adicionadas e demonstradas as funcionalidades de criação e importação da codelist, podendo também adicionar, editar, e associar arquivos às linhas dela.</p>
               </section>
               <section id="funcionamento">
                      <h2 align="center">:desktop_computer::computer_mouse: AirplaneDocGenerator em funcionamento :checkered_flag:</h3>
@@ -57,8 +57,8 @@
               </section>
               <section id="burndown">
                      <h2 align="center"><i>Burndown</i> :date::chart_with_downwards_trend:</h3>
-                     <p align="justify">~~descrição falando como foi a sprint~~</p>
-                     ~~imagem do burndown da sprint~~
+                     <p align="justify">A sprint como um todo ocorreu bem, mas na última semana alguns imprevistos dificultaram o desenvolvimento. Finalizamos o desenvolvimentos dois dias antes do final da sprint e nos dias seguintes nos dedicamos à documentação.</p>
+		     <p align="center"><img src="https://raw.githubusercontent.com/Syank/AirplaneDocGenerator/main/doc/burndown/sprint%202/burndown-s2.png"></p>
               </section>
               <section id="equipe">
                      <h2>Integrantes da equipe :girl::boy:</h2>
