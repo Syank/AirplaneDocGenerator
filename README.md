@@ -27,7 +27,8 @@
               <section id="funcionamento">
                      <h3>:running_woman: AirplaneDocGenerator em funcionamento :computer::computer_mouse:</h3>
                      <p align="center">
-                            <img src="https://raw.githubusercontent.com/Syank/AirplaneDocGenerator/main/doc/gifs/sprint1/Apresenta%C3%A7%C3%A3o%20Sprint%201%20%20%20GIF.gif">                        </p>
+                            <img src="https://github.com/Syank/AirplaneDocGenerator/blob/main/doc/gifs/sprint2/Apresentacao-Sprint-2.gif">
+                     </p>
               </section>
               <section id="funcionalidades">
                      <h3>:hourglass_flowing_sand: Funcionalidades de cada entrega</h3>
@@ -63,10 +64,10 @@
                             </tr>
                             <tr>
                                    <td><p align="center">Entrega 2</p></td>
-                                   <td><p align="justify">A definir.</p></td>
+                                   <td><p align="justify">O usuário poderá importar a codelist e editar as suas linhas.</p></td>
                                    <td><p align="center">10/10</p></td>
-                                   <td><p align="center"><a href="">Visualizar</a></p></td>
-                                   <td><p align="center"><a href="">Baixar</a></p></td>
+                                   <td><p align="center"><a href="https://github.com/Syank/AirplaneDocGenerator/tree/sprint-2">Visualizar</a></p></td>
+                                   <td><p align="center"><a href="https://github.com/Syank/AirplaneDocGenerator/releases/tag/v1.2">Baixar</a></p></td>
                             </tr>
                             <tr>
                                    <td><p align="center">Entrega 3</p></td>
@@ -90,6 +91,7 @@
                             <li><a href="https://www.linkedin.com/in/b%C3%A1rbara-port-402158198/">Bárbara dos Santos Port</a> (<i>Scrum Master</i>)
                             <li><a href="https://www.linkedin.com/in/rafael-furtado-613a9712a/">Rafael Furtado Rodrigues dos Santos</a> (<i>Product Owner</i>)
                             <li><a href="https://www.linkedin.com/in/alberto-de-mattos-piedade-neto-2b758035/">Alberto de Mattos Piedade Neto</a> (<i>Development Team</i>)
+                            <li><a href="https://www.linkedin.com/in/anna-yukimi-yamada-6ba23b149/">Anna Yukimi Yamada</a> (<i>Development Team</i>)
                             <li><a href="https://www.linkedin.com/in/carolina-margiotti-703897193/">Carolina Margiotti de Abreu</a> (<i>Development Team</i>)
                             <li><a href="https://www.linkedin.com/in/francisco-cardoso-1954651b2/">Francisco Norberto Cardoso Neto</a> (<i>Development Team</i>)
                      </ul>
