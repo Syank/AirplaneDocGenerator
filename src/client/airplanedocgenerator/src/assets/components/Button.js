@@ -20,9 +20,11 @@ class Button extends React.Component {
         this.onClick = props.onClick;
 
         this.confirmTypeStyle =
-            "bg-green-500 hover:bg-green-400 active:bg-green-600 focus:bg-green-400 text-white";
+            "bg-green-500 hover:bg-green-400 active:bg-green-600 focus:bg-green-400 text-white m-2 w-min pl-10 pr-10 w-fitContent";
         this.cancelTypeStyle =
-            "bg-red-500 hover:bg-red-400 active:bg-red-600 focus:bg-red-400 text-white";
+            "bg-red-500 hover:bg-red-400 active:bg-red-600 focus:bg-red-400 text-white m-2 w-min pl-10 pr-10 w-fitContent";
+        this.codelistControlStyle =
+            "bg-green-500 hover:bg-green-400 active:bg-green-600 focus:bg-green-400 text-white m-2 pr-6 pl-6 w-fitContent";
     }
 
     /**
@@ -43,6 +45,10 @@ class Button extends React.Component {
                 buttonStyle = this.cancelTypeStyle;
 
                 break;
+            case "codelistControl":
+                buttonStyle = this.codelistControlStyle;
+
+                break;
             default:
                 buttonStyle = this.confirmTypeStyle;
 
@@ -53,7 +59,7 @@ class Button extends React.Component {
             <button
                 className={
                     buttonStyle +
-                    " shadow-simpleShadow pb-2 pt-2 pl-10 pr-10 select-none outline-none content w-min"
+                    " shadow-simpleShadow pb-2 pt-2 select-none outline-none content"
                 }
                 onClick={this.onClick}
             >

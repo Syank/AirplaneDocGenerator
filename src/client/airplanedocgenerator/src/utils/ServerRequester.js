@@ -66,16 +66,20 @@
      *  - status -> Number - Código HTTP informando o status da requisição
      *  - responseJson -> JSON - Objeto JSON retornado do servidor
      */
-    async doPost(restPath, data = {}){
+    async doPost(restPath, data = {}, contentType = "application/json"){
         let url = this.serverURL + restPath;
 
         let requestConfigs = {
-                            method: "POST",
-                            body: JSON.stringify(data),
-                            headers: {
-                                "Content-Type": "application/json"
-                            }
-                        };
+            method: "POST"
+        };
+
+        if(contentType === "multipart/form-data"){
+            requestConfigs["body"] = data;
+
+        }else{
+            requestConfigs["body"] = JSON.stringify(data);
+            requestConfigs["headers"] = {"Content-type": contentType};
+        }
 
         // Faz a requisição para a URL construída e obtêm sua resposta como JSON
         return await this.doRequest(url, requestConfigs);

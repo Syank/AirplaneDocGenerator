@@ -33,3 +33,59 @@ export function getBackgroundImage() {
      return backgroundImage;
 }
 
+export function isValidProjectName(supposedProjectName) {
+     let partLetter = supposedProjectName.split("-")[0];
+     let partNumber = supposedProjectName.split("-")[1];
+
+     if (partLetter === undefined || partNumber === undefined || !isValidPartLetter(partLetter) || !isValidPartNumber(partNumber)) {
+          return false;
+     }
+
+     return true;
+}
+
+/**
+* Verifica se a parte de letras de um nome de projeto contêm apenas letras
+*
+* @param {String} supposedPartLetter String da parte de letras do nome do projeto
+* @author Rafael Furtado
+*/
+export function isValidPartLetter(supposedPartLetter) {
+     if (supposedPartLetter === undefined || !isNaN(supposedPartLetter) || supposedPartLetter.length !== 3) {
+          return false;
+     }
+
+     let regex = /[a-zA-Z]/;
+
+     let letters = supposedPartLetter.split("");
+
+     for (let i = 0; i < letters.length; i++) {
+          const letter = letters[i];
+
+          if (!regex.test(letter)) {
+               return false;
+          }
+     }
+
+     return true;
+}
+
+/**
+* Verifica se a parte de números do nome de um projeto contêm apenas números
+*
+* @param {String} supposedPartNumber String da parte de números do nome de um projeto
+* @author Rafael Furtado
+*/
+export function isValidPartNumber(supposedPartNumber) {
+     if (supposedPartNumber === undefined || supposedPartNumber.length !== 4 || supposedPartNumber.includes(".")) {
+          return false;
+     }
+
+     let isNumber = +supposedPartNumber;
+
+     if (isNaN(isNumber)) {
+          return false;
+     }
+
+     return true;
+}

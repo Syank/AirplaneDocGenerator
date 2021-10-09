@@ -3,11 +3,12 @@ import React from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 // Icones do FontAwesome
-import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
+import { faArrowLeft, faWindowRestore } from '@fortawesome/free-solid-svg-icons'
 import { faHome } from '@fortawesome/free-solid-svg-icons'
 import { faBars } from '@fortawesome/free-solid-svg-icons'
-import { faMinus } from '@fortawesome/free-solid-svg-icons'
 import { faTimes } from '@fortawesome/free-solid-svg-icons'
+import { faWindowMinimize } from '@fortawesome/free-solid-svg-icons'
+import { faWindowMaximize } from '@fortawesome/free-solid-svg-icons'
 
 import { white } from "tailwindcss/colors";
 import RegisterUser from "./RegisterUser";
@@ -30,8 +31,10 @@ class TopBar extends React.Component{
         this.returnIcon = <FontAwesomeIcon icon={faArrowLeft} color={white}/>;
         this.homeIcon = <FontAwesomeIcon icon={faHome} color={white}/>;
         this.menuIcon = <FontAwesomeIcon icon={faBars} color={white}/>;
-        this.closeIcon = <FontAwesomeIcon icon={faMinus} color={white}/>;
-        this.minimizeIcon = <FontAwesomeIcon icon={faTimes} color={white}/>;
+        this.closeIcon = <FontAwesomeIcon icon={faTimes} color={white}/>;
+        this.minimizeIcon = <FontAwesomeIcon icon={faWindowMinimize} color={white}/>;
+        this.maximizeIcon = <FontAwesomeIcon icon={faWindowMaximize} color={white}/>;
+        this.unmaximizeIcon = <FontAwesomeIcon icon={faWindowRestore} color={white}/>;
 
         // Como todos os botões são iguais, declarei aqui para evitar repetição de código
         this.iconBoxStyle = "h-full w-auto flex flex-row items-center text-20px pr-3 pl-3 "
@@ -43,10 +46,12 @@ class TopBar extends React.Component{
         this.returnToPreviousPage = this.returnToPreviousPage.bind(this);
         this.toggleTopBarMenu = this.toggleTopBarMenu.bind(this);
         this.minimizeApplication = this.minimizeApplication.bind(this);
+        this.maximizeApplication = this.maximizeApplication.bind(this);
 
         this.state = {
             showRegisterUser: false, 
-            showMenu: false
+            showMenu: false,
+            isMaximized: false
         };
 
     }
@@ -69,6 +74,20 @@ class TopBar extends React.Component{
     minimizeApplication(){
         window.electron.windowControll.minimize();
 
+    }
+    /**
+     * Maximiza a aplicação
+     * 
+     */
+    maximizeApplication(){
+        if (this.state.isMaximized){
+            window.electron.windowControll.unmaximize();
+            this.setState({isMaximized: false});
+        }
+        else{
+            window.electron.windowControll.maximize();
+            this.setState({isMaximized: true});
+        }
     }
 
     /**
@@ -153,6 +172,13 @@ class TopBar extends React.Component{
      * @author Rafael Furtado
      */
     getTopBar(){
+        let maximizeIcon;
+        if (this.state.isMaximized){
+            maximizeIcon = this.unmaximizeIcon;
+        }
+        else {
+            maximizeIcon = this.maximizeIcon;
+        }
         let topBarBox = (
             <div>
                 <div className="bg-topBar w-screen h-8 flex justify-between items-center shadow-topBarShadow">
@@ -166,13 +192,19 @@ class TopBar extends React.Component{
                     <div className="h-full w-auto flex flex-row">
                         <div className={this.iconBoxStyle}
                             onClick={this.minimizeApplication}>
-                            {this.closeIcon}
+                            {this.minimizeIcon}
+                        </div>
+
+                        <div className={this.iconBoxStyle}
+                            onClick={this.maximizeApplication}>
+                            {maximizeIcon}
                         </div>
 
                         <div className={this.iconBoxStyle}
                             onClick={this.closeApplication}>
-                            {this.minimizeIcon}
+                            {this.closeIcon}
                         </div>
+
                     </div>
                 </div>
 

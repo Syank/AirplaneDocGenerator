@@ -1,6 +1,8 @@
 package api.crabteam.controllers.requestsBody;
 
+import java.io.IOException;
 
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * Classe para mapear a requisição de criação de um projeto, tendo como única e necessária
@@ -14,14 +16,21 @@ package api.crabteam.controllers.requestsBody;
 public class NewProject {
 	private String nome;
 	private String descricao;
+	private byte[] arquivoCodelist;
 	
 	public NewProject() {
 		
 	}
 	
-	public NewProject(String nome, String descricao) {
+	public NewProject(String nome, String descricao, MultipartFile arquivoCodelist) throws IOException {
+		this(nome, descricao, arquivoCodelist.getBytes());
+		
+	}
+	
+	public NewProject(String nome, String descricao, byte[] arquivoCodelist) throws IOException {
 		this.nome = nome;
 		this.descricao = descricao;
+		this.arquivoCodelist = arquivoCodelist;
 		
 	}
 	
@@ -39,6 +48,18 @@ public class NewProject {
 	
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
+	}
+
+	public byte[] getArquivoCodelist() {
+		return arquivoCodelist;
+	}
+
+	public void setArquivoCodelist(byte[] arquivoCodelist) {
+		this.arquivoCodelist = arquivoCodelist;
+	}
+	
+	public void setArquivoCodelist(MultipartFile arquivoCodelist) throws IOException {
+		this.arquivoCodelist = arquivoCodelist.getBytes();
 	}
 	
 }

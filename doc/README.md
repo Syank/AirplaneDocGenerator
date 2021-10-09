@@ -41,6 +41,9 @@ O projeto pode ser dividido em dois, a parte do cliente e a do servidor. Este gu
 
 - Nota: Para o projeto do servidor, foi adotada a IDE Eclipse como padrão para seu desenvolvimento e execução;
 
+- ***IMPORTANTE:*** O servidor necessita de um diretório no sistema para salvar as codelists importadas e, para encontrar o diretório, ele busca por uma **variável de ambiente** que contêm o caminho para a pasta.
+  - Crie uma **variável de ambiente** com o exato nome: **APIEmbraerCodelistFolder** e em seu valor aponte para uma pasta de sua escolha onde as codelists deverão ser salvas.
+
 ##### Passos
 - Na barra superior do Eclipse, clique em File > Open Projects from File System...;
 
