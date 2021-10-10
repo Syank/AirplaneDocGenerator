@@ -34,7 +34,8 @@ public class AirplaneManualGeneratorApplication implements CommandLineRunner {
 		Usuario user = userRep.findByEmail("admin@root.crabteam");
 		
 		if(user == null) {
-			Administrador admin = new Administrador("System Admin", "a", "a");
+			//Administrador admin = new Administrador("System Admin", "a", "a");
+			Administrador admin = new Administrador("System Admin", "admin@crabteam.com", "crabteam");
 					
 			userRep.save(admin);
 			
