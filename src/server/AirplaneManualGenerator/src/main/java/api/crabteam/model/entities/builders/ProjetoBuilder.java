@@ -1,5 +1,7 @@
 package api.crabteam.model.entities.builders;
 
+import java.io.IOException;
+
 import org.springframework.stereotype.Service;
 
 import api.crabteam.controllers.requestsBody.NewProject;
@@ -15,7 +17,7 @@ public class ProjetoBuilder {
 	private ProjetoRepository projetoRepository;
 	
 	
-	public void build(NewProject newProject) {
+	public void build(NewProject newProject) throws IOException {
 		String name = newProject.getNome().toUpperCase();
 		String description = newProject.getDescricao();
 		byte[] codelistFile = newProject.getArquivoCodelist();
@@ -29,7 +31,8 @@ public class ProjetoBuilder {
 			
 			this.isPersisted = persistProjeto(projeto);
 			
-		}else {
+		}
+		else {
 			try {
 				CodelistBuilder codelistBuilder = new CodelistBuilder(codelistFile, name);
 				
@@ -39,9 +42,10 @@ public class ProjetoBuilder {
 				
 				this.isPersisted = persistProjeto(projeto);
 				
-			}catch (Exception e) {
+			}
+			catch (Exception e) {
 				this.failMessage = e.getMessage();
-				
+				System.err.println(e);
 			}
 			
 		}

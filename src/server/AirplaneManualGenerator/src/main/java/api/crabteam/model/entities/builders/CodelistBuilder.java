@@ -1,5 +1,6 @@
 package api.crabteam.model.entities.builders;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,9 +40,11 @@ public class CodelistBuilder {
 		
 	}
 	
-	public CodelistBuilder(String projectName) {
+	public CodelistBuilder(String projectName) throws IOException {
 		Codelist codelist = new Codelist();
 		codelist.setNome(projectName);
+		
+		createProjectFoldersStructure(projectName);
 		
 		this.codelist = codelist;
 		
@@ -49,11 +52,14 @@ public class CodelistBuilder {
 
 
 	public CodelistBuilder(byte[] codelistBytesFile, String projectName) throws Exception {
+		
+		createProjectFoldersStructure(projectName);
+		
 		String fileName = projectName + "_codelist.xlsx";
 		
-		FileUtils.saveCodelistFile(codelistBytesFile, fileName, PROJECTS_DIRECTORY, projectName);
-		
-		Workbook workbook = FileUtils.readAsExcel(PROJECTS_DIRECTORY + "\\" + fileName);
+		String projectPath = PROJECTS_DIRECTORY.concat("/").concat(projectName);
+		FileUtils.saveCodelistFile(codelistBytesFile, fileName, projectPath, projectName);
+		Workbook workbook = FileUtils.readAsExcel(projectPath + "\\" + fileName);
 		
 		Sheet projectSheet = workbook.getSheet(projectName);
 		
@@ -248,6 +254,23 @@ public class CodelistBuilder {
 		}
 		
 		throw new Exception();
+	}
+	
+	public void createProjectFoldersStructure (String projectName) throws IOException {
+		
+		String sProjectFolder = PROJECTS_DIRECTORY.concat("/").concat(projectName);
+		
+		File projectFolder = new File(sProjectFolder);
+
+		// foi necessário fazer assim pois já temos uma classe com o mesmo nome
+		org.apache.commons.io.FileUtils.deleteDirectory(projectFolder);
+		
+		projectFolder = new File(sProjectFolder.concat("/Master"));
+		projectFolder.mkdirs();
+			
+		projectFolder = new File(sProjectFolder.concat("/Rev"));
+		projectFolder.mkdirs();
+		
 	}
 	
 	public void build (NewCodelist newCodelist, String projectName) throws IOException {
