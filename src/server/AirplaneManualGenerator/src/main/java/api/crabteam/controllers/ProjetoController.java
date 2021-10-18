@@ -1,5 +1,6 @@
 package api.crabteam.controllers;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -164,24 +165,46 @@ public class ProjetoController {
 		String oldProjectName = newData.getOldName().toUpperCase();
 
 		Projeto project = projetoRepository.findByName(oldProjectName);
-
+		Projeto supposedNewProject = projetoRepository.findByName(newProjectName);
+		
 		if (project == null) {
 			return new ResponseEntity<String>("Não foi possível encontrar o projeto para alterar seu nome",
 					HttpStatus.INTERNAL_SERVER_ERROR);
 		}
+		
+		if (supposedNewProject == null) {
+			String filesDirectory = System.getenv("APIEmbraerCodelistFolder").concat("/").concat(oldProjectName);
+			String newFilesDirectory = System.getenv("APIEmbraerCodelistFolder").concat("/").concat(newProjectName);
+			
+			// foi necessário fazer assim pois já temos uma classe com o mesmo nome
+			// se já existir alguma pasta de antes e que não foi apagada
+			org.apache.commons.io.FileUtils.deleteDirectory(new File(newFilesDirectory));
+			
+			File supposedCodelistSheet = new File(filesDirectory.concat("/").concat(oldProjectName).concat("_codelist.xlsx"));
+			
+			if (supposedCodelistSheet.exists()) {
+				// primeiro renomeia o nome da planilha, depois renomeia o arquivo
+				FileUtils.renameCodelistSheet(filesDirectory, oldProjectName + "_codelist.xlsx", oldProjectName, newProjectName);
+				FileUtils.renameFile(filesDirectory, oldProjectName + "_codelist.xlsx", newProjectName + "_codelist.xlsx");
+			}
 
-		String filesDirectory = System.getenv("APIEmbraerCodelistFolder");
+			project.getCodelist().setNome(newProjectName);
+			project.setNome(newProjectName);
+			
+			File newProjectFolder = new File(newFilesDirectory);
+			
+			File projectFolder = new File(filesDirectory);
+			projectFolder.renameTo(newProjectFolder);
 
-		FileUtils.renameFile(filesDirectory, oldProjectName + "_codelist.xlsx", newProjectName + "_codelist.xlsx");
-		FileUtils.renameCodelistSheet(filesDirectory, newProjectName + "_codelist.xlsx", oldProjectName,
-				newProjectName);
+			projetoRepository.save(project);
 
-		project.getCodelist().setNome(newProjectName);
-		project.setNome(newProjectName);
-
-		projetoRepository.save(project);
-
-		return new ResponseEntity<Boolean>(true, HttpStatus.OK);	
+			return new ResponseEntity<Boolean>(true, HttpStatus.OK);	
+		}
+		else {
+			return new ResponseEntity<String>("Já existe um projeto com esse nome!",
+					HttpStatus.NOT_ACCEPTABLE);
+		}
+		
 	}
 	
 }
