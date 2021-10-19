@@ -368,6 +368,7 @@ class CodelistManager extends React.Component {
         let formData = new FormData();
         formData.append("file", file);
         formData.append("line", justId);
+        formData.append("codelistName", this.state["projectData"]["codelist"]["nome"]);
 
         let response = await serverRequester.doPost(
             "/codelistLine/attachFile",
@@ -502,7 +503,8 @@ class CodelistManager extends React.Component {
                 blockNumber: newBlockNumber,
                 blockName: newBlockName,
                 code: newCode,
-                remarksText: newRemarks
+                remarksText: newRemarks,
+                codelistName: this.state["projectData"]["codelist"]["nome"]
             }
 
             let serverRequester = new ServerRequester("http://localhost:8080");
