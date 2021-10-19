@@ -21,6 +21,8 @@ import api.crabteam.model.entities.builders.ProjetoBuilder;
 import api.crabteam.model.repositories.CodelistRepository;
 import api.crabteam.model.repositories.LinhaRepository;
 import api.crabteam.model.repositories.ProjetoRepository;
+import api.crabteam.utils.ProjectHealthCheck;
+import api.crabteam.utils.ProjectSituation;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -93,6 +95,15 @@ public class CodelistController {
 			projectCodelist.addLinha(linha);
 		}
 		projeto.setCodelist(projectCodelist);
+		
+		ProjectHealthCheck healthCheck = new ProjectHealthCheck(projeto);
+		
+		ProjectSituation situation = healthCheck.getSituation();
+		
+		projeto.getSituation().setOk(situation.isOk());
+		projeto.getSituation().setSituationMessage(situation.getSituationMessage());
+		projeto.getSituation().setSituationTitle(situation.getSituationTitle());
+		
 		projetoRepository.save(projeto);
 		
 		return new ResponseEntity<Boolean>(true, HttpStatus.OK);

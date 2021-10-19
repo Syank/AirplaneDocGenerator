@@ -22,12 +22,16 @@ import api.crabteam.controllers.requestsBody.NewLine;
 import api.crabteam.controllers.requestsBody.UpdatedLine;
 import api.crabteam.model.entities.Codelist;
 import api.crabteam.model.entities.Linha;
+import api.crabteam.model.entities.Projeto;
 import api.crabteam.model.entities.Remark;
 import api.crabteam.model.entities.builders.LinhaBuilder;
 import api.crabteam.model.entities.builders.RemarkBuilder;
 import api.crabteam.model.repositories.CodelistRepository;
 import api.crabteam.model.repositories.LinhaRepository;
+import api.crabteam.model.repositories.ProjetoRepository;
 import api.crabteam.utils.FileUtils;
+import api.crabteam.utils.ProjectHealthCheck;
+import api.crabteam.utils.ProjectSituation;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -49,6 +53,9 @@ public class LinhaController {
 
 	@Autowired
 	LinhaRepository linhaRepository;
+	
+	@Autowired
+	ProjetoRepository projectRepository;
 
 	@Autowired
 	LinhaBuilder linhaBuilder;
@@ -117,6 +124,18 @@ public class LinhaController {
 			codelist.addLinha(linha);
 			
 			codelistRepository.save(codelist);
+			
+			Projeto project = projectRepository.findByName(codelist.getNome());
+			
+			ProjectHealthCheck healthCheck = new ProjectHealthCheck(project);
+			
+			ProjectSituation situation = healthCheck.getSituation();
+			
+			project.getSituation().setOk(situation.isOk());
+			project.getSituation().setSituationMessage(situation.getSituationMessage());
+			project.getSituation().setSituationTitle(situation.getSituationTitle());
+			
+			projectRepository.save(project);
 			
 			return new ResponseEntity<Boolean>(true, HttpStatus.OK);
 		} catch (Exception e) {
