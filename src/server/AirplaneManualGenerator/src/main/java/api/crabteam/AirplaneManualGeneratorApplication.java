@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import api.crabteam.model.entities.Administrador;
 import api.crabteam.model.entities.Usuario;
+import api.crabteam.model.enumarations.EnvironmentVariables;
 import api.crabteam.model.repositories.ProjetoRepository;
 import api.crabteam.model.repositories.UsuarioRepository;
 
@@ -26,6 +27,9 @@ public class AirplaneManualGeneratorApplication implements CommandLineRunner {
 	
 	@Override
 	public void run(String... args) throws Exception {
+		
+		System.err.println(EnvironmentVariables.PROJECTS_FOLDER.getValue());
+		
 		// Verifica se a variável de apontamento para a pasta de uploads foi configurada
 		if(System.getenv("APIEmbraerCodelistFolder") == null) {
 			throw new Exception("A variável de ambiente para o apontamento da pasta de uploads, APIEmbraerCodelistFolder, não foi encontrada");
