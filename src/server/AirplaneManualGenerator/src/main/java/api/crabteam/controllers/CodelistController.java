@@ -18,6 +18,7 @@ import api.crabteam.model.entities.Linha;
 import api.crabteam.model.entities.Projeto;
 import api.crabteam.model.entities.builders.CodelistBuilder;
 import api.crabteam.model.entities.builders.ProjetoBuilder;
+import api.crabteam.model.enumarations.EnvironmentVariables;
 import api.crabteam.model.repositories.CodelistRepository;
 import api.crabteam.model.repositories.LinhaRepository;
 import api.crabteam.model.repositories.ProjetoRepository;
@@ -52,9 +53,7 @@ public class CodelistController {
 	
 	@Autowired
 	LinhaRepository linhaRepository;
-	
-	private static final String PROJECTS_DIRECTORY = System.getenv("APIEmbraerCodelistFolder");
-	
+		
 	/**
 	 * Realiza o upload de um arquivo de codelist para um projeto de manual
 	 * @param newCodelist
@@ -74,7 +73,7 @@ public class CodelistController {
 		CodelistBuilder codelistBuilder = new CodelistBuilder(newCodelist.getBytes(), projectName);
 		Codelist codelist = codelistBuilder.getBuildedCodelist();
 		
-		File destinationAbsolutePath = new File(PROJECTS_DIRECTORY + "\\" + projectName + "_codelist.xlsx");
+		File destinationAbsolutePath = new File(EnvironmentVariables.PROJECTS_FOLDER.getValue() + "\\" + projectName + "_codelist.xlsx");
 		newCodelist.transferTo(destinationAbsolutePath);
 		
 		List<Linha> linhas = codelist.getLinhas();
