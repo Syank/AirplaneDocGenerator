@@ -24,6 +24,7 @@ import api.crabteam.controllers.requestsBody.ChangeProjectName;
 import api.crabteam.controllers.requestsBody.NewProject;
 import api.crabteam.model.entities.Projeto;
 import api.crabteam.model.entities.builders.ProjetoBuilder;
+import api.crabteam.model.enumarations.EnvironmentVariables;
 import api.crabteam.model.repositories.ProjetoRepository;
 import api.crabteam.utils.FileUtils;
 import io.swagger.annotations.ApiOperation;
@@ -173,8 +174,8 @@ public class ProjetoController {
 		}
 		
 		if (supposedNewProject == null) {
-			String filesDirectory = System.getenv("APIEmbraerCodelistFolder").concat("/").concat(oldProjectName);
-			String newFilesDirectory = System.getenv("APIEmbraerCodelistFolder").concat("/").concat(newProjectName);
+			String filesDirectory = EnvironmentVariables.PROJECTS_FOLDER.getValue().concat("/").concat(oldProjectName);
+			String newFilesDirectory = EnvironmentVariables.PROJECTS_FOLDER.getValue().concat("/").concat(newProjectName);
 			
 			// foi necessário fazer assim pois já temos uma classe com o mesmo nome
 			// se já existir alguma pasta de antes e que não foi apagada

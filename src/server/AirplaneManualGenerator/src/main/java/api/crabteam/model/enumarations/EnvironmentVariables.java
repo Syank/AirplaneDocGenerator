@@ -2,7 +2,7 @@ package api.crabteam.model.enumarations;
 
 public enum EnvironmentVariables {
 	
-	PROJECTS_FOLDER(System.getenv("APIEmbraerCodelistFolder"));
+	PROJECTS_FOLDER(System.getenv("ProjectsWorkFolder"));
 	
 	private String value;
 	
