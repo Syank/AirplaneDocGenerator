@@ -198,6 +198,18 @@ public class LinhaController {
 			
 			linhaRepository.save(line);
 			
+			Projeto project = projectRepository.findByName(updatedLine.getCodelistName());
+			
+			ProjectHealthCheck healthCheck = new ProjectHealthCheck(project);
+			
+			ProjectSituation situation = healthCheck.getSituation();
+			
+			project.getSituation().setOk(situation.isOk());
+			project.getSituation().setSituationMessage(situation.getSituationMessage());
+			project.getSituation().setSituationTitle(situation.getSituationTitle());
+			
+			projectRepository.save(project);
+			
 		}catch (Exception e) {
 			return new ResponseEntity<String>("A linha não foi atualizada.", HttpStatus.BAD_REQUEST);
 		}
@@ -241,7 +253,8 @@ public class LinhaController {
 			@ApiResponse(code = 400, message = "The file wasn't attached to the line."),
 			@ApiResponse(code = 404, message = "The file wasn't found.") })
 	public ResponseEntity<?> attachFile(@RequestParam(name = "file") MultipartFile file,
-			@RequestParam(name = "line") Integer line) throws IOException {
+			@RequestParam(name = "line") Integer line,
+			@RequestParam String codelistName) throws IOException {
 
 		File destinationAbsolutePath = new File(EnvironmentVariables.PROJECTS_FOLDER.getValue() + "/line_" + line.toString() + "_file.pdf");
 		file.transferTo(destinationAbsolutePath);
@@ -252,6 +265,18 @@ public class LinhaController {
 		linha.setId(line);
 		linha.setFilePath(destinationAbsolutePath.getAbsolutePath());
 		linhaRepository.save(linha);
+		
+		Projeto project = projectRepository.findByName(codelistName);
+		
+		ProjectHealthCheck healthCheck = new ProjectHealthCheck(project);
+		
+		ProjectSituation situation = healthCheck.getSituation();
+		
+		project.getSituation().setOk(situation.isOk());
+		project.getSituation().setSituationMessage(situation.getSituationMessage());
+		project.getSituation().setSituationTitle(situation.getSituationTitle());
+		
+		projectRepository.save(project);
 
 		return new ResponseEntity<Boolean>(true, HttpStatus.OK);
 	}
