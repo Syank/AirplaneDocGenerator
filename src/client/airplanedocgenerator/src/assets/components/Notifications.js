@@ -24,10 +24,9 @@ export function notification(nStatus, nTitle, nMessage) {
  * @param {String} cTitle Título quando está confirmando
  * @param {String} cMessage Mensagem para exibir ao usuário na confirmação
  * @param {String} cIcon Tipos: https://sweetalert2.github.io/#icons
- * @param {String} sOption O que fazer após clicar no OK?
  */
-export function withConfirmation(cTitle, cMessage, cIcon, sOption) {
-     Swal.fire({
+export async function withConfirmation(cTitle, cMessage, cIcon) {
+     const { value: confirmation } =  await Swal.fire({
           title: cTitle,
           text: cMessage,
           icon: cIcon,
@@ -36,27 +35,10 @@ export function withConfirmation(cTitle, cMessage, cIcon, sOption) {
           cancelButtonColor: '#d33',
           cancelButtonText: "Cancelar",
           confirmButtonText: "OK!"
-     }).then((result) => {
-          if (result.isConfirmed) {
-               switch (sOption) {
-                    case "example":
-                         notification("success", "Uhu!", "Exemplo exibido!");
-                         break;
+     });
 
-                    default:
-                         break;
-               }
-          }
-     })
+     return confirmation;
 }
-/**
- *  withConfirmation (
-          "Criar o projeto?",
-          "Quer mesmo criar o projeto?",
-          "warning",
-          "example"
-     );
- */
 
 export async function addFile(lineId) {
      const { value: uploadedFile } = await Swal.fire({
