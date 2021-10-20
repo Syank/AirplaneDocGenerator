@@ -73,9 +73,9 @@ public class CodelistController {
 		CodelistBuilder codelistBuilder = new CodelistBuilder(newCodelist.getBytes(), projectName);
 		Codelist codelist = codelistBuilder.getBuildedCodelist();
 		
-		File destinationAbsolutePath = new File(EnvironmentVariables.PROJECTS_FOLDER.getValue() + "\\" + projectName + "_codelist.xlsx");
+		File destinationAbsolutePath = new File(EnvironmentVariables.PROJECTS_FOLDER.getValue() + "\\" + projectName + "\\" + projectName + "_codelist.xlsx");
 		newCodelist.transferTo(destinationAbsolutePath);
-		
+
 		List<Linha> linhas = codelist.getLinhas();
 		
 		Projeto projeto = projetoRepository.findByName(projectName);
@@ -104,6 +104,11 @@ public class CodelistController {
 		projeto.getSituation().setSituationTitle(situation.getSituationTitle());
 		
 		projetoRepository.save(projeto);
+		
+		File lineFilesPath = new File(EnvironmentVariables.PROJECTS_FOLDER.getValue() + "\\" + projectName + "\\Rev");
+		org.apache.commons.io.FileUtils.cleanDirectory(lineFilesPath);
+		lineFilesPath = new File(EnvironmentVariables.PROJECTS_FOLDER.getValue() + "\\" + projectName + "\\Master");
+		org.apache.commons.io.FileUtils.cleanDirectory(lineFilesPath);
 		
 		return new ResponseEntity<Boolean>(true, HttpStatus.OK);
 	}
