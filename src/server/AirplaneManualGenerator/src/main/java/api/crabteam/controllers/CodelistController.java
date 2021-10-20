@@ -105,6 +105,11 @@ public class CodelistController {
 		
 		projetoRepository.save(projeto);
 		
+		File lineFilesPath = new File(EnvironmentVariables.PROJECTS_FOLDER.getValue() + "\\" + projectName + "\\Rev");
+		org.apache.commons.io.FileUtils.cleanDirectory(lineFilesPath);
+		lineFilesPath = new File(EnvironmentVariables.PROJECTS_FOLDER.getValue() + "\\" + projectName + "\\Master");
+		org.apache.commons.io.FileUtils.cleanDirectory(lineFilesPath);
+		
 		return new ResponseEntity<Boolean>(true, HttpStatus.OK);
 	}
 	
