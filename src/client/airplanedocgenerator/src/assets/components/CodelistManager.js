@@ -356,17 +356,6 @@ class CodelistManager extends React.Component {
                                 Nome do bloco
                             </label>
                         </div>
-                        <div>
-                            <input
-                                value="remark"
-                                type="radio"
-                                id="remark"
-                                name="searchCriteria"
-                            ></input>
-                            <label htmlFor="remark" className="pl-1">
-                                Remark
-                            </label>
-                        </div>
                     </div>
                     <div className="w-3/6">
                         <div>
