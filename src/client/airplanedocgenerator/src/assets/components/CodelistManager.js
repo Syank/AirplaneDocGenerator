@@ -8,11 +8,7 @@ import {
     faTimes,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-    addCodelist,
-    addFile,
-    notification,
-} from "../components/Notifications";
+import { addCodelist, addFile, notification, withConfirmation } from "../components/Notifications";
 import ServerRequester from "../../utils/ServerRequester";
 
 /**
@@ -389,38 +385,39 @@ class CodelistManager extends React.Component {
     }
 
     async importCodelist(event) {
-        let name = document.getElementById("nomeProjeto").textContent;
 
-        let file = await addCodelist(name);
+        let ok = await withConfirmation("Deseja importar uma nova codelist?",
+                                        "Isso apagará arquivos vinculados a linhas e as renovará.",
+                                        "warning");
 
-        let serverRequester = new ServerRequester("http://localhost:8080");
+        if (ok) {
+            let name = document.getElementById("nomeProjeto").textContent;
 
-        let formData = new FormData();
-        formData.append("newCodelist", file);
-        formData.append("projectName", name);
-
-        let response = await serverRequester.doPost(
-            "/codelist/upload",
-            formData,
-            "multipart/form-data"
-        );
-
-        if (response.status === 200) {
-            notification(
-                "success",
-                "Sucesso! 😄",
-                "A codelist foi substituída!"
+            let file = await addCodelist(name);
+    
+            let serverRequester = new ServerRequester("http://localhost:8080");
+    
+            let formData = new FormData();
+            formData.append("newCodelist", file);
+            formData.append("projectName", name);
+    
+            let response = await serverRequester.doPost(
+                "/codelist/upload",
+                formData,
+                "multipart/form-data"
             );
-
-            await this.props.reloadData();
-
-            this.props.hide();
-        } else {
-            notification(
-                "error",
-                "Ops 🙁",
-                "Não foi possível alterar a codelist do manual"
-            );
+    
+            if (response.status === 200) {
+                notification("success", "Sucesso! 😄", "A codelist foi substituída!");
+    
+                await this.props.reloadData();
+    
+                this.props.hide();
+    
+            }else {
+                notification("error", "Ops 🙁", "Não foi possível alterar a codelist do manual");
+    
+            }
         }
     }
 
@@ -536,6 +533,7 @@ class CodelistManager extends React.Component {
         let formData = new FormData();
         formData.append("file", file);
         formData.append("line", justId);
+        formData.append("codelistName", this.state["projectData"]["codelist"]["nome"]);
 
         let response = await serverRequester.doPost(
             "/codelistLine/attachFile",
@@ -718,7 +716,8 @@ class CodelistManager extends React.Component {
                 blockName: newBlockName,
                 code: newCode,
                 remarksText: newRemarks,
-            };
+                codelistName: this.state["projectData"]["codelist"]["nome"]
+            }
 
             let serverRequester = new ServerRequester("http://localhost:8080");
 

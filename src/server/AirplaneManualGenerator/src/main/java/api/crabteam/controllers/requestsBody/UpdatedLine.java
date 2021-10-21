@@ -5,16 +5,12 @@ public class UpdatedLine {
 	private int id;
 	
 	private String sectionNumber;
-	
 	private String subsectionNumber;
-	
 	private String blockNumber;
-	
 	private String blockName;
-	
 	private String code;
-	
 	private String remarksText;
+	private String codelistName;
 
 	
 	
@@ -72,6 +68,14 @@ public class UpdatedLine {
 
 	public void setRemarksText(String remarksText) {
 		this.remarksText = remarksText;
+	}
+
+	public String getCodelistName() {
+		return codelistName;
+	}
+
+	public void setCodelistName(String codelistName) {
+		this.codelistName = codelistName;
 	}
 	
 }

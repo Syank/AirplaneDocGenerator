@@ -26,6 +26,7 @@ import api.crabteam.model.entities.Projeto;
 import api.crabteam.model.entities.Remark;
 import api.crabteam.model.entities.builders.LinhaBuilder;
 import api.crabteam.model.entities.builders.RemarkBuilder;
+import api.crabteam.model.enumarations.EnvironmentVariables;
 import api.crabteam.model.repositories.CodelistRepository;
 import api.crabteam.model.repositories.LinhaRepository;
 import api.crabteam.model.repositories.ProjetoRepository;
@@ -59,8 +60,6 @@ public class LinhaController {
 
 	@Autowired
 	LinhaBuilder linhaBuilder;
-
-	private static final String PROJECTS_DIRECTORY = System.getenv("APIEmbraerCodelistFolder");
 
 	/**
 	 * Cria uma nova linha em uma codelist.
@@ -117,9 +116,9 @@ public class LinhaController {
 		try {
 			String fileName = "line-" + linha.getSectionNumber() + linha.getSubsectionNumber() + linha.getBlockNumber() + linha.getBlockName(); 
 			
-			FileUtils.saveFile(lineFile.getBytes(), fileName + ".pdf" , PROJECTS_DIRECTORY);
+			FileUtils.saveFile(lineFile.getBytes(), fileName + ".pdf" , EnvironmentVariables.PROJECTS_FOLDER.getValue());
 			
-			linha.setFilePath(PROJECTS_DIRECTORY + "\\" + fileName + ".pdf");
+			linha.setFilePath(EnvironmentVariables.PROJECTS_FOLDER.getValue() + "\\" + fileName + ".pdf");
 			
 			codelist.addLinha(linha);
 			
@@ -199,6 +198,18 @@ public class LinhaController {
 			
 			linhaRepository.save(line);
 			
+			Projeto project = projectRepository.findByName(updatedLine.getCodelistName());
+			
+			ProjectHealthCheck healthCheck = new ProjectHealthCheck(project);
+			
+			ProjectSituation situation = healthCheck.getSituation();
+			
+			project.getSituation().setOk(situation.isOk());
+			project.getSituation().setSituationMessage(situation.getSituationMessage());
+			project.getSituation().setSituationTitle(situation.getSituationTitle());
+			
+			projectRepository.save(project);
+			
 		}catch (Exception e) {
 			return new ResponseEntity<String>("A linha não foi atualizada.", HttpStatus.BAD_REQUEST);
 		}
@@ -242,9 +253,10 @@ public class LinhaController {
 			@ApiResponse(code = 400, message = "The file wasn't attached to the line."),
 			@ApiResponse(code = 404, message = "The file wasn't found.") })
 	public ResponseEntity<?> attachFile(@RequestParam(name = "file") MultipartFile file,
-			@RequestParam(name = "line") Integer line) throws IOException {
+			@RequestParam(name = "line") Integer line,
+			@RequestParam String codelistName) throws IOException {
 
-		File destinationAbsolutePath = new File(PROJECTS_DIRECTORY + "/line_" + line.toString() + "_file.pdf");
+		File destinationAbsolutePath = new File(EnvironmentVariables.PROJECTS_FOLDER.getValue() + "/line_" + line.toString() + "_file.pdf");
 		file.transferTo(destinationAbsolutePath);
 
 		Optional<Linha> optionalLinha = linhaRepository.findById(line);
@@ -253,6 +265,18 @@ public class LinhaController {
 		linha.setId(line);
 		linha.setFilePath(destinationAbsolutePath.getAbsolutePath());
 		linhaRepository.save(linha);
+		
+		Projeto project = projectRepository.findByName(codelistName);
+		
+		ProjectHealthCheck healthCheck = new ProjectHealthCheck(project);
+		
+		ProjectSituation situation = healthCheck.getSituation();
+		
+		project.getSituation().setOk(situation.isOk());
+		project.getSituation().setSituationMessage(situation.getSituationMessage());
+		project.getSituation().setSituationTitle(situation.getSituationTitle());
+		
+		projectRepository.save(project);
 
 		return new ResponseEntity<Boolean>(true, HttpStatus.OK);
 	}

@@ -18,6 +18,7 @@ import api.crabteam.model.entities.Linha;
 import api.crabteam.model.entities.Projeto;
 import api.crabteam.model.entities.Remark;
 import api.crabteam.model.enumarations.CodelistColumn;
+import api.crabteam.model.enumarations.EnvironmentVariables;
 import api.crabteam.model.repositories.CodelistRepository;
 import api.crabteam.model.repositories.ProjetoRepository;
 import api.crabteam.utils.FileUtils;
@@ -31,9 +32,7 @@ public class CodelistBuilder {
 	
 	private CodelistRepository codelistRepository;
 	private ProjetoRepository projectRepository;
-	
-	private static final String PROJECTS_DIRECTORY = System.getenv("APIEmbraerCodelistFolder");
-	
+		
 	private Codelist codelist;
 	
 	public CodelistBuilder() {
@@ -57,7 +56,7 @@ public class CodelistBuilder {
 		
 		String fileName = projectName + "_codelist.xlsx";
 		
-		String projectPath = PROJECTS_DIRECTORY.concat("/").concat(projectName);
+		String projectPath = EnvironmentVariables.PROJECTS_FOLDER.getValue().concat("/").concat(projectName);
 		FileUtils.saveCodelistFile(codelistBytesFile, fileName, projectPath, projectName);
 		Workbook workbook = FileUtils.readAsExcel(projectPath + "\\" + fileName);
 		
@@ -258,7 +257,7 @@ public class CodelistBuilder {
 	
 	public void createProjectFoldersStructure (String projectName) throws IOException {
 		
-		String sProjectFolder = PROJECTS_DIRECTORY.concat("/").concat(projectName);
+		String sProjectFolder = EnvironmentVariables.PROJECTS_FOLDER.getValue().concat("/").concat(projectName);
 		
 		File projectFolder = new File(sProjectFolder);
 

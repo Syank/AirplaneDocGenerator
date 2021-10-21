@@ -12,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.OrderBy;
 
 @Entity(name = "codelist")
 public class Codelist {
@@ -24,6 +25,7 @@ public class Codelist {
 	private String nome;
 	
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OrderBy("section_number, subsection_number, block_number, block_name, code")
 	private List<Linha> linhas = new ArrayList<Linha>();
 	
 	@OneToOne(mappedBy = "codelist")
