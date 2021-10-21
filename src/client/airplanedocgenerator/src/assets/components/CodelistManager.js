@@ -478,11 +478,11 @@ class CodelistManager extends React.Component {
     needRenderRow(linhaData) {
         const searchCriteria = this.state.searchCriteria;
         const searchValue = this.state.searchValue.toLowerCase();
+        const remarks = linhaData["remarks"];
         if (searchCriteria === "all") {
             if (this.filter === "all") {
                 return true;
             } else {
-                const remarks = linhaData["remarks"];
                 for (let i = 0; i < remarks.length; i++) {
                     const remark = remarks[i];
                     const traco = remark["traco"];
@@ -492,15 +492,12 @@ class CodelistManager extends React.Component {
             }
         }
 
-        console.log(searchCriteria + " " + this.filter);
-
         //filtro a partir do search
         let valor = linhaData[searchCriteria].toLowerCase();
 
         if (valor.includes(searchValue) && this.filter === "all") {
             return true;
         } else {
-            const remarks = linhaData["remarks"];
             for (let i = 0; i < remarks.length; i++) {
                 const remark = remarks[i];
                 const traco = remark["traco"];
