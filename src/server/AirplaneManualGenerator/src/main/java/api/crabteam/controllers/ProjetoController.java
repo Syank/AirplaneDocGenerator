@@ -27,6 +27,7 @@ import api.crabteam.model.entities.builders.ProjetoBuilder;
 import api.crabteam.model.enumarations.EnvironmentVariables;
 import api.crabteam.model.repositories.ProjetoRepository;
 import api.crabteam.utils.FileUtils;
+import api.crabteam.utils.FileVerifications;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -174,26 +175,29 @@ public class ProjetoController {
 		}
 		
 		if (supposedNewProject == null) {
-			String filesDirectory = EnvironmentVariables.PROJECTS_FOLDER.getValue().concat("/").concat(oldProjectName);
-			String newFilesDirectory = EnvironmentVariables.PROJECTS_FOLDER.getValue().concat("/").concat(newProjectName);
+			String filesDirectory = EnvironmentVariables.PROJECTS_FOLDER.getValue().concat("\\").concat(oldProjectName);
+			String newFilesDirectory = EnvironmentVariables.PROJECTS_FOLDER.getValue().concat("\\").concat(newProjectName);
 			
 			// foi necessário fazer assim pois já temos uma classe com o mesmo nome
 			// se já existir alguma pasta de antes e que não foi apagada
 			org.apache.commons.io.FileUtils.deleteDirectory(new File(newFilesDirectory));
 			
-			File supposedCodelistSheet = new File(filesDirectory.concat("/").concat(oldProjectName).concat("_codelist.xlsx"));
+			String fileExtension = ".xlsx";
+			
+			File supposedCodelistSheet = new File(filesDirectory.concat("\\").concat(oldProjectName).concat(fileExtension));
 			
 			if (supposedCodelistSheet.exists()) {
 				// primeiro renomeia o nome da planilha, depois renomeia o arquivo
-				FileUtils.renameCodelistSheet(filesDirectory, oldProjectName + "_codelist.xlsx", oldProjectName, newProjectName);
-				FileUtils.renameFile(filesDirectory, oldProjectName + "_codelist.xlsx", newProjectName + "_codelist.xlsx");
+				FileUtils.renameCodelistSheet(filesDirectory, oldProjectName + fileExtension, oldProjectName, newProjectName);
+				FileUtils.renameFile(filesDirectory, oldProjectName + fileExtension, newProjectName + fileExtension);
 			}
 
 			project.getCodelist().setNome(newProjectName);
 			project.setNome(newProjectName);
 			
-			File newProjectFolder = new File(newFilesDirectory);
+			FileVerifications.renameProjectFiles(new File(filesDirectory + "\\Master"), newProjectName);
 			
+			File newProjectFolder = new File(newFilesDirectory);
 			File projectFolder = new File(filesDirectory);
 			projectFolder.renameTo(newProjectFolder);
 

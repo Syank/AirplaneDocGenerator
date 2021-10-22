@@ -1,5 +1,8 @@
 package api.crabteam.utils;
 
+import java.io.File;
+import java.io.IOException;
+
 import api.crabteam.model.entities.Linha;
 import api.crabteam.model.enumarations.EnvironmentVariables;
 
@@ -60,6 +63,45 @@ public class FileVerifications {
 		
 		String[] fileInfos = {strFilePath, fileName};
 		return fileInfos;
+	}
+	
+	/**
+	 * Método recursivo que verifica as subpastas e arquivos do diretório do projeto de manual
+	 * @param projectPath (pasta do projeto de manual que desejo efetuar as mudanças)
+	 * @param newProjectName (novo nome desse projeto de manual)
+	 * @throws IOException
+	 * @author Bárbara Port
+	 */
+	public static void getSubfolders (File projectPath, String newProjectName) throws IOException {
+	    for (File content : projectPath.listFiles()) {
+	       if (content.isDirectory()) {
+	           getSubfolders(content, newProjectName);
+	       }
+	       else {
+	    	   String splittedOldName[] = new String[5];
+	    	   splittedOldName = content.getName().split("-");
+	    	   
+	    	   String[] splittedNewName = newProjectName.split("-");
+	    	   
+	    	   //setting letters
+	    	   splittedOldName[0] = splittedNewName[0];
+	    	   splittedOldName[1] = splittedNewName[1];
+	    	   
+	    	   String newFileName = String.join("-", splittedOldName);
+	    	   content.renameTo(new File(content.getParent().concat("\\").concat(newFileName)));
+	       }
+	    }
+	}
+	
+	/**
+	 * Método que é mais "legível" no momento de renomear os arquivos de um projeto
+	 * @param projectPath (pasta do projeto de manual que desejo efetuar as mudanças)
+	 * @param newProjectName (novo nome desse projeto de manual)
+	 * @throws IOException
+	 * @author Bárbara Port
+	 */
+	public static void renameProjectFiles (File projectPath, String newProjectName) throws IOException {
+		getSubfolders(projectPath, newProjectName);
 	}
 
 }
