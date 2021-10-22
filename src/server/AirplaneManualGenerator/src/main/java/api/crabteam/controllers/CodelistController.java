@@ -73,7 +73,7 @@ public class CodelistController {
 		CodelistBuilder codelistBuilder = new CodelistBuilder(newCodelist.getBytes(), projectName);
 		Codelist codelist = codelistBuilder.getBuildedCodelist();
 		
-		File destinationAbsolutePath = new File(EnvironmentVariables.PROJECTS_FOLDER.getValue() + "\\" + projectName + "\\" + projectName + "_codelist.xlsx");
+		File destinationAbsolutePath = new File(EnvironmentVariables.PROJECTS_FOLDER.getValue() + "\\" + projectName + "\\" + projectName + ".xlsx");
 		newCodelist.transferTo(destinationAbsolutePath);
 
 		List<Linha> linhas = codelist.getLinhas();

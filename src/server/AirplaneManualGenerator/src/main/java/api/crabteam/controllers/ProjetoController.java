@@ -181,12 +181,14 @@ public class ProjetoController {
 			// se já existir alguma pasta de antes e que não foi apagada
 			org.apache.commons.io.FileUtils.deleteDirectory(new File(newFilesDirectory));
 			
-			File supposedCodelistSheet = new File(filesDirectory.concat("/").concat(oldProjectName).concat("_codelist.xlsx"));
+			String fileExtension = ".xlsx";
+			
+			File supposedCodelistSheet = new File(filesDirectory.concat("/").concat(oldProjectName).concat(fileExtension));
 			
 			if (supposedCodelistSheet.exists()) {
 				// primeiro renomeia o nome da planilha, depois renomeia o arquivo
-				FileUtils.renameCodelistSheet(filesDirectory, oldProjectName + "_codelist.xlsx", oldProjectName, newProjectName);
-				FileUtils.renameFile(filesDirectory, oldProjectName + "_codelist.xlsx", newProjectName + "_codelist.xlsx");
+				FileUtils.renameCodelistSheet(filesDirectory, oldProjectName + fileExtension, oldProjectName, newProjectName);
+				FileUtils.renameFile(filesDirectory, oldProjectName + fileExtension, newProjectName + fileExtension);
 			}
 
 			project.getCodelist().setNome(newProjectName);
