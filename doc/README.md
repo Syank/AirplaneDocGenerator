@@ -58,6 +58,8 @@ O projeto pode ser dividido em dois: a parte do cliente e a do servidor. Este gu
   - Na linha `spring.datasource.username=<nome_de_usuario>`, coloque seu nome de usuário do banco de dados
   - Na linha `spring.datasource.password=<senha>`, coloque sua senha do banco de dados
 
+- Caso haja erros envolvendo arquivos de teste, é por conta do JUnit! Adicione-o ao Build Path do projeto.
+
 - No pacote "api.crabteam", execute o arquivo AirplaneManualGeneratorApplication;
 
 - Você notará que diversas saídas aparecerão no console, caso nenhuma exceção seja lançada, o projeto foi configurado adequadamente!
