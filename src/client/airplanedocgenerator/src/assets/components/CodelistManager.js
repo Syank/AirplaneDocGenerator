@@ -155,13 +155,13 @@ class CodelistManager extends React.Component {
                                     className="text-center mb-2 border-b-2 outline-none focus:bg-gray-200"
                                     type="text"
                                     placeholder="Bloco"
-                                    id="newLineBlock"
+                                    id="newLineBlockNumber"
                                 ></input>
                                 <input
                                     className="text-center mb-2 border-b-2 outline-none focus:bg-gray-200"
                                     type="text"
                                     placeholder="Nome do bloco"
-                                    id="newLineBlockNumber"
+                                    id="newLineBlockName"
                                 ></input>
                                 <input
                                     className="text-center mb-2 border-b-2 outline-none focus:bg-gray-200"
@@ -212,7 +212,7 @@ class CodelistManager extends React.Component {
         let newSubSection = document.getElementById("newLineSubsection").value;
         let newBlockNumber =
             document.getElementById("newLineBlockNumber").value;
-        let newBlockName = document.getElementById("newLineBlock").value;
+        let newBlockName = document.getElementById("newLineBlockName").value;
         let newCode = document.getElementById("newLineCode").value;
         let newRemarks = document.getElementById("newLineRemarks").value;
         let file = document.getElementById("newLineFile").files[0];
