@@ -26,11 +26,9 @@ import api.crabteam.model.entities.Projeto;
 import api.crabteam.model.entities.Remark;
 import api.crabteam.model.entities.builders.LinhaBuilder;
 import api.crabteam.model.entities.builders.RemarkBuilder;
-import api.crabteam.model.enumarations.EnvironmentVariables;
 import api.crabteam.model.repositories.CodelistRepository;
 import api.crabteam.model.repositories.LinhaRepository;
 import api.crabteam.model.repositories.ProjetoRepository;
-import api.crabteam.utils.FileUtils;
 import api.crabteam.utils.FileVerifications;
 import api.crabteam.utils.ProjectHealthCheck;
 import api.crabteam.utils.ProjectSituation;
@@ -114,12 +112,16 @@ public class LinhaController {
 
 		linha.setRemarks(newRemarks);
 
-		try {
-			String fileName = "line-" + linha.getSectionNumber() + linha.getSubsectionNumber() + linha.getBlockNumber() + linha.getBlockName(); 
+		try {			
+			String[] fileInfos = FileVerifications.fileDestination(linha, codelist.getNome());
+			String strFilePath = fileInfos[0];
+			String fileName = fileInfos[1];
+
+			File destinationAbsolutePath = new File(strFilePath);
+			destinationAbsolutePath.mkdirs();
+			lineFile.transferTo(new File(strFilePath.concat(fileName)));
 			
-			FileUtils.saveFile(lineFile.getBytes(), fileName + ".pdf" , EnvironmentVariables.PROJECTS_FOLDER.getValue());
-			
-			linha.setFilePath(EnvironmentVariables.PROJECTS_FOLDER.getValue() + "\\" + fileName + ".pdf");
+			linha.setFilePath(destinationAbsolutePath.getAbsolutePath());
 			
 			codelist.addLinha(linha);
 			
