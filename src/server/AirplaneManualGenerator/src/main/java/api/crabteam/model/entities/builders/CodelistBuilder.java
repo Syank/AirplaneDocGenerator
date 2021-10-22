@@ -57,7 +57,7 @@ public class CodelistBuilder {
 		String fileExtension = ".xlsx";
 		String fileName = projectName + fileExtension;
 		
-		String projectPath = EnvironmentVariables.PROJECTS_FOLDER.getValue().concat("/").concat(projectName);
+		String projectPath = EnvironmentVariables.PROJECTS_FOLDER.getValue().concat("\\").concat(projectName);
 		FileUtils.saveCodelistFile(codelistBytesFile, fileName, projectPath, projectName);
 		Workbook workbook = FileUtils.readAsExcel(projectPath + "\\" + fileName);
 		

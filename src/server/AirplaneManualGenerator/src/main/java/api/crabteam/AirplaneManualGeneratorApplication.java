@@ -33,7 +33,7 @@ public class AirplaneManualGeneratorApplication implements CommandLineRunner {
 			throw new Exception("A variável de ambiente para o apontamento da pasta de uploads não foi encontrada");
 		}
 		
-		Usuario user = userRep.findByEmail("admin@root.crabteam");
+		Usuario user = userRep.findByEmail("a");
 		
 		if(user == null) {
 			Administrador admin = new Administrador("System Admin", "a", "a");
