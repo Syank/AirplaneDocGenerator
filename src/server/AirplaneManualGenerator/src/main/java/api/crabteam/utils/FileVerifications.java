@@ -65,7 +65,14 @@ public class FileVerifications {
 		return fileInfos;
 	}
 	
-	public static void getSubfolders(File projectPath, String newProjectName) throws IOException {
+	/**
+	 * Método recursivo que verifica as subpastas e arquivos do diretório do projeto de manual
+	 * @param projectPath (pasta do projeto de manual que desejo efetuar as mudanças)
+	 * @param newProjectName (novo nome desse projeto de manual)
+	 * @throws IOException
+	 * @author Bárbara Port
+	 */
+	public static void getSubfolders (File projectPath, String newProjectName) throws IOException {
 	    for (File content : projectPath.listFiles()) {
 	       if (content.isDirectory()) {
 	           getSubfolders(content, newProjectName);
@@ -86,6 +93,13 @@ public class FileVerifications {
 	    }
 	}
 	
+	/**
+	 * Método que é mais "legível" no momento de renomear os arquivos de um projeto
+	 * @param projectPath (pasta do projeto de manual que desejo efetuar as mudanças)
+	 * @param newProjectName (novo nome desse projeto de manual)
+	 * @throws IOException
+	 * @author Bárbara Port
+	 */
 	public static void renameProjectFiles (File projectPath, String newProjectName) throws IOException {
 		getSubfolders(projectPath, newProjectName);
 	}
