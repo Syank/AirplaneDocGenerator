@@ -30,7 +30,7 @@ public class FileVerifications {
 		String subsectionNumber = linha.getSubsectionNumber();
 		String subsectionName = linha.getSubsectionName();
 		
-		String fileName = codelistName.concat("-").concat(blockNumber).concat("-");
+		String fileName = codelistName.concat("-").concat(sectionNumber).concat("-");
 		String fileExtension = ".pdf";
 		String strFilePath = EnvironmentVariables.PROJECTS_FOLDER.getValue()
 							.concat("/")

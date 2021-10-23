@@ -725,26 +725,47 @@ class CodelistManager extends React.Component {
     async updateLine(event) {
         let lineId = this.getLineId(event);
 
-        let newSectionNumber = 
-            document.getElementById("line-sectionNumber-" + lineId).value 
-                ? "" : document.getElementById("line-sectionNumber-" + lineId).placeholder;
-        let newSectionName = 
-            document.getElementById("line-sectionName-" + lineId).value
-                ? "" : document.getElementById("line-sectionName-" + lineId).placeholder;
-        let newSubSectionNumber = document.getElementById("line-subsectionNumber-" + lineId).value;
-        let newSubSectionName = document.getElementById("line-subsectionName-" + lineId).value;
-        let newBlockNumber = 
-            document.getElementById("line-blockNumber-" + lineId).value
-                ? "" : document.getElementById("line-blockNumber-" + lineId).placeholder;
-        let newBlockName = 
-            document.getElementById("line-blockName-" + lineId).value
-                ? "" : document.getElementById("line-blockName-" + lineId).placeholder;
-        let newCode = 
-            document.getElementById("line-code-" + lineId).value
-                ? "" : document.getElementById("line-code-" + lineId).placeholder;
-        let newRemarks = 
-            document.getElementById("line-remarks-" + lineId).value
-                ? "" : document.getElementById("line-remarks-" + lineId).placeholder;
+        let sectionNumberInput = document.getElementById("line-sectionNumber-" + lineId);
+        let sectionNameInput = document.getElementById("line-sectionName-" + lineId);
+        let subsectionNumberInput = document.getElementById("line-subsectionNumber-" + lineId);
+        let subsectionNameInput = document.getElementById("line-subsectionName-" + lineId);
+        let blockNumberInput = document.getElementById("line-blockNumber-" + lineId);
+        let blockNameInput = document.getElementById("line-blockName-" + lineId);
+        let codeInput = document.getElementById("line-code-" + lineId);
+        let remarksInput = document.getElementById("line-remarks-" + lineId);
+
+        let newSectionNumber = sectionNumberInput.value;
+        if(newSectionNumber === ""){
+            newSectionNumber = sectionNumberInput.placeholder;
+        }
+
+        let newSectionName = sectionNameInput.value;
+        if(newSectionName === ""){
+            newSectionName = sectionNameInput.placeholder;
+        }
+
+        let newSubSectionNumber = subsectionNumberInput.value;
+        let newSubSectionName = subsectionNameInput.value;
+
+        let newBlockNumber = blockNumberInput.value;
+        if(newBlockNumber === ""){
+            newBlockNumber = blockNumberInput.placeholder;
+        }
+
+        let newBlockName = blockNameInput.value;
+        if(newBlockName === ""){
+            newBlockName = blockNameInput.placeholder;
+        }
+
+        let newCode = codeInput.value;
+        if(newCode === ""){
+            newCode = codeInput.placeholder;
+        }
+
+        let newRemarks = remarksInput.value;
+        if(newRemarks === ""){
+            newRemarks = remarksInput.placeholder;
+        }
 
         let isValidRemarks = this.checkIsValidRemarksText(newRemarks);
 
@@ -775,7 +796,7 @@ class CodelistManager extends React.Component {
             if(newSubSectionNumber !== ""){
                 updatedLine["subsectionNumber"] = newSubSectionNumber;
                 updatedLine["subsectionName"] = newSubSectionName;
-                
+
             }
 
             let serverRequester = new ServerRequester("http://localhost:8080");
