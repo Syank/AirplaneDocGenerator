@@ -181,12 +181,32 @@ public class CodelistBuilder {
 				
 			}
 			
-			this.codelist.addLinha(linha);
+			if(isValidLine(linha)) {
+				this.codelist.addLinha(linha);
+				
+			}else {
+				throw new Exception("A codelist contêm linhas mal formatadas ou inválidas");
+			}
+			
 			
 		}
 		
 		this.codelist.setNome(projectName);
 		
+	}
+
+	private boolean isValidLine(Linha line) {
+		String subSectionNumber = line.getSubsectionNumber();
+		String subSectionName = line.getSubsectionName();
+		
+		// Ambos devem ter um valor, se não, ambos devem não ter um valor
+		if(subSectionNumber != null && subSectionName != null) {
+			return true;
+		}else if(subSectionNumber == null && subSectionName == null) {
+			return true;
+		}
+		
+		return false;
 	}
 
 	public Codelist getBuildedCodelist() {

@@ -143,6 +143,8 @@ public class LinhaController {
 			
 			return new ResponseEntity<Boolean>(true, HttpStatus.OK);
 		} catch (Exception e) {
+			e.printStackTrace();
+			
 			return new ResponseEntity<String>("A linha não foi adicionada à codelist.", HttpStatus.BAD_REQUEST);
 		}
 

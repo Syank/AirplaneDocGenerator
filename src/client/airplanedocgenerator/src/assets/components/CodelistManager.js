@@ -143,13 +143,25 @@ class CodelistManager extends React.Component {
                                     className="text-center mb-2 border-b-2 outline-none focus:bg-gray-200"
                                     type="text"
                                     placeholder="Seção"
-                                    id="newLineSection"
+                                    id="newLineSectionNumber"
+                                ></input>
+                                <input
+                                    className="text-center mb-2 border-b-2 outline-none focus:bg-gray-200"
+                                    type="text"
+                                    placeholder="Nome da seção"
+                                    id="newLineSectionName"
                                 ></input>
                                 <input
                                     className="text-center mb-2 border-b-2 outline-none focus:bg-gray-200"
                                     type="text"
                                     placeholder="Subseção"
-                                    id="newLineSubsection"
+                                    id="newLineSubsectionNumber"
+                                ></input>
+                                <input
+                                    className="text-center mb-2 border-b-2 outline-none focus:bg-gray-200"
+                                    type="text"
+                                    placeholder="Nome da subseção"
+                                    id="newLineSubsectionName"
                                 ></input>
                                 <input
                                     className="text-center mb-2 border-b-2 outline-none focus:bg-gray-200"
@@ -207,11 +219,23 @@ class CodelistManager extends React.Component {
         return component;
     }
 
+    isValidSubsectionFields(subSectionNumber, subSectionName){
+		// Ambos devem ter um valor, se não, ambos devem não ter um valor
+		if(subSectionNumber !== "" && subSectionName !== "") {
+			return true;
+		}else if(subSectionNumber === "" && subSectionName === "") {
+			return true;
+		}
+		
+		return false;
+    }
+
     async createNewLine() {
-        let newSection = document.getElementById("newLineSection").value;
-        let newSubSection = document.getElementById("newLineSubsection").value;
-        let newBlockNumber =
-            document.getElementById("newLineBlockNumber").value;
+        let newSectionNumber = document.getElementById("newLineSectionNumber").value;
+        let newSectionName = document.getElementById("newLineSectionName").value;
+        let newSubSectionNumber = document.getElementById("newLineSubsectionNumber").value;
+        let newSubSectionName = document.getElementById("newLineSubsectionName").value;
+        let newBlockNumber = document.getElementById("newLineBlockNumber").value;
         let newBlockName = document.getElementById("newLineBlockName").value;
         let newCode = document.getElementById("newLineCode").value;
         let newRemarks = document.getElementById("newLineRemarks").value;
@@ -223,6 +247,12 @@ class CodelistManager extends React.Component {
                 "Um momento! 🤨",
                 "Para criar uma nova linha, é necessário também atribuir um arquivo a ela, por favor, escolha um"
             );
+        } else if(newSectionNumber === "" || newSectionName === "" || newBlockNumber === "" || newBlockName === "" || newCode === ""){
+            notification(
+                "error",
+                "Um momento! 🤨",
+                "Para criar uma nova linha, com exceção dos campos \"Subseção\" e \"Nome da subção\", todos os outros são obrigatórios, por favor, os preencha"
+            );
         } else if (!this.checkIsValidRemarksText(newRemarks)) {
             notification(
                 "error",
@@ -231,19 +261,27 @@ class CodelistManager extends React.Component {
                     "Onde X são os números do traço. Múltiplos remarks devem ser separados por vírgula, como: " +
                     "-XX (APELIDO), -XX (APELIDO)"
             );
-        } else {
+        }else if (!this.isValidSubsectionFields(newSubSectionNumber, newSubSectionName)){
+            notification("error", "Um momento! 🤨",
+                "Os campos subseção e nome da subseção são opcionais, mas caso um deles seja preenchido, o outro também deverá ser");
+
+        }else {
             let formData = new FormData();
-            formData.append("sectionNumber", newSection);
-            formData.append("subsectionNumber", newSubSection);
+            formData.append("sectionNumber", newSectionNumber);
+            formData.append("sectionName", newSectionName);
             formData.append("blockNumber", newBlockNumber);
             formData.append("blockName", newBlockName);
             formData.append("code", newCode);
             formData.append("remarksText", newRemarks);
             formData.append("lineFile", file);
-            formData.append(
-                "codelistName",
-                this.state["projectData"]["codelist"]["nome"]
-            );
+            formData.append("codelistName", this.state["projectData"]["codelist"]["nome"]);
+
+            // Caso o usuário forneça informações de subseção, adiciona elas ao formulário
+            if(newSubSectionNumber !== ""){
+                formData.append("subsectionNumber", newSubSectionNumber);
+                formData.append("subsectionName", newSubSectionName);
+
+            }
 
             let serverRequester = new ServerRequester("http://localhost:8080");
 

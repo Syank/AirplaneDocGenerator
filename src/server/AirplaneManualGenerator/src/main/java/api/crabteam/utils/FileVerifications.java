@@ -23,12 +23,12 @@ public class FileVerifications {
 	public static String[] fileDestination (Linha linha, String codelistName) {
 		
 		String sectionNumber = linha.getSectionNumber();
-		String sectionName = "Section Name";
+		String sectionName = linha.getSectionName();
 		String blockNumber = linha.getBlockNumber();
 		String blockName = linha.getBlockName();
 		String code = linha.getCode();
-		String subsectionNumber = "";
-		String subsectionName = "";
+		String subsectionNumber = linha.getSubsectionNumber();
+		String subsectionName = linha.getSubsectionName();
 		
 		String fileName = codelistName.concat("-").concat(blockNumber).concat("-");
 		String fileExtension = ".pdf";
@@ -42,9 +42,9 @@ public class FileVerifications {
 							.concat("/");
 		
 		// Verifying subsection
-		if (!(linha.getSubsectionNumber() == null)) {
+		if (linha.getSubsectionNumber() != null) {
 			subsectionNumber = linha.getSubsectionNumber();
-			subsectionName = "Subsection Name";
+			subsectionName = linha.getSubsectionName();
 			
 			fileName = fileName.concat(subsectionNumber).concat("-");
 			strFilePath = strFilePath
@@ -53,15 +53,16 @@ public class FileVerifications {
 							.concat(subsectionName)
 							.concat("/");
 		}
-		// -------------------
+		
 		fileName = fileName.concat(blockNumber).concat("c").concat(code).concat(fileExtension);
+		
 		strFilePath = strFilePath.concat(blockNumber)
 								 .concat(" ")
 								 .concat(blockName)
 								 .concat("/");
 		
-		
 		String[] fileInfos = {strFilePath, fileName};
+		
 		return fileInfos;
 	}
 	
