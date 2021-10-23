@@ -725,22 +725,26 @@ class CodelistManager extends React.Component {
     async updateLine(event) {
         let lineId = this.getLineId(event);
 
-        let newSection = document.getElementById(
-            "line-sectionNumber-" + lineId
-        ).value;
-        let newSubSection = document.getElementById(
-            "line-subsectionNumber-" + lineId
-        ).value;
-        let newBlockNumber = document.getElementById(
-            "line-blockNumber-" + lineId
-        ).value;
-        let newBlockName = document.getElementById(
-            "line-blockName-" + lineId
-        ).value;
-        let newCode = document.getElementById("line-code-" + lineId).value;
-        let newRemarks = document.getElementById(
-            "line-remarks-" + lineId
-        ).value;
+        let newSectionNumber = 
+            document.getElementById("line-sectionNumber-" + lineId).value 
+                ? "" : document.getElementById("line-sectionNumber-" + lineId).placeholder;
+        let newSectionName = 
+            document.getElementById("line-sectionName-" + lineId).value
+                ? "" : document.getElementById("line-sectionName-" + lineId).placeholder;
+        let newSubSectionNumber = document.getElementById("line-subsectionNumber-" + lineId).value;
+        let newSubSectionName = document.getElementById("line-subsectionName-" + lineId).value;
+        let newBlockNumber = 
+            document.getElementById("line-blockNumber-" + lineId).value
+                ? "" : document.getElementById("line-blockNumber-" + lineId).placeholder;
+        let newBlockName = 
+            document.getElementById("line-blockName-" + lineId).value
+                ? "" : document.getElementById("line-blockName-" + lineId).placeholder;
+        let newCode = 
+            document.getElementById("line-code-" + lineId).value
+                ? "" : document.getElementById("line-code-" + lineId).placeholder;
+        let newRemarks = 
+            document.getElementById("line-remarks-" + lineId).value
+                ? "" : document.getElementById("line-remarks-" + lineId).placeholder;
 
         let isValidRemarks = this.checkIsValidRemarksText(newRemarks);
 
@@ -752,16 +756,26 @@ class CodelistManager extends React.Component {
                     "Onde X são os números do traço. Múltiplos remarks devem ser separados por vírgula, como: " +
                     "-XX (APELIDO), -XX (APELIDO)"
             );
+        } else if(!this.isValidSubsectionFields(newSubSectionNumber, newSubSectionName)){
+            notification("error", "Um momento! 🤨",
+                "Os campos subseção e nome da subseção são opcionais, mas caso um deles seja preenchido, o outro também deverá ser");
+
         } else {
             let updatedLine = {
                 id: lineId,
-                sectionNumber: newSection,
-                subsectionNumber: newSubSection,
+                sectionNumber: newSectionNumber,
+                sectionName: newSectionName,
                 blockNumber: newBlockNumber,
                 blockName: newBlockName,
                 code: newCode,
                 remarksText: newRemarks,
                 codelistName: this.state["projectData"]["codelist"]["nome"]
+            }
+
+            if(newSubSectionNumber !== ""){
+                updatedLine["subsectionNumber"] = newSubSectionNumber;
+                updatedLine["subsectionName"] = newSubSectionName;
+                
             }
 
             let serverRequester = new ServerRequester("http://localhost:8080");
@@ -873,8 +887,24 @@ class CodelistManager extends React.Component {
                                 <input
                                     className="w-full text-center"
                                     type="text"
+                                    id={"line-sectionName-" + id}
+                                    placeholder={linhaData["sectionName"]}
+                                ></input>
+                            </td>
+                            <td className="border border-gray-300">
+                                <input
+                                    className="w-full text-center"
+                                    type="text"
                                     id={"line-subsectionNumber-" + id}
                                     placeholder={linhaData["subsectionNumber"]}
+                                ></input>
+                            </td>
+                            <td className="border border-gray-300">
+                                <input
+                                    className="w-full text-center"
+                                    type="text"
+                                    id={"line-subsectionName-" + id}
+                                    placeholder={linhaData["subsectionName"]}
                                 ></input>
                             </td>
                             <td className="border border-gray-300">
