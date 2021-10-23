@@ -81,7 +81,9 @@ public class LinhaController {
 		Linha linha = new Linha();
 		
 		linha.setSectionNumber(newLine.getSectionNumber());
+		linha.setSectionName(newLine.getSectionName());
 		linha.setSubsectionNumber(newLine.getSubsectionNumber());
+		linha.setSubsectionName(newLine.getSubsectionName());
 		linha.setBlockNumber(newLine.getBlockNumber());
 		linha.setBlockName(newLine.getBlockName());
 		linha.setCode(newLine.getCode());
@@ -171,7 +173,9 @@ public class LinhaController {
 			line.setBlockNumber(updatedLine.getBlockNumber());
 			line.setCode(updatedLine.getCode());
 			line.setSectionNumber(updatedLine.getSectionNumber());
+			line.setSectionName(updatedLine.getSectionName());
 			line.setSubsectionNumber(updatedLine.getSubsectionNumber());
+			line.setSubsectionName(updatedLine.getSubsectionName());
 			
 			ArrayList<Remark> newRemarks = new ArrayList<Remark>();
 			
@@ -214,7 +218,7 @@ public class LinhaController {
 			projectRepository.save(project);
 			
 		}catch (Exception e) {
-			return new ResponseEntity<String>("A linha não foi atualizada.", HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>("A linha não foi atualizada", HttpStatus.BAD_REQUEST);
 		}
 
 		return new ResponseEntity<Boolean>(true, HttpStatus.OK);
@@ -234,8 +238,9 @@ public class LinhaController {
 	public ResponseEntity<?> deleteLine(@PathVariable int line) {
 		try {
 			linhaRepository.deleteById(line);
+			
 		} catch (Exception e) {
-			return new ResponseEntity<String>("A linha não foi deletada.", HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>("A linha não foi deletada", HttpStatus.BAD_REQUEST);
 		}
 
 		return new ResponseEntity<Boolean>(true, HttpStatus.OK);
@@ -286,4 +291,5 @@ public class LinhaController {
 
 		return new ResponseEntity<Boolean>(true, HttpStatus.OK);
 	}
+	
 }

@@ -5,7 +5,7 @@ import {
     faPen,
     faFileAlt,
     faCheck,
-    faTimes,
+    faTimes
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { addCodelist, addFile, notification, withConfirmation } from "../components/Notifications";
@@ -46,7 +46,7 @@ class CodelistManager extends React.Component {
             projectData: projectData,
             showAddNewLineComponent: false,
             searchCriteria: "all",
-            searchValue: "",
+            searchValue: ""
         };
 
         let linesSituationMap = this.createLinesSituationMap();
@@ -76,7 +76,7 @@ class CodelistManager extends React.Component {
 
             map[lineId] = {
                 editing: false,
-                hasFile: hasFile,
+                hasFile: hasFile
             };
         }
 
@@ -91,12 +91,12 @@ class CodelistManager extends React.Component {
         if (searchValue === "" || searchCriteria === undefined) {
             this.setState({
                 searchCriteria: "all",
-                searchValue: "",
+                searchValue: ""
             });
         } else {
             this.setState({
                 searchCriteria: searchCriteria,
-                searchValue: searchValue,
+                searchValue: searchValue
             });
         }
     }
@@ -487,11 +487,18 @@ class CodelistManager extends React.Component {
             for (let i = 0; i < remarks.length; i++) {
                 const remark = remarks[i];
                 const traco = remark["traco"];
+                
                 if (traco === this.filter) {
-                    if (valor.includes(searchValue)) return true;
+                    if (valor.includes(searchValue)){
+                        return true;
+                    }
+
                 }
+
             }
+
         }
+
         return false;
     }
 
@@ -783,7 +790,13 @@ class CodelistManager extends React.Component {
                                 {linhaData["sectionNumber"]}
                             </td>
                             <td className="border border-gray-300">
+                                {linhaData["sectionName"]}
+                            </td>
+                            <td className="border border-gray-300">
                                 {linhaData["subsectionNumber"]}
+                            </td>
+                            <td className="border border-gray-300">
+                                {linhaData["subsectionName"]}
                             </td>
                             <td className="border border-gray-300">
                                 {linhaData["blockNumber"]}
@@ -884,7 +897,13 @@ class CodelistManager extends React.Component {
                             Nº seção
                         </th>
                         <th className="border border-gray-300 bg-yellow-200">
+                            Seção
+                        </th>
+                        <th className="border border-gray-300 bg-yellow-200">
                             Nº subseção
+                        </th>
+                        <th className="border border-gray-300 bg-yellow-200">
+                            Subseção
                         </th>
                         <th className="border border-gray-300 bg-yellow-200">
                             Nº bloco

@@ -105,12 +105,20 @@ public class CodelistBuilder {
 					if(type instanceof CodelistColumn) {
 						CodelistColumn columnType = (CodelistColumn) type;
 						switch (columnType) {
-							case SECAO:
+							case N_SECAO:
 								linha.setSectionNumber(cellValue);
 	
 								break;
-							case SUB_SECAO:
+							case NOME_SECAO:
+								linha.setSectionName(cellValue);
+	
+								break;
+							case N_SUB_SECAO:
 								linha.setSubsectionNumber(cellValue);
+	
+								break;
+							case NOME_SUB_SECAO:
+								linha.setSubsectionName(cellValue);
 	
 								break;
 							case BLOCK:
@@ -204,7 +212,7 @@ public class CodelistBuilder {
 			CodelistColumn columnType = null;
 			
 			for(CodelistColumn codelistEnum : CodelistColumn.values()){
-				if(codelistEnum.columnType.contains(cellValue)) {
+				if(codelistEnum.columnType.equals(cellValue)) {
 					columnType = codelistEnum;
 					
 				}
