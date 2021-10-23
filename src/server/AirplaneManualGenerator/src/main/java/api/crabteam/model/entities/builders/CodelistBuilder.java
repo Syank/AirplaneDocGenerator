@@ -105,12 +105,20 @@ public class CodelistBuilder {
 					if(type instanceof CodelistColumn) {
 						CodelistColumn columnType = (CodelistColumn) type;
 						switch (columnType) {
-							case SECAO:
+							case N_SECAO:
 								linha.setSectionNumber(cellValue);
 	
 								break;
-							case SUB_SECAO:
+							case NOME_SECAO:
+								linha.setSectionName(cellValue);
+	
+								break;
+							case N_SUB_SECAO:
 								linha.setSubsectionNumber(cellValue);
+	
+								break;
+							case NOME_SUB_SECAO:
+								linha.setSubsectionName(cellValue);
 	
 								break;
 							case BLOCK:
@@ -173,12 +181,32 @@ public class CodelistBuilder {
 				
 			}
 			
-			this.codelist.addLinha(linha);
+			if(isValidLine(linha)) {
+				this.codelist.addLinha(linha);
+				
+			}else {
+				throw new Exception("A codelist contêm linhas mal formatadas ou inválidas");
+			}
+			
 			
 		}
 		
 		this.codelist.setNome(projectName);
 		
+	}
+
+	private boolean isValidLine(Linha line) {
+		String subSectionNumber = line.getSubsectionNumber();
+		String subSectionName = line.getSubsectionName();
+		
+		// Ambos devem ter um valor, se não, ambos devem não ter um valor
+		if(subSectionNumber != null && subSectionName != null) {
+			return true;
+		}else if(subSectionNumber == null && subSectionName == null) {
+			return true;
+		}
+		
+		return false;
 	}
 
 	public Codelist getBuildedCodelist() {
@@ -204,7 +232,7 @@ public class CodelistBuilder {
 			CodelistColumn columnType = null;
 			
 			for(CodelistColumn codelistEnum : CodelistColumn.values()){
-				if(codelistEnum.columnType.contains(cellValue)) {
+				if(codelistEnum.columnType.equals(cellValue)) {
 					columnType = codelistEnum;
 					
 				}

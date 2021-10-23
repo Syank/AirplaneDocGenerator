@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Optional;
 
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +27,7 @@ import api.crabteam.model.entities.Projeto;
 import api.crabteam.model.entities.Remark;
 import api.crabteam.model.entities.builders.LinhaBuilder;
 import api.crabteam.model.entities.builders.RemarkBuilder;
+import api.crabteam.model.enumarations.EnvironmentVariables;
 import api.crabteam.model.repositories.CodelistRepository;
 import api.crabteam.model.repositories.LinhaRepository;
 import api.crabteam.model.repositories.ProjetoRepository;
@@ -81,7 +83,9 @@ public class LinhaController {
 		Linha linha = new Linha();
 		
 		linha.setSectionNumber(newLine.getSectionNumber());
+		linha.setSectionName(newLine.getSectionName());
 		linha.setSubsectionNumber(newLine.getSubsectionNumber());
+		linha.setSubsectionName(newLine.getSubsectionName());
 		linha.setBlockNumber(newLine.getBlockNumber());
 		linha.setBlockName(newLine.getBlockName());
 		linha.setCode(newLine.getCode());
@@ -141,6 +145,8 @@ public class LinhaController {
 			
 			return new ResponseEntity<Boolean>(true, HttpStatus.OK);
 		} catch (Exception e) {
+			e.printStackTrace();
+			
 			return new ResponseEntity<String>("A linha não foi adicionada à codelist.", HttpStatus.BAD_REQUEST);
 		}
 
@@ -167,11 +173,15 @@ public class LinhaController {
 		try {
 			Linha line = linhaRepository.findById(lineId).get();
 			
+			String[] oldLineFileInfo = FileVerifications.fileDestination(line, updatedLine.getCodelistName());
+			
 			line.setBlockName(updatedLine.getBlockName());
 			line.setBlockNumber(updatedLine.getBlockNumber());
 			line.setCode(updatedLine.getCode());
 			line.setSectionNumber(updatedLine.getSectionNumber());
+			line.setSectionName(updatedLine.getSectionName());
 			line.setSubsectionNumber(updatedLine.getSubsectionNumber());
+			line.setSubsectionName(updatedLine.getSubsectionName());
 			
 			ArrayList<Remark> newRemarks = new ArrayList<Remark>();
 			
@@ -199,6 +209,24 @@ public class LinhaController {
 			
 			line.setRemarks(newRemarks);
 			
+			String[] lineFileNewInfo = FileVerifications.fileDestination(line, updatedLine.getCodelistName());
+			
+			String oldFileAbsolutePathName = oldLineFileInfo[0] + oldLineFileInfo[1];
+			String newFileAbsolutePathName = lineFileNewInfo[0];
+			
+			File oldFile = new File(oldFileAbsolutePathName);
+			File newFile = new File(newFileAbsolutePathName);
+			
+			FileUtils.copyFileToDirectory(oldFile, newFile);
+			oldFile.delete();
+			
+			File rootProjectFolder = new File(EnvironmentVariables.PROJECTS_FOLDER.getValue() + "\\" + updatedLine.getCodelistName() + "\\Master");
+			
+			FileVerifications.deleteEmptyFolders(rootProjectFolder);
+			
+			File newNewFile = new File(newFileAbsolutePathName + oldLineFileInfo[1]);
+			newNewFile.renameTo(new File(newFileAbsolutePathName + lineFileNewInfo[1]));
+			
 			linhaRepository.save(line);
 			
 			Projeto project = projectRepository.findByName(updatedLine.getCodelistName());
@@ -214,7 +242,9 @@ public class LinhaController {
 			projectRepository.save(project);
 			
 		}catch (Exception e) {
-			return new ResponseEntity<String>("A linha não foi atualizada.", HttpStatus.BAD_REQUEST);
+			e.printStackTrace();
+			
+			return new ResponseEntity<String>("A linha não foi atualizada", HttpStatus.BAD_REQUEST);
 		}
 
 		return new ResponseEntity<Boolean>(true, HttpStatus.OK);
@@ -234,8 +264,9 @@ public class LinhaController {
 	public ResponseEntity<?> deleteLine(@PathVariable int line) {
 		try {
 			linhaRepository.deleteById(line);
+			
 		} catch (Exception e) {
-			return new ResponseEntity<String>("A linha não foi deletada.", HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>("A linha não foi deletada", HttpStatus.BAD_REQUEST);
 		}
 
 		return new ResponseEntity<Boolean>(true, HttpStatus.OK);
@@ -286,4 +317,5 @@ public class LinhaController {
 
 		return new ResponseEntity<Boolean>(true, HttpStatus.OK);
 	}
+	
 }

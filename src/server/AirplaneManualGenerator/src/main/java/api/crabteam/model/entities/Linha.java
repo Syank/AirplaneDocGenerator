@@ -25,8 +25,14 @@ public class Linha {
 	@Column(nullable = false)
 	private String sectionNumber;
 	
+	@Column(nullable = false)
+	private String sectionName;
+	
 	@Column
 	private String subsectionNumber;
+	
+	@Column
+	private String subsectionName;
 	
 	@Column(nullable = false)
 	private String blockNumber;
@@ -110,6 +116,22 @@ public class Linha {
 	
 	public void addRemark(Remark remark) {
 		this.remarks.add(remark);
+	}
+
+	public String getSectionName() {
+		return sectionName;
+	}
+
+	public void setSectionName(String sectionName) {
+		this.sectionName = sectionName;
+	}
+
+	public String getSubsectionName() {
+		return subsectionName;
+	}
+
+	public void setSubsectionName(String subsectionName) {
+		this.subsectionName = subsectionName;
 	}
 
 }

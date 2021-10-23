@@ -23,14 +23,14 @@ public class FileVerifications {
 	public static String[] fileDestination (Linha linha, String codelistName) {
 		
 		String sectionNumber = linha.getSectionNumber();
-		String sectionName = "Section Name";
+		String sectionName = linha.getSectionName();
 		String blockNumber = linha.getBlockNumber();
 		String blockName = linha.getBlockName();
 		String code = linha.getCode();
-		String subsectionNumber = "";
-		String subsectionName = "";
+		String subsectionNumber = linha.getSubsectionNumber();
+		String subsectionName = linha.getSubsectionName();
 		
-		String fileName = codelistName.concat("-").concat(blockNumber).concat("-");
+		String fileName = codelistName.concat("-").concat(sectionNumber).concat("-");
 		String fileExtension = ".pdf";
 		String strFilePath = EnvironmentVariables.PROJECTS_FOLDER.getValue()
 							.concat("/")
@@ -42,9 +42,9 @@ public class FileVerifications {
 							.concat("/");
 		
 		// Verifying subsection
-		if (!(linha.getSubsectionNumber() == null)) {
+		if (linha.getSubsectionNumber() != null) {
 			subsectionNumber = linha.getSubsectionNumber();
-			subsectionName = "Subsection Name";
+			subsectionName = linha.getSubsectionName();
 			
 			fileName = fileName.concat(subsectionNumber).concat("-");
 			strFilePath = strFilePath
@@ -53,15 +53,16 @@ public class FileVerifications {
 							.concat(subsectionName)
 							.concat("/");
 		}
-		// -------------------
+		
 		fileName = fileName.concat(blockNumber).concat("c").concat(code).concat(fileExtension);
+		
 		strFilePath = strFilePath.concat(blockNumber)
 								 .concat(" ")
 								 .concat(blockName)
 								 .concat("/");
 		
-		
 		String[] fileInfos = {strFilePath, fileName};
+		
 		return fileInfos;
 	}
 	
@@ -102,6 +103,38 @@ public class FileVerifications {
 	 */
 	public static void renameProjectFiles (File projectPath, String newProjectName) throws IOException {
 		getSubfolders(projectPath, newProjectName);
+	}
+	
+	/**
+	 * Excluí as pastas vazias de um dado diretório
+	 * 
+	 * @param directory - Diretório para verificar as pastas vazias
+	 * @author Rafael Furtado
+	 */
+	public static void deleteEmptyFolders(File directory) {
+	    File[] contents = directory.listFiles();
+	    
+	    if(contents.length == 0) {
+	    	directory.delete();
+	    	
+	    }else {
+		    for (int i = 0; i < contents.length; i++) {
+				File content = contents[i];
+				
+				if(content.isDirectory()) {
+					deleteEmptyFolders(content);
+					
+					if(content.listFiles() != null && content.listFiles().length == 0) {
+						content.delete();
+						
+					}
+					
+				}
+				
+			}
+		    
+	    }
+
 	}
 
 }

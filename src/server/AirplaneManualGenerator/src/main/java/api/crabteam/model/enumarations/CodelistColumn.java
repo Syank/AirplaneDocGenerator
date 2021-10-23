@@ -1,8 +1,10 @@
 package api.crabteam.model.enumarations;
 
 public enum CodelistColumn {
-	SECAO("Nº SEÇÃO"), 
-	SUB_SECAO("Nº SUB SEÇÃO"),
+	N_SECAO("Nº SEÇÃO"),
+	NOME_SECAO("SEÇÃO"),
+	N_SUB_SECAO("Nº SUB SEÇÃO"),
+	NOME_SUB_SECAO("SUB SEÇÃO"),
 	BLOCK("Nº BLOCK"), 
 	BLOCK_NAME("BLOCK NAME"),
 	CODE("CODE"), 

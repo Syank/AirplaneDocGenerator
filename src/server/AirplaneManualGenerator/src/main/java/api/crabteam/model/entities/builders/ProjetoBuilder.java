@@ -31,8 +31,7 @@ public class ProjetoBuilder {
 			
 			this.isPersisted = persistProjeto(projeto);
 			
-		}
-		else {
+		}else {
 			try {
 				CodelistBuilder codelistBuilder = new CodelistBuilder(codelistFile, name);
 				
@@ -42,10 +41,11 @@ public class ProjetoBuilder {
 				
 				this.isPersisted = persistProjeto(projeto);
 				
-			}
-			catch (Exception e) {
+			}catch (Exception e) {
+				e.printStackTrace();
+				
 				this.failMessage = e.getMessage();
-				System.err.println(e);
+				
 			}
 			
 		}
@@ -70,6 +70,8 @@ public class ProjetoBuilder {
 			
 			return true;
 		}catch (Exception e) {
+			e.printStackTrace();
+			
 			return false;
 		}
 		

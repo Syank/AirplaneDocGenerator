@@ -5,7 +5,7 @@ import {
     faPen,
     faFileAlt,
     faCheck,
-    faTimes,
+    faTimes
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { addCodelist, addFile, notification, withConfirmation } from "../components/Notifications";
@@ -46,7 +46,7 @@ class CodelistManager extends React.Component {
             projectData: projectData,
             showAddNewLineComponent: false,
             searchCriteria: "all",
-            searchValue: "",
+            searchValue: ""
         };
 
         let linesSituationMap = this.createLinesSituationMap();
@@ -76,7 +76,7 @@ class CodelistManager extends React.Component {
 
             map[lineId] = {
                 editing: false,
-                hasFile: hasFile,
+                hasFile: hasFile
             };
         }
 
@@ -91,12 +91,12 @@ class CodelistManager extends React.Component {
         if (searchValue === "" || searchCriteria === undefined) {
             this.setState({
                 searchCriteria: "all",
-                searchValue: "",
+                searchValue: ""
             });
         } else {
             this.setState({
                 searchCriteria: searchCriteria,
-                searchValue: searchValue,
+                searchValue: searchValue
             });
         }
     }
@@ -143,13 +143,25 @@ class CodelistManager extends React.Component {
                                     className="text-center mb-2 border-b-2 outline-none focus:bg-gray-200"
                                     type="text"
                                     placeholder="Seção"
-                                    id="newLineSection"
+                                    id="newLineSectionNumber"
+                                ></input>
+                                <input
+                                    className="text-center mb-2 border-b-2 outline-none focus:bg-gray-200"
+                                    type="text"
+                                    placeholder="Nome da seção"
+                                    id="newLineSectionName"
                                 ></input>
                                 <input
                                     className="text-center mb-2 border-b-2 outline-none focus:bg-gray-200"
                                     type="text"
                                     placeholder="Subseção"
-                                    id="newLineSubsection"
+                                    id="newLineSubsectionNumber"
+                                ></input>
+                                <input
+                                    className="text-center mb-2 border-b-2 outline-none focus:bg-gray-200"
+                                    type="text"
+                                    placeholder="Nome da subseção"
+                                    id="newLineSubsectionName"
                                 ></input>
                                 <input
                                     className="text-center mb-2 border-b-2 outline-none focus:bg-gray-200"
@@ -207,11 +219,23 @@ class CodelistManager extends React.Component {
         return component;
     }
 
+    isValidSubsectionFields(subSectionNumber, subSectionName){
+		// Ambos devem ter um valor, se não, ambos devem não ter um valor
+		if(subSectionNumber !== "" && subSectionName !== "") {
+			return true;
+		}else if(subSectionNumber === "" && subSectionName === "") {
+			return true;
+		}
+		
+		return false;
+    }
+
     async createNewLine() {
-        let newSection = document.getElementById("newLineSection").value;
-        let newSubSection = document.getElementById("newLineSubsection").value;
-        let newBlockNumber =
-            document.getElementById("newLineBlockNumber").value;
+        let newSectionNumber = document.getElementById("newLineSectionNumber").value;
+        let newSectionName = document.getElementById("newLineSectionName").value;
+        let newSubSectionNumber = document.getElementById("newLineSubsectionNumber").value;
+        let newSubSectionName = document.getElementById("newLineSubsectionName").value;
+        let newBlockNumber = document.getElementById("newLineBlockNumber").value;
         let newBlockName = document.getElementById("newLineBlockName").value;
         let newCode = document.getElementById("newLineCode").value;
         let newRemarks = document.getElementById("newLineRemarks").value;
@@ -223,6 +247,12 @@ class CodelistManager extends React.Component {
                 "Um momento! 🤨",
                 "Para criar uma nova linha, é necessário também atribuir um arquivo a ela, por favor, escolha um"
             );
+        } else if(newSectionNumber === "" || newSectionName === "" || newBlockNumber === "" || newBlockName === "" || newCode === ""){
+            notification(
+                "error",
+                "Um momento! 🤨",
+                "Para criar uma nova linha, com exceção dos campos \"Subseção\" e \"Nome da subção\", todos os outros são obrigatórios, por favor, os preencha"
+            );
         } else if (!this.checkIsValidRemarksText(newRemarks)) {
             notification(
                 "error",
@@ -231,19 +261,27 @@ class CodelistManager extends React.Component {
                     "Onde X são os números do traço. Múltiplos remarks devem ser separados por vírgula, como: " +
                     "-XX (APELIDO), -XX (APELIDO)"
             );
-        } else {
+        }else if (!this.isValidSubsectionFields(newSubSectionNumber, newSubSectionName)){
+            notification("error", "Um momento! 🤨",
+                "Os campos subseção e nome da subseção são opcionais, mas caso um deles seja preenchido, o outro também deverá ser");
+
+        }else {
             let formData = new FormData();
-            formData.append("sectionNumber", newSection);
-            formData.append("subsectionNumber", newSubSection);
+            formData.append("sectionNumber", newSectionNumber);
+            formData.append("sectionName", newSectionName);
             formData.append("blockNumber", newBlockNumber);
             formData.append("blockName", newBlockName);
             formData.append("code", newCode);
             formData.append("remarksText", newRemarks);
             formData.append("lineFile", file);
-            formData.append(
-                "codelistName",
-                this.state["projectData"]["codelist"]["nome"]
-            );
+            formData.append("codelistName", this.state["projectData"]["codelist"]["nome"]);
+
+            // Caso o usuário forneça informações de subseção, adiciona elas ao formulário
+            if(newSubSectionNumber !== ""){
+                formData.append("subsectionNumber", newSubSectionNumber);
+                formData.append("subsectionName", newSubSectionName);
+
+            }
 
             let serverRequester = new ServerRequester("http://localhost:8080");
 
@@ -487,11 +525,18 @@ class CodelistManager extends React.Component {
             for (let i = 0; i < remarks.length; i++) {
                 const remark = remarks[i];
                 const traco = remark["traco"];
+                
                 if (traco === this.filter) {
-                    if (valor.includes(searchValue)) return true;
+                    if (valor.includes(searchValue)){
+                        return true;
+                    }
+
                 }
+
             }
+
         }
+
         return false;
     }
 
@@ -680,22 +725,47 @@ class CodelistManager extends React.Component {
     async updateLine(event) {
         let lineId = this.getLineId(event);
 
-        let newSection = document.getElementById(
-            "line-sectionNumber-" + lineId
-        ).value;
-        let newSubSection = document.getElementById(
-            "line-subsectionNumber-" + lineId
-        ).value;
-        let newBlockNumber = document.getElementById(
-            "line-blockNumber-" + lineId
-        ).value;
-        let newBlockName = document.getElementById(
-            "line-blockName-" + lineId
-        ).value;
-        let newCode = document.getElementById("line-code-" + lineId).value;
-        let newRemarks = document.getElementById(
-            "line-remarks-" + lineId
-        ).value;
+        let sectionNumberInput = document.getElementById("line-sectionNumber-" + lineId);
+        let sectionNameInput = document.getElementById("line-sectionName-" + lineId);
+        let subsectionNumberInput = document.getElementById("line-subsectionNumber-" + lineId);
+        let subsectionNameInput = document.getElementById("line-subsectionName-" + lineId);
+        let blockNumberInput = document.getElementById("line-blockNumber-" + lineId);
+        let blockNameInput = document.getElementById("line-blockName-" + lineId);
+        let codeInput = document.getElementById("line-code-" + lineId);
+        let remarksInput = document.getElementById("line-remarks-" + lineId);
+
+        let newSectionNumber = sectionNumberInput.value;
+        if(newSectionNumber === ""){
+            newSectionNumber = sectionNumberInput.placeholder;
+        }
+
+        let newSectionName = sectionNameInput.value;
+        if(newSectionName === ""){
+            newSectionName = sectionNameInput.placeholder;
+        }
+
+        let newSubSectionNumber = subsectionNumberInput.value;
+        let newSubSectionName = subsectionNameInput.value;
+
+        let newBlockNumber = blockNumberInput.value;
+        if(newBlockNumber === ""){
+            newBlockNumber = blockNumberInput.placeholder;
+        }
+
+        let newBlockName = blockNameInput.value;
+        if(newBlockName === ""){
+            newBlockName = blockNameInput.placeholder;
+        }
+
+        let newCode = codeInput.value;
+        if(newCode === ""){
+            newCode = codeInput.placeholder;
+        }
+
+        let newRemarks = remarksInput.value;
+        if(newRemarks === ""){
+            newRemarks = remarksInput.placeholder;
+        }
 
         let isValidRemarks = this.checkIsValidRemarksText(newRemarks);
 
@@ -707,16 +777,26 @@ class CodelistManager extends React.Component {
                     "Onde X são os números do traço. Múltiplos remarks devem ser separados por vírgula, como: " +
                     "-XX (APELIDO), -XX (APELIDO)"
             );
+        } else if(!this.isValidSubsectionFields(newSubSectionNumber, newSubSectionName)){
+            notification("error", "Um momento! 🤨",
+                "Os campos subseção e nome da subseção são opcionais, mas caso um deles seja preenchido, o outro também deverá ser");
+
         } else {
             let updatedLine = {
                 id: lineId,
-                sectionNumber: newSection,
-                subsectionNumber: newSubSection,
+                sectionNumber: newSectionNumber,
+                sectionName: newSectionName,
                 blockNumber: newBlockNumber,
                 blockName: newBlockName,
                 code: newCode,
                 remarksText: newRemarks,
                 codelistName: this.state["projectData"]["codelist"]["nome"]
+            }
+
+            if(newSubSectionNumber !== ""){
+                updatedLine["subsectionNumber"] = newSubSectionNumber;
+                updatedLine["subsectionName"] = newSubSectionName;
+
             }
 
             let serverRequester = new ServerRequester("http://localhost:8080");
@@ -783,7 +863,13 @@ class CodelistManager extends React.Component {
                                 {linhaData["sectionNumber"]}
                             </td>
                             <td className="border border-gray-300">
+                                {linhaData["sectionName"]}
+                            </td>
+                            <td className="border border-gray-300">
                                 {linhaData["subsectionNumber"]}
+                            </td>
+                            <td className="border border-gray-300">
+                                {linhaData["subsectionName"]}
                             </td>
                             <td className="border border-gray-300">
                                 {linhaData["blockNumber"]}
@@ -822,8 +908,24 @@ class CodelistManager extends React.Component {
                                 <input
                                     className="w-full text-center"
                                     type="text"
+                                    id={"line-sectionName-" + id}
+                                    placeholder={linhaData["sectionName"]}
+                                ></input>
+                            </td>
+                            <td className="border border-gray-300">
+                                <input
+                                    className="w-full text-center"
+                                    type="text"
                                     id={"line-subsectionNumber-" + id}
                                     placeholder={linhaData["subsectionNumber"]}
+                                ></input>
+                            </td>
+                            <td className="border border-gray-300">
+                                <input
+                                    className="w-full text-center"
+                                    type="text"
+                                    id={"line-subsectionName-" + id}
+                                    placeholder={linhaData["subsectionName"]}
                                 ></input>
                             </td>
                             <td className="border border-gray-300">
@@ -884,7 +986,13 @@ class CodelistManager extends React.Component {
                             Nº seção
                         </th>
                         <th className="border border-gray-300 bg-yellow-200">
+                            Seção
+                        </th>
+                        <th className="border border-gray-300 bg-yellow-200">
                             Nº subseção
+                        </th>
+                        <th className="border border-gray-300 bg-yellow-200">
+                            Subseção
                         </th>
                         <th className="border border-gray-300 bg-yellow-200">
                             Nº bloco

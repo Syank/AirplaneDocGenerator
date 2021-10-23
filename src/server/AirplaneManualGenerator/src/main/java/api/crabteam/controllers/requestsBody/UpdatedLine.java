@@ -5,7 +5,9 @@ public class UpdatedLine {
 	private int id;
 	
 	private String sectionNumber;
+	private String sectionName;
 	private String subsectionNumber;
+	private String subsectionName;
 	private String blockNumber;
 	private String blockName;
 	private String code;
@@ -76,6 +78,22 @@ public class UpdatedLine {
 
 	public void setCodelistName(String codelistName) {
 		this.codelistName = codelistName;
+	}
+
+	public String getSectionName() {
+		return sectionName;
+	}
+
+	public void setSectionName(String sectionName) {
+		this.sectionName = sectionName;
+	}
+
+	public String getSubsectionName() {
+		return subsectionName;
+	}
+
+	public void setSubsectionName(String subsectionName) {
+		this.subsectionName = subsectionName;
 	}
 	
 }
