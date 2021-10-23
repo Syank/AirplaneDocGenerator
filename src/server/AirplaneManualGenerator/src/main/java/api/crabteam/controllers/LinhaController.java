@@ -2,8 +2,6 @@ package api.crabteam.controllers;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Optional;
@@ -29,6 +27,7 @@ import api.crabteam.model.entities.Projeto;
 import api.crabteam.model.entities.Remark;
 import api.crabteam.model.entities.builders.LinhaBuilder;
 import api.crabteam.model.entities.builders.RemarkBuilder;
+import api.crabteam.model.enumarations.EnvironmentVariables;
 import api.crabteam.model.repositories.CodelistRepository;
 import api.crabteam.model.repositories.LinhaRepository;
 import api.crabteam.model.repositories.ProjetoRepository;
@@ -220,6 +219,10 @@ public class LinhaController {
 			
 			FileUtils.copyFileToDirectory(oldFile, newFile);
 			oldFile.delete();
+			
+			File rootProjectFolder = new File(EnvironmentVariables.PROJECTS_FOLDER.getValue() + "\\" + updatedLine.getCodelistName() + "\\Master");
+			
+			FileVerifications.deleteEmptyFolders(rootProjectFolder);
 			
 			File newNewFile = new File(newFileAbsolutePathName + oldLineFileInfo[1]);
 			newNewFile.renameTo(new File(newFileAbsolutePathName + lineFileNewInfo[1]));

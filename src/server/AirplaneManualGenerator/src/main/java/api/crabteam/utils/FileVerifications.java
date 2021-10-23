@@ -104,5 +104,37 @@ public class FileVerifications {
 	public static void renameProjectFiles (File projectPath, String newProjectName) throws IOException {
 		getSubfolders(projectPath, newProjectName);
 	}
+	
+	/**
+	 * Excluí as pastas vazias de um dado diretório
+	 * 
+	 * @param directory - Diretório para verificar as pastas vazias
+	 * @author Rafael Furtado
+	 */
+	public static void deleteEmptyFolders(File directory) {
+	    File[] contents = directory.listFiles();
+	    
+	    if(contents.length == 0) {
+	    	directory.delete();
+	    	
+	    }else {
+		    for (int i = 0; i < contents.length; i++) {
+				File content = contents[i];
+				
+				if(content.isDirectory()) {
+					deleteEmptyFolders(content);
+					
+					if(content.listFiles() != null && content.listFiles().length == 0) {
+						content.delete();
+						
+					}
+					
+				}
+				
+			}
+		    
+	    }
+
+	}
 
 }
