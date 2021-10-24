@@ -33,20 +33,26 @@ class CodelistManager extends React.Component {
         this.addFileToLine = this.addFileToLine.bind(this);
         this.importCodelist = this.importCodelist.bind(this);
         this.toggleAddNewLine = this.toggleAddNewLine.bind(this);
-        this.closeAddNewLineComponent =
-            this.closeAddNewLineComponent.bind(this);
+        this.closeAddNewLineComponent = this.closeAddNewLineComponent.bind(this);
         this.createNewLine = this.createNewLine.bind(this);
         this.search = this.search.bind(this);
+        this.toggleRevision = this.toggleRevision.bind(this);
+        this.confirmRevision = this.toggleConfirmRevision.bind(this);
+        this.getConfirmRevisionComponent = this.getConfirmRevisionComponent.bind(this);
+        this.toggleConfirmRevision = this.toggleConfirmRevision.bind(this);
 
         let projectData = this.props.projectData;
 
         this.newLineComponentId = "newLineComponent";
+        this.confirmRevisionId = "confirmRevisionComponent";
 
         this.state = {
             projectData: projectData,
             showAddNewLineComponent: false,
             searchCriteria: "all",
-            searchValue: ""
+            searchValue: "",
+            revision: false,
+            confirmRevision: false
         };
 
         let linesSituationMap = this.createLinesSituationMap();
@@ -333,15 +339,41 @@ class CodelistManager extends React.Component {
         }
     }
 
+    getConfirmRevisionComponent(){
+        let component = (
+            <div id={this.confirmRevisionId} className="z-20 w-full h-full absolute flex flex-row items-center justify-center backdrop-filter backdrop-blur-blurLogin" onClick={this.toggleConfirmRevision}>
+                <div className="h-4/6 w-5/6 flex flex-col items-center justify-center bg-white shadow-registerUser">
+                    <div className="w-5/6 text-center pt-3 pb-5 border-b-2 border-opacity-50 border-black">
+                        <h1 className="text-2xl	font-bold text-center leading-loose">
+                            Finalização da revisão
+                        </h1>
+                        <p>
+                            Adicione uma descrição para a revisão e atribua às linhas escolhidas 
+                            os novos arquivos desta revisão
+                        </p>
+                    </div>
+                    <div className="w-full h-full flex flex-col p-5">
+                        <div className="w-full text-center">
+                            <h2 className="font-bold">Descrição da revisão</h2>
+                            <textarea id="revisionDescriptionTextArea" className="w-2/3 h-20 resize-none border-2 border-black border-opacity-60"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+
+        return component;
+    }
+
     getCodelistManagerComponent() {
         let component = (
-            <div
-                id={this.id}
-                className="z-10 w-full h-full absolute flex flex-row items-center justify-center backdrop-filter backdrop-blur-blurLogin"
-                onClick={this.close}
-            >
+            <div id={this.id} className="z-10 w-full h-full absolute flex flex-row items-center justify-center backdrop-filter backdrop-blur-blurLogin" onClick={this.close}>
                 {this.state["showAddNewLineComponent"] &&
-                    this.getAddNewLineComponent()}
+                    this.getAddNewLineComponent()
+                }
+                {this.state["confirmRevision"] &&
+                    this.getConfirmRevisionComponent()
+                }
                 <div className="h-5/6 w-5/6 bg-white">{this.getContent()}</div>
             </div>
         );
@@ -471,28 +503,61 @@ class CodelistManager extends React.Component {
         let showAddNewLineComponent = this.state["showAddNewLineComponent"];
 
         this.setState({ showAddNewLineComponent: !showAddNewLineComponent });
+
+    }
+
+    toggleRevision(){
+        let revisionState = this.state["revision"];
+
+        this.setState({revision: !revisionState});
+
+    }
+
+    toggleConfirmRevision(event){
+        let confirmRevision = this.state["confirmRevision"];
+
+        if(confirmRevision){
+            let clickTargetId = event.target.id;
+
+            if (clickTargetId === this.confirmRevisionId) {
+                this.setState({confirmRevision: !confirmRevision});
+            }
+
+        }else{
+            this.setState({confirmRevision: !confirmRevision});
+
+        }
+
     }
 
     getManageButtons() {
         let component = (
-            <div className="flex flex-row w-full">
+            <div className="flex flex-row w-full justify-between">
                 <div>
                     <Button
                         text="Nova Linha"
                         onClick={this.toggleAddNewLine}
                         type="codelistControl"
                     ></Button>
+                    <Button
+                        text="Exportar Codelist"
+                        type="codelistControl"
+                        onClick={this.exportCodelist}
+                    ></Button>
+                    <Button
+                        text="Importar Codelist"
+                        type="codelistControl"
+                        onClick={this.importCodelist}
+                    ></Button>
                 </div>
-                <Button
-                    text="Exportar Codelist"
-                    type="codelistControl"
-                    onClick={this.exportCodelist}
-                ></Button>
-                <Button
-                    text="Importar Codelist"
-                    type="codelistControl"
-                    onClick={this.importCodelist}
-                ></Button>
+                {!this.state["revision"] ?
+                    <Button text="Criar revisão" onClick={this.toggleRevision} type="confirm"/>
+                        :
+                    <div>
+                        <Button text="Confirmar revisão" onClick={this.toggleConfirmRevision} type="confirm"/>
+                        <Button text="Cancelar revisão" onClick={this.toggleRevision} type="cancel"/>
+                    </div>
+                }
             </div>
         );
 
@@ -883,12 +948,14 @@ class CodelistManager extends React.Component {
                             <td className="border border-gray-300">
                                 {remarks}
                             </td>
-                            <td
-                                id={"actions-line-" + id}
-                                className="border border-gray-300"
-                            >
+                            <td id={"actions-line-" + id} className="border border-gray-300">
                                 {actions}
                             </td>
+                            {this.state["revision"] &&
+                                <td className="border border-gray-300">
+                                    <input type="checkbox" id={"revision-" + lineId}></input>
+                                </td>
+                            }
                         </tr>
                     );
                 } else {
@@ -1009,6 +1076,11 @@ class CodelistManager extends React.Component {
                         <th className="border border-gray-300 bg-accent text-white">
                             Ações
                         </th>
+                        {this.state["revision"] &&
+                            <th className="border border-gray-300 bg-yellow-600 text-white">
+                                Revisar
+                            </th>
+                        }
                     </tr>
                 </thead>
                 <tbody>{this.getRows()}</tbody>
