@@ -1,5 +1,7 @@
 package api.crabteam.model.entities;
 
+import java.time.LocalDate;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -29,6 +31,9 @@ public class Projeto {
 	
 	@Column(columnDefinition = "text")
 	private String descricao;
+	
+	@Column(columnDefinition = "date default current_date", nullable = false, insertable = false)
+	private LocalDate creationDate;
 	
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "codelist_id", referencedColumnName = "id")
@@ -88,6 +93,10 @@ public class Projeto {
 
 	public void setSituation(ProjectSituation situation) {
 		this.situation = situation;
+	}
+
+	public LocalDate getCreationDate() {
+		return creationDate;
 	}
 	
 }
