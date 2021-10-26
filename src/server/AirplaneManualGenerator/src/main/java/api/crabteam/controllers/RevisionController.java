@@ -39,6 +39,7 @@ public class RevisionController {
 			@RequestParam List<MultipartFile> revisedLinesFiles,
 			@RequestParam List<Integer> revisedLinesIds){
 		Projeto project = projetoRepository.findByName(projectName);
+		int projectId = project.getId();
 
 		int lastRevisionVersion = project.getLastRevision().getVersion();
 		String actualRevision = String.valueOf(lastRevisionVersion + 1);
@@ -79,9 +80,11 @@ public class RevisionController {
 			newRevision.setDescription(revisionDescription);
 			newRevision.setVersion(lastRevisionVersion + 1);
 
-			project.addRevision(newRevision);
+			Projeto revProject = projetoRepository.findById(projectId).get();
 			
-			projetoRepository.save(project);
+			revProject.addRevision(newRevision);
+			
+			projetoRepository.save(revProject);
 			
 		}catch (Exception e) {
 			e.printStackTrace();

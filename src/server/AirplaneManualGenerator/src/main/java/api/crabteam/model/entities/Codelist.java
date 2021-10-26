@@ -1,7 +1,9 @@
 package api.crabteam.model.entities;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -26,7 +28,7 @@ public class Codelist {
 	
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@OrderBy("section_number, subsection_number, block_number, block_name, code")
-	private List<Linha> linhas = new ArrayList<Linha>();
+	private Set<Linha> linhas = new HashSet<Linha>();
 	
 	@OneToOne(mappedBy = "codelist")
 	private Projeto projeto;
@@ -48,11 +50,17 @@ public class Codelist {
 	}
 
 	public List<Linha> getLinhas() {
-		return linhas;
+		ArrayList<Linha> arrayList = new ArrayList<Linha>();
+		
+		arrayList.addAll(linhas);
+		
+		return arrayList;
 	}
 
 	public void setLinhas(List<Linha> linhas) {
-		this.linhas = linhas;
+		Set<Linha> set = new HashSet<Linha>(linhas);
+		
+		this.linhas = set;
 	}
 
 	public void addLinha(Linha newLine) {

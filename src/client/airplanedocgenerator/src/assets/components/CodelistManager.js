@@ -451,6 +451,7 @@ class CodelistManager extends React.Component {
 
             let formData = new FormData();
             formData.append("projectName", projectName);
+            formData.append("revisionDescription", revisionDescription);
 
             for (let i = 0; i < linesIds.length; i++) {
                 const lineId = linesIds[i];
@@ -598,7 +599,7 @@ class CodelistManager extends React.Component {
 
         let revisionFile = await addFile();
 
-        if(revisionFile !== undefined){
+        if(revisionFile !== undefined && revisionFile !== null){
             let confirmedRevisionFiles = this.state["revisionFiles"];
 
             confirmedRevisionFiles[id] = revisionFile;
