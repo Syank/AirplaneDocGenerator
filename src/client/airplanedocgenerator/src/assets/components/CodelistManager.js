@@ -415,7 +415,7 @@ class CodelistManager extends React.Component {
         return component;
     }
 
-    createRevision(){
+    async createRevision(){
         let filesToRevise = this.state["revisionFiles"];
         let revisionDescription = document.getElementById("revisionDescriptionTextArea").value;
         let projectName = this.state["projectData"]["nome"];
@@ -423,11 +423,13 @@ class CodelistManager extends React.Component {
         let selectedCheckboxes = document.querySelectorAll("input[type=checkbox]:checked");
 
         let revisionLinesOk = true;
+        let linesIds = []
 
         for (let i = 0; i < selectedCheckboxes.length; i++) {
             const checkbox = selectedCheckboxes[i];
 
             let lineId = checkbox.id.split("-")[3];
+            linesIds.push(lineId);
 
             if(filesToRevise[lineId] === undefined){
                 revisionLinesOk = false;
@@ -445,6 +447,32 @@ class CodelistManager extends React.Component {
         }
 
         if(revisionLinesOk && hasLinesToRevise){
+            let serverRequest = new ServerRequester("http://localhost:8080");
+
+            let formData = new FormData();
+            formData.append("projectName", projectName);
+
+            for (let i = 0; i < linesIds.length; i++) {
+                const lineId = linesIds[i];
+
+                formData.append("revisedLinesIds", lineId);
+                formData.append("revisedLinesFiles", filesToRevise[lineId]);
+                
+            }
+
+            let response = await serverRequest.doPost("/revision/newRevision", formData, "multipart/form-data");
+
+            if(response["responseJson"] === true){
+                notification("success", "Revisão criada com sucesso! 😊", 
+                "A nova revisão foi criada com sucesso, você pode consultá-la na interface de revisões, clicando no botão \"Revisões\" na tela de gerenciamento do projeto");
+
+                this.setState({confirmRevision: false, revision: false});
+
+            }else{
+                notification("error", "Falha ao criar revisão 🤕", 
+                "Ocorreu um erro interno ao criar a revisão, contate os administradores");
+
+            }
 
         }else{
             if(!hasLinesToRevise){
