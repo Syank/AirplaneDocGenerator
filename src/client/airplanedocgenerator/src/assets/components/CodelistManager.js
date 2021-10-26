@@ -466,8 +466,14 @@ class CodelistManager extends React.Component {
             if(response["responseJson"] === true){
                 notification("success", "Revisão criada com sucesso! 😊", 
                 "A nova revisão foi criada com sucesso, você pode consultá-la na interface de revisões, clicando no botão \"Revisões\" na tela de gerenciamento do projeto");
+                
+                let newData = await this.props.reloadData();
 
-                this.setState({confirmRevision: false, revision: false});
+                this.state["projectData"] = newData;
+
+                let linesSituation = this.createLinesSituationMap();
+
+                this.setState({confirmRevision: false, revision: false, linesSituation: linesSituation});
 
             }else{
                 notification("error", "Falha ao criar revisão 🤕", 
