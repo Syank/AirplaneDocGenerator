@@ -33,6 +33,7 @@ class CreationScreen extends React.Component {
         };
 
         this.goToCreateNewProjectScreen = this.goToCreateNewProjectScreen.bind(this);
+        this.goToImportProjectPage = this.goToImportProjectPage.bind(this);
     }
 
     /**
@@ -69,7 +70,7 @@ class CreationScreen extends React.Component {
      * @author Carolina Margiotti
      */
     goToImportProjectPage() {
-        notification("info", "Aguarde um pouco!", "Essa funcionalidade estará disponível em breve!");
+        this.props.navigation("importProjectScreen");
     }
 
     /**
