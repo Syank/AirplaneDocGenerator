@@ -1,6 +1,7 @@
 package api.crabteam.controllers;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,7 @@ import api.crabteam.model.enumarations.EnvironmentVariables;
 import api.crabteam.model.repositories.CodelistRepository;
 import api.crabteam.model.repositories.LinhaRepository;
 import api.crabteam.model.repositories.ProjetoRepository;
+import api.crabteam.utils.CodelistExporter;
 import api.crabteam.utils.ProjectHealthCheck;
 import api.crabteam.utils.ProjectSituation;
 import io.swagger.annotations.Api;
@@ -125,6 +127,20 @@ public class CodelistController {
 		
 		return new ResponseEntity<List<?>>(linhas, HttpStatus.OK);
 		
+	}
+	
+	@PostMapping("/export")
+	@ApiOperation("Export a codelist to a Excel file.")
+	@ApiResponses({
+        @ApiResponse(code = 200, message = "Codelist exported successfully."),
+        @ApiResponse(code = 500, message = "Something went wrong.")
+    })
+	public ResponseEntity<?> exportCodelist (@RequestParam (name = "codelistName") String codelistName) throws IOException {
+		
+		List<Linha> codelistLines = codelistRepository.findByName(codelistName).getLinhas();
+		CodelistExporter.generateCodelistFile(codelistName, codelistLines);
+		
+		return new ResponseEntity<String>("Success!", HttpStatus.OK);
 	}
 
 }

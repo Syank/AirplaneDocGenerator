@@ -11,10 +11,12 @@ public enum CodelistColumn {
 	REMARK("Remarks");
 	
 	public String columnType;
-
+	
 	CodelistColumn(String columnType) {
 		this.columnType = columnType;
-		
 	}
 	
+	public static CodelistColumn[] getValues() {
+		return CodelistColumn.values();
+	}
 }

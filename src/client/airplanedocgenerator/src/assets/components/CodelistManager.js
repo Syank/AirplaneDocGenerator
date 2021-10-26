@@ -459,12 +459,19 @@ class CodelistManager extends React.Component {
         }
     }
 
-    exportCodelist() {
-        notification(
-            "info",
-            "Aguarde um pouco! 🤓",
-            "Essa funcionalidade estará disponível em breve!"
+    async exportCodelist(event) {
+        let serverRequester = new ServerRequester("http://localhost:8080");
+    
+        let formData = new FormData();
+        formData.append("codelistName", document.getElementById("nomeProjeto").textContent);
+
+        let response = await serverRequester.doPost(
+            "/codelist/export",
+            formData,
+            "multipart/form-data"
         );
+
+        console.log(response);
     }
 
     toggleAddNewLine() {
