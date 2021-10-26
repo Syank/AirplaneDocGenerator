@@ -7,6 +7,7 @@ import Button from "../assets/components/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faFileAlt, faPen, faTimes } from "@fortawesome/free-solid-svg-icons";
 import CodelistManager from "../assets/components/CodelistManager";
+import ProjectRevision from "../assets/components/ProjectRevision";
 
 
 class ProjectAdministrationScreen extends React.Component{
@@ -30,6 +31,7 @@ class ProjectAdministrationScreen extends React.Component{
             editingProjectName: false,
             editingProjectDescription: false,
             showCodelist: false,
+            showRevisions: false,
             codelistFilter: "all"
         };
 
@@ -45,6 +47,8 @@ class ProjectAdministrationScreen extends React.Component{
         this.showCodelist = this.showCodelist.bind(this);
         this.hideCodelistManager = this.hideCodelistManager.bind(this);
         this.loadProjectData = this.loadProjectData.bind(this);
+        this.showRevisions = this.showRevisions.bind(this);
+        this.hideRevisions = this.hideRevisions.bind(this);
 
     }
 
@@ -171,7 +175,7 @@ class ProjectAdministrationScreen extends React.Component{
     }
 
     showRevisions(){
-        notification("info", "Aguarde um pouco! 🤓", "Essa funcionalidade estará disponível em breve!");
+        this.setState({showRevisions: true});
 
     }
 
@@ -416,6 +420,11 @@ class ProjectAdministrationScreen extends React.Component{
 
     }
 
+    hideRevisions(){
+        this.setState({showRevisions: false});
+
+    }
+
     getAdministrationScreen(){
         let selectProjectScreen = (
             <div id="contentDisplay" className="w-full h-full">
@@ -426,6 +435,9 @@ class ProjectAdministrationScreen extends React.Component{
                         projectData={this.state["projectData"]}
                         filter={this.state["codelistFilter"]}
                         hide={this.hideCodelistManager}/>
+                }
+                {this.state["showRevisions"] &&
+                    <ProjectRevision projectData={this.state["projectData"]} hide={this.hideRevisions}/>
                 }
                 <div
                     id="projectAdministrationScreen"

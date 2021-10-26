@@ -1,13 +1,22 @@
 package api.crabteam.model.entities;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.OrderBy;
 
 import api.crabteam.utils.ProjectHealthCheck;
 import api.crabteam.utils.ProjectSituation;
@@ -30,6 +39,9 @@ public class Projeto {
 	@Column(columnDefinition = "text")
 	private String descricao;
 	
+	@Column(columnDefinition = "date default current_date", nullable = false, insertable = false)
+	private LocalDate creationDate;
+	
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "codelist_id", referencedColumnName = "id")
 	private Codelist codelist;
@@ -38,12 +50,28 @@ public class Projeto {
 	@JoinColumn(name = "project_situation_id", referencedColumnName = "id")
 	private ProjectSituation situation;
 	
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OrderBy("creation_date")
+	@JoinColumn(name = "revision_id", referencedColumnName = "id")
+	private Set<Revisao> revisions = new HashSet<Revisao>();
+	
 	public Projeto() {
 		
 	}
 	
 	public Projeto(String nome) {
 		this.nome = nome;
+		
+		ProjectHealthCheck healthCheck = new ProjectHealthCheck(this);
+		
+		this.situation = healthCheck.getSituation();
+		
+		Revisao originalRevision = new Revisao();
+		
+		originalRevision.setDescription("Versão original do projeto");
+		originalRevision.setVersion(0);
+		
+		this.addRevision(originalRevision);
 		
 	}
 	
@@ -55,6 +83,13 @@ public class Projeto {
 		ProjectHealthCheck healthCheck = new ProjectHealthCheck(this);
 		
 		this.situation = healthCheck.getSituation();
+		
+		Revisao originalRevision = new Revisao();
+		
+		originalRevision.setDescription("Versão original do projeto");
+		originalRevision.setVersion(0);
+		
+		this.addRevision(originalRevision);
 		
 	}
 
@@ -88,6 +123,39 @@ public class Projeto {
 
 	public void setSituation(ProjectSituation situation) {
 		this.situation = situation;
+	}
+
+	public LocalDate getCreationDate() {
+		return creationDate;
+	}
+	
+	public Set<Revisao> getRevisions() {
+		return revisions;
+	}
+
+	public void setRevisions(Set<Revisao> revisions) {
+		this.revisions = revisions;
+	}
+	
+	public void addRevision(Revisao revision) {
+		this.revisions.add(revision);
+		
+	}
+	
+	public Revisao getLastRevision() {
+		List<Revisao> list = new ArrayList<Revisao>();
+		
+		list.addAll(this.revisions);
+		
+		return list.get(list.size() - 1);
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 	
 }

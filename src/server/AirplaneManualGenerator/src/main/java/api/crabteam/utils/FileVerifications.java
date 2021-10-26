@@ -22,11 +22,11 @@ public class FileVerifications {
 	 */
 	public static String[] fileDestination (Linha linha, String codelistName) {
 		
-		String sectionNumber = linha.getSectionNumber();
-		String sectionName = linha.getSectionName();
-		String blockNumber = linha.getBlockNumber();
-		String blockName = linha.getBlockName();
-		String code = linha.getCode();
+		String sectionNumber = linha.getSectionNumber().trim();
+		String sectionName = linha.getSectionName().trim();
+		String blockNumber = linha.getBlockNumber().trim();
+		String blockName = linha.getBlockName().trim();
+		String code = linha.getCode().trim();
 		String subsectionNumber = linha.getSubsectionNumber();
 		String subsectionName = linha.getSubsectionName();
 		
@@ -43,8 +43,8 @@ public class FileVerifications {
 		
 		// Verifying subsection
 		if (linha.getSubsectionNumber() != null) {
-			subsectionNumber = linha.getSubsectionNumber();
-			subsectionName = linha.getSubsectionName();
+			subsectionNumber = linha.getSubsectionNumber().trim();
+			subsectionName = linha.getSubsectionName().trim();
 			
 			fileName = fileName.concat(subsectionNumber).concat("-");
 			strFilePath = strFilePath

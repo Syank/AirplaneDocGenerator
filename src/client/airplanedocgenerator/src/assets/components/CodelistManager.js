@@ -33,25 +33,36 @@ class CodelistManager extends React.Component {
         this.addFileToLine = this.addFileToLine.bind(this);
         this.importCodelist = this.importCodelist.bind(this);
         this.toggleAddNewLine = this.toggleAddNewLine.bind(this);
-        this.closeAddNewLineComponent =
-            this.closeAddNewLineComponent.bind(this);
+        this.closeAddNewLineComponent = this.closeAddNewLineComponent.bind(this);
         this.createNewLine = this.createNewLine.bind(this);
         this.search = this.search.bind(this);
+        this.toggleRevision = this.toggleRevision.bind(this);
+        this.confirmRevision = this.toggleConfirmRevision.bind(this);
+        this.getConfirmRevisionComponent = this.getConfirmRevisionComponent.bind(this);
+        this.toggleConfirmRevision = this.toggleConfirmRevision.bind(this);
+        this.getLinesToRevision = this.getLinesToRevision.bind(this);
+        this.addRevisionFile = this.addRevisionFile.bind(this);
+        this.createRevision = this.createRevision.bind(this);
 
         let projectData = this.props.projectData;
 
         this.newLineComponentId = "newLineComponent";
+        this.confirmRevisionId = "confirmRevisionComponent";
 
         this.state = {
             projectData: projectData,
             showAddNewLineComponent: false,
             searchCriteria: "all",
-            searchValue: ""
+            searchValue: "",
+            revision: false,
+            confirmRevision: false,
+            revisionFiles: {}
         };
 
         let linesSituationMap = this.createLinesSituationMap();
 
         this.state["linesSituation"] = linesSituationMap;
+
     }
 
     createLinesSituationMap() {
@@ -333,15 +344,287 @@ class CodelistManager extends React.Component {
         }
     }
 
+    getLinesToRevision(){
+        let component = (
+            <table className="w-full table-fixed border-collapse border border-gray-300 text-center">
+                <thead>
+                    <tr>
+                        <th className="border border-gray-300 bg-yellow-200">
+                            Nº seção
+                        </th>
+                        <th className="border border-gray-300 bg-yellow-200">
+                            Seção
+                        </th>
+                        <th className="border border-gray-300 bg-yellow-200">
+                            Nº subseção
+                        </th>
+                        <th className="border border-gray-300 bg-yellow-200">
+                            Subseção
+                        </th>
+                        <th className="border border-gray-300 bg-yellow-200">
+                            Nº bloco
+                        </th>
+                        <th className="border border-gray-300 bg-yellow-200">
+                            Nome do bloco
+                        </th>
+                        <th className="border border-gray-300 bg-yellow-200">
+                            Código
+                        </th>
+                        <th className="border border-gray-300 bg-gray-300">
+                            Remarks
+                        </th>
+                        <th className="border border-gray-300 bg-accent text-white">
+                            Arquivo da revisão
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>{this.getRevisionLines()}</tbody>
+            </table>
+        );
+
+        return component;
+    }
+
+    getConfirmRevisionComponent(){
+        let component = (
+            <div id={this.confirmRevisionId} className="z-20 w-full h-full absolute flex flex-row items-center justify-center backdrop-filter backdrop-blur-blurLogin" onClick={this.toggleConfirmRevision}>
+                <div className="h-3/4 w-5/6 flex flex-col items-center justify-center bg-white shadow-registerUser">
+                    <div className="w-5/6 mt-5 text-center border-b-2 border-opacity-50 border-black">
+                        <h1 className="text-2xl	font-bold text-center leading-loose">
+                            Finalização da revisão
+                        </h1>
+                        <p>
+                            Adicione uma descrição para a revisão e atribua às linhas escolhidas 
+                            os novos arquivos desta revisão
+                        </p>
+                    </div>
+                    <div className="w-full h-full flex flex-col pl-5 pr-5 items-center overflow-auto">
+                        <div className="w-full text-center mt-5 mb-5">
+                            <h2 className="font-bold">Descrição da revisão</h2>
+                            <textarea id="revisionDescriptionTextArea" className="w-2/3 h-20 resize-none border-2 border-black border-opacity-60"></textarea>
+                        </div>
+                        <div className="mb-10">
+                            {this.getLinesToRevision()}
+                        </div>
+                        <Button type="confirm" text="Finalizar revisão" onClick={this.createRevision}/>
+                    </div>
+                </div>
+            </div>
+        );
+
+        return component;
+    }
+
+    async createRevision(){
+        let filesToRevise = this.state["revisionFiles"];
+        let revisionDescription = document.getElementById("revisionDescriptionTextArea").value;
+        let projectName = this.state["projectData"]["nome"];
+
+        let selectedCheckboxes = document.querySelectorAll("input[type=checkbox]:checked");
+
+        let revisionLinesOk = true;
+        let linesIds = []
+
+        for (let i = 0; i < selectedCheckboxes.length; i++) {
+            const checkbox = selectedCheckboxes[i];
+
+            let lineId = checkbox.id.split("-")[3];
+            linesIds.push(lineId);
+
+            if(filesToRevise[lineId] === undefined){
+                revisionLinesOk = false;
+
+                break;
+            }
+            
+        }
+
+        let hasLinesToRevise = true;
+
+        if(selectedCheckboxes.length === 0){
+            hasLinesToRevise = false;
+
+        }
+
+        if(revisionLinesOk && hasLinesToRevise){
+            let serverRequest = new ServerRequester("http://localhost:8080");
+
+            let formData = new FormData();
+            formData.append("projectName", projectName);
+            formData.append("revisionDescription", revisionDescription);
+
+            for (let i = 0; i < linesIds.length; i++) {
+                const lineId = linesIds[i];
+
+                formData.append("revisedLinesIds", lineId);
+                formData.append("revisedLinesFiles", filesToRevise[lineId]);
+                
+            }
+
+            let response = await serverRequest.doPost("/revision/newRevision", formData, "multipart/form-data");
+
+            if(response["responseJson"] === true){
+                notification("success", "Revisão criada com sucesso! 😊", 
+                "A nova revisão foi criada com sucesso, você pode consultá-la na interface de revisões, clicando no botão \"Revisões\" na tela de gerenciamento do projeto");
+                
+                let newData = await this.props.reloadData();
+
+                this.state["projectData"] = newData;
+
+                let linesSituation = this.createLinesSituationMap();
+
+                this.setState({confirmRevision: false, revision: false, linesSituation: linesSituation});
+
+            }else{
+                notification("error", "Falha ao criar revisão 🤕", 
+                "Ocorreu um erro interno ao criar a revisão, contate os administradores");
+
+            }
+
+        }else{
+            if(!hasLinesToRevise){
+                notification("error", "Sem linhas para revisão 😤", 
+                "Para criar uma revisão, é necessário que existam linhas selecionadas");
+
+            }else{
+                notification("error", "Linha de revisão sem novo arquivo 😤", 
+                "Para finalizar a criação da revisão, todas as linhas escolhidas devem ter arquivos " +
+                "selecionados para elas");
+                
+            }
+
+        }
+
+        console.log(projectName, filesToRevise, revisionDescription);
+
+    }
+
+    getRevisionLines(){
+        let selectedCheckboxes = document.querySelectorAll("input[type=checkbox]:checked");
+
+        let linesIds = [];
+
+        for (let i = 0; i < selectedCheckboxes.length; i++) {
+            const checkbox = selectedCheckboxes[i];
+
+            let lineId = checkbox.id.split("-")[3];
+
+            linesIds.push(lineId);
+            
+        }
+
+        let projectLines = this.state["projectData"]["codelist"]["linhas"];
+        let linesToRender = [];
+        
+        for (let i = 0; i < projectLines.length; i++) {
+            const line = projectLines[i];
+            
+            let lineId = line["id"].toString();
+
+            if(linesIds.includes(lineId)){
+                linesToRender.push(line);
+
+            }
+
+        }
+
+        let components = [];
+
+        for (let i = 0; i < linesToRender.length; i++) {
+            const linhaData = linesToRender[i];
+
+            let id = linhaData["id"].toString();
+        
+            let lineId = "revision-line-" + id;
+    
+            let component;
+    
+            let remarks = this.getRemarksText(linhaData["remarks"]);
+
+            let color;
+
+            if(Object.keys(this.state["revisionFiles"]).includes(id)){
+                color = "#32da1f";  // Verde
+
+            }else{
+                color = "#f43a3a";  // Vermelho
+
+            }
+
+            let selectFileIcon = <FontAwesomeIcon key={"revision-file-line-" + lineId} icon={faFileAlt}
+                                                  color={color} className="cursor-pointer"
+                                                  onClick={this.addRevisionFile}/>;
+
+            component = (
+                <tr id={"revision-" + lineId} key={"revision-linha-" + lineId}>
+                    <td className="border border-gray-300">
+                        {linhaData["sectionNumber"]}
+                    </td>
+                    <td className="border border-gray-300">
+                        {linhaData["sectionName"]}
+                    </td>
+                    <td className="border border-gray-300">
+                        {linhaData["subsectionNumber"]}
+                    </td>
+                    <td className="border border-gray-300">
+                        {linhaData["subsectionName"]}
+                    </td>
+                    <td className="border border-gray-300">
+                        {linhaData["blockNumber"]}
+                    </td>
+                    <td className="border border-gray-300">
+                        {linhaData["blockName"]}
+                    </td>
+                    <td className="border border-gray-300">
+                        {linhaData["code"]}
+                    </td>
+                    <td className="border border-gray-300">
+                        {remarks}
+                    </td>
+                    <td className="border border-gray-300">
+                        {selectFileIcon}
+                    </td>
+                </tr>
+            );
+
+            components.push(component);
+            
+        }
+
+        return components;
+    }
+
+    async addRevisionFile(event){
+        let lineId = event.target.parentElement.parentElement.parentElement.id;
+
+        if(lineId === ""){
+            lineId = event.target.parentElement.parentElement.id;
+        }
+
+        let id = lineId.split("-").pop();
+
+        let revisionFile = await addFile();
+
+        if(revisionFile !== undefined && revisionFile !== null){
+            let confirmedRevisionFiles = this.state["revisionFiles"];
+
+            confirmedRevisionFiles[id] = revisionFile;
+    
+            this.setState({revisionFiles: confirmedRevisionFiles});
+
+        }
+
+    }
+
     getCodelistManagerComponent() {
         let component = (
-            <div
-                id={this.id}
-                className="z-10 w-full h-full absolute flex flex-row items-center justify-center backdrop-filter backdrop-blur-blurLogin"
-                onClick={this.close}
-            >
+            <div id={this.id} className="z-10 w-full h-full absolute flex flex-row items-center justify-center backdrop-filter backdrop-blur-blurLogin" onClick={this.close}>
                 {this.state["showAddNewLineComponent"] &&
-                    this.getAddNewLineComponent()}
+                    this.getAddNewLineComponent()
+                }
+                {this.state["confirmRevision"] &&
+                    this.getConfirmRevisionComponent()
+                }
                 <div className="h-5/6 w-5/6 bg-white">{this.getContent()}</div>
             </div>
         );
@@ -471,28 +754,61 @@ class CodelistManager extends React.Component {
         let showAddNewLineComponent = this.state["showAddNewLineComponent"];
 
         this.setState({ showAddNewLineComponent: !showAddNewLineComponent });
+
+    }
+
+    toggleRevision(){
+        let revisionState = this.state["revision"];
+
+        this.setState({revision: !revisionState, revisionFiles: {}});
+
+    }
+
+    toggleConfirmRevision(event){
+        let confirmRevision = this.state["confirmRevision"];
+
+        if(confirmRevision){
+            let clickTargetId = event.target.id;
+
+            if (clickTargetId === this.confirmRevisionId) {
+                this.setState({confirmRevision: !confirmRevision, revisionFiles: {}});
+            }
+
+        }else{
+            this.setState({confirmRevision: !confirmRevision, revisionFiles: {}});
+
+        }
+
     }
 
     getManageButtons() {
         let component = (
-            <div className="flex flex-row w-full">
+            <div className="flex flex-row w-full justify-between">
                 <div>
                     <Button
                         text="Nova Linha"
                         onClick={this.toggleAddNewLine}
                         type="codelistControl"
                     ></Button>
+                    <Button
+                        text="Exportar Codelist"
+                        type="codelistControl"
+                        onClick={this.exportCodelist}
+                    ></Button>
+                    <Button
+                        text="Importar Codelist"
+                        type="codelistControl"
+                        onClick={this.importCodelist}
+                    ></Button>
                 </div>
-                <Button
-                    text="Exportar Codelist"
-                    type="codelistControl"
-                    onClick={this.exportCodelist}
-                ></Button>
-                <Button
-                    text="Importar Codelist"
-                    type="codelistControl"
-                    onClick={this.importCodelist}
-                ></Button>
+                {!this.state["revision"] ?
+                    <Button text="Criar revisão" onClick={this.toggleRevision} type="confirm"/>
+                        :
+                    <div>
+                        <Button text="Confirmar revisão" onClick={this.toggleConfirmRevision} type="confirm"/>
+                        <Button text="Cancelar revisão" onClick={this.toggleRevision} type="cancel"/>
+                    </div>
+                }
             </div>
         );
 
@@ -883,12 +1199,14 @@ class CodelistManager extends React.Component {
                             <td className="border border-gray-300">
                                 {remarks}
                             </td>
-                            <td
-                                id={"actions-line-" + id}
-                                className="border border-gray-300"
-                            >
+                            <td id={"actions-line-" + id} className="border border-gray-300">
                                 {actions}
                             </td>
+                            {this.state["revision"] &&
+                                <td className="border border-gray-300">
+                                    <input type="checkbox" id={"revision-" + lineId}></input>
+                                </td>
+                            }
                         </tr>
                     );
                 } else {
@@ -1009,6 +1327,11 @@ class CodelistManager extends React.Component {
                         <th className="border border-gray-300 bg-accent text-white">
                             Ações
                         </th>
+                        {this.state["revision"] &&
+                            <th className="border border-gray-300 bg-yellow-600 text-white">
+                                Revisar
+                            </th>
+                        }
                     </tr>
                 </thead>
                 <tbody>{this.getRows()}</tbody>
@@ -1056,12 +1379,25 @@ class CodelistManager extends React.Component {
      * @param {Event} event Evento ao clicar fora do formulário de registro
      * @author Rafael Furtado
      */
-    close(event) {
+    async close(event) {
         let clickTargetId = event.target.id;
 
         if (clickTargetId === this.id) {
-            this.props.hide();
+            if(this.state["revision"]){
+                let confirm = await withConfirmation("Revisão em andamento", "Deseja realmente sair? Isso irá cancelar a revisão em andamento", "warning", "Sair", "Cancelar");
+
+                if(confirm){
+                    this.props.hide();
+
+                }
+
+            }else{
+                this.props.hide();
+
+            }
+            
         }
+
     }
 
     /**
