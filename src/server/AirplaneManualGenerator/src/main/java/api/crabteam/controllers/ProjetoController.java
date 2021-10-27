@@ -2,6 +2,7 @@ package api.crabteam.controllers;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletRequest;
@@ -210,6 +211,14 @@ public class ProjetoController {
 					HttpStatus.NOT_ACCEPTABLE);
 		}
 		
+	}
+	
+	@PostMapping("/import")
+	public ResponseEntity<?> importProject(
+			@RequestParam MultipartFile codelist,
+			@RequestParam ArrayList<MultipartFile> projectFile){
+		
+		return new ResponseEntity<Boolean>(false, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
 }
