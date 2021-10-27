@@ -45,15 +45,12 @@ public class CodelistExporter {
 				int index = l - 1;
 				List<Remark> lineRemarks = codelistLines.get(index).getRemarks();
 				for (Remark remark : lineRemarks) {
+					System.err.println("Remark " + remark.getTraco());
 					if (remark.getTraco().equals(entry.getKey())) {
 						createCell(sheet.getRow(l), control, "1");
 					}
-					else {
-						createCell(sheet.getRow(l), control, "");
-					}
 				}
 			}
-			
 			control += 1;
 		}
 	}
