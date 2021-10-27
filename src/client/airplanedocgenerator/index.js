@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain } = require("electron");
+const { app, BrowserWindow, ipcMain, dialog} = require("electron");
 
 var mainWindow;
 
@@ -10,6 +10,7 @@ app.on("ready", () => {
         minWidth: 880,
         frame: true,
         webPreferences: {
+            enableRemoteModule: true,
             nodeIntegration: false,
             worldSafeExecuteJavaScript: true,
             contextIsolation: true,
@@ -37,5 +38,12 @@ ipcMain.on("maximize", function () {
 
 ipcMain.on("unmaximize", function () {
     mainWindow.unmaximize();
+});
+
+ipcMain.on("showDialog", function () {
+    let options = {
+        properties:["openDirectory"]
+    }
+    global.pathToSaveFile = dialog.showOpenDialog(options);
 });
 

@@ -1,4 +1,4 @@
-const { ipcRenderer, contextBridge } = require('electron');
+const { ipcRenderer, contextBridge, remote } = require('electron');
 
 contextBridge.exposeInMainWorld('electron', {
     windowControll: {
@@ -13,6 +13,9 @@ contextBridge.exposeInMainWorld('electron', {
         },
         close () {
             closeWindow()
+        },
+        showDialog () {
+            return showOpenDialog()
         }
     }
 });
@@ -31,4 +34,9 @@ function closeWindow() {
 
 function unmaximizeWindow() {
     ipcRenderer.send("unmaximize");
+}
+
+function showOpenDialog() {
+    ipcRenderer.send("showDialog");
+    return remote.getGlobal("pathToSaveFile");
 }

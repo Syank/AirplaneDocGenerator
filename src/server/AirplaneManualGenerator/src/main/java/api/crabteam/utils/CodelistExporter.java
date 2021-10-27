@@ -114,7 +114,7 @@ public class CodelistExporter {
 		}
 	}
 	
-	private static void createCodelistSheet (String codelistName, List<Linha> codelistLines) throws IOException {
+	private static void createCodelistSheet (String codelistName, List<Linha> codelistLines, String pathToSave) throws IOException {
 		
 		Workbook workbook = new XSSFWorkbook();
 		Sheet sheet = workbook.createSheet(codelistName);
@@ -123,13 +123,13 @@ public class CodelistExporter {
 		createCodelistLines(sheet, codelistLines);
 		createRemarksColumnsAndLines(sheet, getCodelistColumns().length, codelistLines);
 		
-		String fileLocation = "C:\\Users\\port3\\Desktop\\exportedCodelistTest.xlsx";
+		String fileLocation = pathToSave.concat("\\").concat(codelistName).concat(".xlsx");
 		FileOutputStream outputStream = new FileOutputStream(fileLocation);
 		workbook.write(outputStream);
 		workbook.close();
 	}
 
-	public static void generateCodelistFile (String codelistName, List<Linha> codelistLines) throws IOException {
-		createCodelistSheet(codelistName, codelistLines);
+	public static void generateCodelistFile (String codelistName, List<Linha> codelistLines, String pathToSave) throws IOException {
+		createCodelistSheet(codelistName, codelistLines, pathToSave);
 	}
 }

@@ -461,17 +461,29 @@ class CodelistManager extends React.Component {
 
     async exportCodelist(event) {
         let serverRequester = new ServerRequester("http://localhost:8080");
+
+        let supposedSelectedPath = await window.electron.windowControll.showDialog();
     
-        let formData = new FormData();
-        formData.append("codelistName", document.getElementById("nomeProjeto").textContent);
+        if (supposedSelectedPath.canceled === false) {
+            let pathToSave = supposedSelectedPath.filePaths;
+            let formData = new FormData();
+            formData.append("codelistName", document.getElementById("nomeProjeto").textContent);
+            formData.append("pathToSave", pathToSave);
+    
+            let response = await serverRequester.doPost(
+                "/codelist/export",
+                formData,
+                "multipart/form-data"
+            );
 
-        let response = await serverRequester.doPost(
-            "/codelist/export",
-            formData,
-            "multipart/form-data"
-        );
-
-        console.log(response);
+            if (response.status === 200) {
+                notification(
+                    "success",
+                    "Uhu! 🤩",
+                    "Codelist exportada! Verifique a pasta " + pathToSave + "!"
+                );
+            }
+        }
     }
 
     toggleAddNewLine() {
