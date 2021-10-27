@@ -216,9 +216,41 @@ public class ProjetoController {
 	@PostMapping("/import")
 	public ResponseEntity<?> importProject(
 			@RequestParam MultipartFile codelist,
-			@RequestParam ArrayList<MultipartFile> projectFile){
+			@RequestParam ArrayList<MultipartFile> projectFile) throws Exception{
+		String projectName = projectFile.get(0).getOriginalFilename().split("[/]")[0];
 		
-		return new ResponseEntity<Boolean>(false, HttpStatus.INTERNAL_SERVER_ERROR);
+		boolean validProjectName = FileVerifications.isValidProjectName(projectName);
+		
+		if(!validProjectName) {
+			return new ResponseEntity<String>("O nome da pasta do projeto é inválido", HttpStatus.BAD_REQUEST);
+		}
+		
+		String workDirectory = EnvironmentVariables.PROJECTS_FOLDER.getValue();
+		
+		try {
+			org.apache.commons.io.FileUtils.deleteDirectory(new File(workDirectory + "\\" + projectName));
+			
+			for (int i = 0; i < projectFile.size(); i++) {
+				MultipartFile file = projectFile.get(i);
+				
+				String destinationPath = workDirectory + "\\" + file.getOriginalFilename();
+				
+				File destinationFile = new File(destinationPath);
+				destinationFile.mkdirs();
+				
+				file.transferTo(destinationFile);
+				
+			}
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+			
+			org.apache.commons.io.FileUtils.deleteDirectory(new File(workDirectory + "\\" + projectName));
+			
+			return new ResponseEntity<String>("Ocorreu um erro interno ao realizar a importação do projeto", HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
+		return new ResponseEntity<Boolean>(true, HttpStatus.OK);
 	}
 	
 }

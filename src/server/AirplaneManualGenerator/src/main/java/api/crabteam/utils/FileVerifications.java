@@ -136,5 +136,53 @@ public class FileVerifications {
 	    }
 
 	}
+	
+	public static boolean isValidProjectName(String supposedProjectName) {
+	     String partLetter = supposedProjectName.split("-")[0];
+	     String partNumber = supposedProjectName.split("-")[1];
+	     
+	     boolean validPartLetter = isValidPartLetter(partLetter);
+	     boolean validPartNumber = isValidPartNumber(partNumber);
+
+	     if (!validPartLetter || !validPartNumber) {
+	          return false;
+	     }
+
+	     return true;
+	}
+
+	private static boolean isValidPartNumber(String supposedPartNumber) {
+	     if (supposedPartNumber.length() != 4) {
+	          return false;
+	     }
+
+	     for (int i = 0; i < supposedPartNumber.length(); i++) {
+	          char letter = supposedPartNumber.charAt(i);
+
+	          if (!Character.isDigit(letter)) {
+	               return false;
+	          }
+	          
+	     }
+
+	     return true;
+	}
+
+	private static boolean isValidPartLetter(String supposedPartLetter) {
+	     if (supposedPartLetter.length() != 3) {
+	          return false;
+	     }
+
+	     for (int i = 0; i < supposedPartLetter.length(); i++) {
+	          char letter = supposedPartLetter.charAt(i);
+
+	          if (!Character.isLetter(letter)) {
+	               return false;
+	          }
+	          
+	     }
+
+	     return true;
+	}
 
 }
