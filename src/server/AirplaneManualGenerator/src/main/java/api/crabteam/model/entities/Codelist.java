@@ -16,6 +16,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.OrderBy;
 
+import api.crabteam.utils.FileVerifications;
+
 @Entity(name = "codelist")
 public class Codelist {
 	
@@ -55,6 +57,25 @@ public class Codelist {
 		arrayList.addAll(linhas);
 		
 		return arrayList;
+	}
+	
+	public Linha getLinhaByFileName(String fileName) {
+		ArrayList<Linha> arrayList = new ArrayList<Linha>();
+		
+		arrayList.addAll(linhas);
+		
+		for (int i = 0; i < arrayList.size(); i++) {
+			Linha linha = arrayList.get(i);
+			
+			String name = FileVerifications.fileDestination(linha, this.nome)[0] + FileVerifications.fileDestination(linha, this.nome)[1];
+			
+			if(name.equals(fileName)) {
+				return linha;
+			}
+			
+		}
+		
+		return null;
 	}
 
 	public void setLinhas(List<Linha> linhas) {

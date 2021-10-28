@@ -51,7 +51,7 @@ public class Projeto {
 	private ProjectSituation situation;
 	
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@OrderBy("creation_date")
+	@OrderBy("creation_date, version")
 	@JoinColumn(name = "revision_id", referencedColumnName = "id")
 	private Set<Revisao> revisions = new HashSet<Revisao>();
 	

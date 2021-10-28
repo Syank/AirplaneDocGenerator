@@ -23,17 +23,30 @@ class UploadScreen extends React.Component {
         let codelistFile = codelistInput.files[0];
         let projectFiles = projectFolderInput.files;
 
+        let files = []
+
+        for (let i = 0; i < projectFiles.length; i++) {
+            let file = projectFiles[i];
+
+            if(file.name.includes(".pdf")){
+                files.push(file);
+
+            }
+            
+        }
+
         let formData = new FormData();
 
         formData.append("codelist", codelistFile);
 
-        for (let i = 0; i < projectFiles.length; i++) {
-            const file = projectFiles[i];
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
 
             formData.append("projectFile", file);
 
         }
 
+        
         let response = await serverRequester.doPost("/project/import",  formData, "multipart/form-data");
 
         if (response["responseJson"] === true) {
@@ -112,6 +125,7 @@ class UploadScreen extends React.Component {
                                 id="directory-location"
                                 onChange={this.setDirectoryName}
                                 className="hidden" webkitdirectory="true"
+                                accept=".pdf"
                             ></input>
                         </div>
                         <div className="m-8 p-5">
