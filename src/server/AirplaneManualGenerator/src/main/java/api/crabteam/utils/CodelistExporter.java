@@ -232,6 +232,7 @@ public class CodelistExporter {
 		FileOutputStream outputStream = new FileOutputStream(fileLocation);
 		workbook.write(outputStream);
 		workbook.close();
+		outputStream.close();
 	}
 
 	/**
