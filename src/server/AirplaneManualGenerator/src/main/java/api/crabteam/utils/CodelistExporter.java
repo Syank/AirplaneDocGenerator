@@ -24,17 +24,38 @@ import api.crabteam.model.enumarations.CodelistColumn;
  */
 public class CodelistExporter {
 	
+	/**
+	 * Variável que armazena todos os remarks da codelist para que eu possa criar as colunas no arquivo do excel
+	 */
 	private static Map<String, String> codelistRemarks = new HashMap<String, String>();
 	
+	/**
+	 * Método que pega todas as colunas da codelist a partir de um enum. Mesmo que o enum nude, o código ainda funcionará devidamente
+	 * @return CodelistColumn[] com cada uma das colunas
+	 */
 	private static CodelistColumn[] getCodelistColumns () {
 		return CodelistColumn.getValues();
 	}
 	
+	/**
+	 * Método que cria uma célula no arquivo da codelist
+	 * @param row -> linha do arquivo do excel. começa em 0
+	 * @param index -> coluna do arquivo do excel. começa em 0
+	 * @param value -> conteúdo a ser salvo na célula
+	 * @author Bárbara Port
+	 */
 	private static void createCell (Row row, int index, String value) {
 		Cell cell = row.createCell(index);
 		cell.setCellValue(value);
 	}
 	
+	/**
+	 * Método que cria toda a parte das colunas e linhas dos remarks (aquela parte em que os remarks da linha ficam com o valor 1)
+	 * @param sheet -> arquivo do excel em que a codelist está sendo salva
+	 * @param start -> qual a primeira coluna do arquivo do excel que os remarks poderão ser escritos, porque as anteriores são outra informações
+	 * @param codelistLines -> linhas da codelist que está sendo salva
+	 * @author Bárbara Port
+	 */
 	private static void createRemarksColumnsAndLines (Sheet sheet, int start, List<Linha> codelistLines) {
 		Row header = sheet.getRow(0);
 		int control = start;
@@ -54,6 +75,11 @@ public class CodelistExporter {
 		}
 	}
 	
+	/**
+	 * Método que cria o header do arquivo no qual a codelist será salva
+	 * @param sheet -> arquivo do excel em que a codelist será salva
+	 * @author Bárbara Port
+	 */
 	private static void createCodelistHeader (Sheet sheet) {
 		Row header = sheet.createRow(0);
 		CodelistColumn[] codelistColumns = getCodelistColumns();
@@ -62,6 +88,12 @@ public class CodelistExporter {
 		}
 	}
 	
+	/**
+	 * Método que gera uma string com os remarks formatados
+	 * @param lineRemarks -> remarks de uma linha da codelist a ser salva
+	 * @return String com os remarks no formato "-50, -96, -10", por exemplo
+	 * @author Bárbara Port
+	 */
 	private static String generateWritableRemarks (List<Remark> lineRemarks) {
 		List<String> tracos = new ArrayList<>();
 		for (int r = 0; r < lineRemarks.size(); r++) {
@@ -75,6 +107,12 @@ public class CodelistExporter {
 		return String.join(", ", tracos);
 	}
 	
+	/**
+	 * Método responsável por criar as linhas da codelist (que não sejam das colunas dos remarks)
+	 * @param sheet -> arquivo do excel no qual as linhas serão escritas
+	 * @param codelistLines -> linhas da codelist a ser salva
+	 * @author Bárbara Port
+	 */
 	private static void createCodelistLines (Sheet sheet, List<Linha> codelistLines) {
 		for (int l = 1; l <= codelistLines.size(); l++) {
 			int i = l - 1;
@@ -114,6 +152,14 @@ public class CodelistExporter {
 		}
 	}
 	
+	/**
+	 * Método que realmente gera o arquivo da codelist
+	 * @param codelistName -> nome da codelist a salvar
+	 * @param codelistLines -> linhas da codelist a salvar
+	 * @param pathToSave -> caminho em que a codelist será salva
+	 * @throws IOException
+	 * @author Bárbara Port
+	 */
 	private static void createCodelistSheet (String codelistName, List<Linha> codelistLines, String pathToSave) throws IOException {
 		
 		Workbook workbook = new XSSFWorkbook();
@@ -129,6 +175,14 @@ public class CodelistExporter {
 		workbook.close();
 	}
 
+	/**
+	 * Método mais "legível" para gerar a codelist em outras partes do projeto
+	 * @param codelistName -> nome da codelist a salvar
+	 * @param codelistLines -> linhas da codelist a salvar
+	 * @param pathToSave -> caminho em que a codelist será salva
+	 * @throws IOException
+	 * @author Bárbara Port
+	 */
 	public static void generateCodelistFile (String codelistName, List<Linha> codelistLines, String pathToSave) throws IOException {
 		createCodelistSheet(codelistName, codelistLines, pathToSave);
 	}
