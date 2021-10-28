@@ -7,9 +7,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.FillPatternType;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
@@ -38,6 +44,39 @@ public class CodelistExporter {
 	}
 	
 	/**
+	 * Método que estiliza as células
+	 * @param cell -> célula a ser estilizada
+	 * @author Bárbara Port
+	 */
+	private static void setCellStyle (Cell cell) {
+		Workbook workbook = cell.getSheet().getWorkbook();
+		CellStyle cellStyle = workbook.createCellStyle();
+		cellStyle.setAlignment(HorizontalAlignment.CENTER);
+		cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+		// border style
+		BorderStyle borderStyle = BorderStyle.THIN;
+		cellStyle.setBorderTop(borderStyle);
+		cellStyle.setBorderBottom(borderStyle);
+		cellStyle.setBorderRight(borderStyle);
+		cellStyle.setBorderLeft(borderStyle);
+		// border color
+		short borderColor = IndexedColors.BLACK.getIndex();
+		cellStyle.setTopBorderColor(borderColor);
+		cellStyle.setBottomBorderColor(borderColor);
+		cellStyle.setRightBorderColor(borderColor);
+		cellStyle.setLeftBorderColor(borderColor);
+		if (cell.getRowIndex() == 0) {
+			// cell background color
+			short backgroundColor = IndexedColors.LAVENDER.getIndex();
+			cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+			cellStyle.setFillForegroundColor(backgroundColor);
+		}
+		// linebreaks
+		cellStyle.setWrapText(true);
+		cell.setCellStyle(cellStyle);
+	}
+	
+	/**
 	 * Método que cria uma célula no arquivo da codelist
 	 * @param row -> linha do arquivo do excel. começa em 0
 	 * @param index -> coluna do arquivo do excel. começa em 0
@@ -47,6 +86,7 @@ public class CodelistExporter {
 	private static void createCell (Row row, int index, String value) {
 		Cell cell = row.createCell(index);
 		cell.setCellValue(value);
+		setCellStyle(cell);
 	}
 	
 	/**
@@ -69,10 +109,26 @@ public class CodelistExporter {
 					if (remark.getTraco().equals(entry.getKey())) {
 						createCell(sheet.getRow(l), control, "1");
 					}
+					else if (sheet.getRow(l).getCell(control) == null) {
+						createCell(sheet.getRow(l), control, "");
+					}
 				}
 			}
 			control += 1;
 		}
+	}
+	
+	/**
+	 * Método para criar uma linha
+	 * @param sheet -> planilha do excel em que a linha será criada
+	 * @param index -> qual o índice da linha a ser criada (começa no 0)
+	 * @author Bárbara Port
+	 */
+	private static Row createRow (Sheet sheet, int index) {
+		Row row = sheet.createRow(index);
+		short height = index == 0 ? (short) 1000 : (short) 350;
+		row.setHeight(height);
+		return row;
 	}
 	
 	/**
@@ -81,7 +137,7 @@ public class CodelistExporter {
 	 * @author Bárbara Port
 	 */
 	private static void createCodelistHeader (Sheet sheet) {
-		Row header = sheet.createRow(0);
+		Row header = createRow(sheet, 0);
 		CodelistColumn[] codelistColumns = getCodelistColumns();
 		for (int i = 0; i < codelistColumns.length; i++) {
 			createCell(header, i, codelistColumns[i].columnType);
@@ -116,7 +172,7 @@ public class CodelistExporter {
 	private static void createCodelistLines (Sheet sheet, List<Linha> codelistLines) {
 		for (int l = 1; l <= codelistLines.size(); l++) {
 			int i = l - 1;
-			Row line = sheet.createRow(l);
+			Row line = createRow(sheet, l);
 			CodelistColumn[] codelistColumns = getCodelistColumns();
 			String cellContent = "";
 			for (int c = 0; c < codelistColumns.length; c++) {
@@ -129,10 +185,12 @@ public class CodelistExporter {
 					cellContent = codelistLines.get(i).getSectionName();
 					break;
 				case "Nº SUB SEÇÃO":
-					cellContent = codelistLines.get(i).getSubsectionNumber();
+					String supposedSubsectionNumber = codelistLines.get(i).getSubsectionNumber();
+					cellContent = supposedSubsectionNumber == null? "" : supposedSubsectionNumber;
 					break;
 				case "SUB SEÇÃO":
-					cellContent = codelistLines.get(i).getSubsectionName();
+					String supposedSubsectionName = codelistLines.get(i).getSubsectionName();
+					cellContent = supposedSubsectionName == null? "" : supposedSubsectionName;
 					break;
 				case "Nº BLOCK":
 					cellContent = codelistLines.get(i).getBlockNumber();
@@ -165,6 +223,7 @@ public class CodelistExporter {
 		Workbook workbook = new XSSFWorkbook();
 		Sheet sheet = workbook.createSheet(codelistName);
 		
+		sheet.setDefaultColumnWidth(12);
 		createCodelistHeader(sheet);
 		createCodelistLines(sheet, codelistLines);
 		createRemarksColumnsAndLines(sheet, getCodelistColumns().length, codelistLines);
