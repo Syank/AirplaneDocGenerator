@@ -142,8 +142,26 @@ public class CodelistBuilder {
 								for (int k = j + 1; k <= columnsNumber ; k++) {
 									Cell remarkCell = row.getCell(k);
 	
-									double remarkCellValue = remarkCell.getNumericCellValue();
-	
+									CellType remarkCellType = remarkCell.getCellType();
+									
+									double remarkCellValue;
+									
+									if(remarkCellType == CellType.STRING) {
+										String value = remarkCell.getStringCellValue();
+										
+										if(value.isEmpty()) {
+											remarkCellValue = 0;
+											
+										}else {
+											remarkCellValue = Double.parseDouble(value);
+											
+										}
+										
+									}else {
+										remarkCellValue = remarkCell.getNumericCellValue();
+										
+									}
+									
 									if(remarkCellValue != 0) {
 										String remarkNickNameColumn = (String) columnsTypes.get(k);
 	

@@ -107,7 +107,7 @@ public class CodelistExporter {
 				List<Remark> lineRemarks = codelistLines.get(index).getRemarks();
 				for (Remark remark : lineRemarks) {
 					if (remark.getTraco().equals(entry.getKey())) {
-						createCell(sheet.getRow(l), control, "1");
+						createCell(sheet.getRow(l), control, "1.0");
 					}
 					else if (sheet.getRow(l).getCell(control) == null) {
 						createCell(sheet.getRow(l), control, "");

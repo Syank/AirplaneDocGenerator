@@ -136,8 +136,8 @@ public class CodelistController {
         @ApiResponse(code = 500, message = "Something went wrong.")
     })
 	public ResponseEntity<?> exportCodelist (@RequestParam (name = "codelistName") String codelistName, @RequestParam (name = "pathToSave") String pathToSave) throws IOException {
-		
 		List<Linha> codelistLines = codelistRepository.findByName(codelistName).getLinhas();
+		
 		CodelistExporter.generateCodelistFile(codelistName, codelistLines, pathToSave);
 		
 		return new ResponseEntity<String>("Success!", HttpStatus.OK);
