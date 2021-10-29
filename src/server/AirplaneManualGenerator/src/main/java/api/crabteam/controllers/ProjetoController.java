@@ -2,6 +2,9 @@ package api.crabteam.controllers;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.ServletRequest;
@@ -22,7 +25,11 @@ import org.springframework.web.multipart.MultipartFile;
 import api.crabteam.controllers.requestsBody.ChangeProjectDescription;
 import api.crabteam.controllers.requestsBody.ChangeProjectName;
 import api.crabteam.controllers.requestsBody.NewProject;
+import api.crabteam.model.entities.Codelist;
+import api.crabteam.model.entities.Linha;
 import api.crabteam.model.entities.Projeto;
+import api.crabteam.model.entities.Revisao;
+import api.crabteam.model.entities.builders.CodelistBuilder;
 import api.crabteam.model.entities.builders.ProjetoBuilder;
 import api.crabteam.model.enumarations.EnvironmentVariables;
 import api.crabteam.model.repositories.ProjetoRepository;
@@ -210,6 +217,148 @@ public class ProjetoController {
 					HttpStatus.NOT_ACCEPTABLE);
 		}
 		
+	}
+	
+	@PostMapping("/import")
+	public ResponseEntity<?> importProject(
+			@RequestParam(name = "codelist") MultipartFile codelistFile,
+			@RequestParam ArrayList<MultipartFile> projectFile) throws Exception{
+		String projectName = projectFile.get(0).getOriginalFilename().split("[/]")[0];
+		
+		if(projetoRepository.findByName(projectName) != null) {
+			return new ResponseEntity<String>("Já existe um projeto cadastrado com este mesmo nome", HttpStatus.BAD_REQUEST);
+		}
+		
+		boolean validProjectName = FileVerifications.isValidProjectName(projectName);
+		
+		if(!validProjectName) {
+			return new ResponseEntity<String>("O nome da pasta do projeto é inválido", HttpStatus.BAD_REQUEST);
+		}
+		
+		String workDirectory = EnvironmentVariables.PROJECTS_FOLDER.getValue();
+		
+		try {
+			CodelistBuilder codelistBuilder = new CodelistBuilder(codelistFile.getBytes(), projectName);
+			
+			Codelist codelist = codelistBuilder.getBuildedCodelist();
+			
+			Projeto projeto = new Projeto(projectName, "Projeto importado", codelist);
+			projeto.setCodelist(codelist);
+			
+			org.apache.commons.io.FileUtils.deleteDirectory(new File(workDirectory + "\\" + projectName));
+			
+			ArrayList<String> revisionFiles = new ArrayList<String>();
+			
+			for (int i = 0; i < projectFile.size(); i++) {
+				MultipartFile file = projectFile.get(i);
+				
+				String destinationPath = workDirectory + "/" + file.getOriginalFilename();
+				
+				File destinationFile = new File(destinationPath);
+				destinationFile.mkdirs();
+				
+				file.transferTo(destinationFile);
+				
+				String fileName = file.getOriginalFilename().split("[/]")[file.getOriginalFilename().split("[/]").length - 1];
+				
+				if(destinationPath.contains("Rev")) {
+					revisionFiles.add(destinationPath);
+					
+				}
+				
+			}
+			
+			List<Linha> codelistLines = codelist.getLinhas();
+			
+			for (int i = 0; i < codelistLines.size(); i++) {
+				Linha line = codelistLines.get(i);
+				
+				String[] destination = FileVerifications.fileDestination(line, projectName);
+				String expectedFileName = destination[1];
+				
+				File destinationFile = new File(destination[0] + expectedFileName);
+				
+				if(destinationFile.exists()) {
+					line.setFilePath(destinationFile.getAbsolutePath());
+					
+				}
+				
+			}
+			
+			HashMap<String, ArrayList<String>> revisionsMap = new HashMap<String, ArrayList<String>>();
+			int actualRevision = 0;
+			
+			for (int i = 0; i < revisionFiles.size(); i++) {
+				String revisionFilePath = revisionFiles.get(i);
+				
+				ArrayList<String> pathDirectories = new ArrayList<String>(Arrays.asList(revisionFilePath.split("[/]")));
+				
+				int revIndex = pathDirectories.indexOf("Rev");
+				
+				String revFolder = pathDirectories.get(revIndex + 1);
+				
+				if(revisionsMap.containsKey(revFolder)) {
+					revisionsMap.get(revFolder).add(revisionFilePath);
+					
+				}else {
+					revisionsMap.put(revFolder, new ArrayList<String>());
+					
+				}
+				
+			}
+			
+			ArrayList<Revisao> revisions = new ArrayList<Revisao>();
+			
+			actualRevision++;
+			
+			String revisionToCheck = "Rev" + actualRevision;
+			
+			while(revisionsMap.containsKey(revisionToCheck)) {
+				ArrayList<String> revisionFilesPaths = revisionsMap.get(revisionToCheck);
+				
+				for (int i = 0; i < revisionFilesPaths.size(); i++) {
+					String path = revisionFilesPaths.get(i);
+					
+					Linha line = codelist.getLinhaByFileName(path.replace("Rev/" + revisionToCheck, "Master"));
+					
+					if(line != null) {
+						line.setFilePath(path);
+						
+					}
+					
+				}
+				
+				Revisao rev = new Revisao();
+				rev.setDescription("Revisão proveniente da importação do projeto");
+				rev.setVersion(actualRevision);
+				
+				revisions.add(rev);
+				
+				actualRevision++;
+				
+				revisionToCheck = "Rev" + actualRevision;
+				
+			}
+			
+			File destinationAbsolutePath = new File(EnvironmentVariables.PROJECTS_FOLDER.getValue() + "\\" + projectName + "\\" + projectName + ".xlsx");
+			codelistFile.transferTo(destinationAbsolutePath);
+
+			for (int i = 0; i < revisions.size(); i++) {
+				projeto.addRevision(revisions.get(i));
+				
+			}
+			
+			projetoRepository.save(projeto);
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+			
+			org.apache.commons.io.FileUtils.deleteDirectory(new File(workDirectory + "\\" + projectName));
+			
+			return new ResponseEntity<String>("Ocorreu um erro interno ao realizar a importação do projeto", HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
+		return new ResponseEntity<Boolean>(true, HttpStatus.OK);
 	}
 	
 }
