@@ -2,6 +2,7 @@ package api.crabteam.controllers;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Base64;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -129,18 +130,21 @@ public class CodelistController {
 		
 	}
 	
-	@PostMapping("/export")
+	@GetMapping("/export")
 	@ApiOperation("Export a codelist to a Excel file.")
 	@ApiResponses({
         @ApiResponse(code = 200, message = "Codelist exported successfully."),
         @ApiResponse(code = 500, message = "Something went wrong.")
     })
-	public ResponseEntity<?> exportCodelist (@RequestParam (name = "codelistName") String codelistName, @RequestParam (name = "pathToSave") String pathToSave) throws IOException {
+	public ResponseEntity<?> exportCodelist (@RequestParam (name = "codelistName") String codelistName) throws IOException {
 		List<Linha> codelistLines = codelistRepository.findByName(codelistName).getLinhas();
-		
-		CodelistExporter.generateCodelistFile(codelistName, codelistLines, pathToSave);
-		
-		return new ResponseEntity<String>("Success!", HttpStatus.OK);
+	
+		byte[] file = CodelistExporter.generateCodelistFile(codelistName, codelistLines);
+		String base64File = new String(Base64.getEncoder().encode(file));
+		//System.err.println(base64File);
+		//parseMediaType("application/vnd.ms-excel")
+	
+		return new ResponseEntity<String>(base64File, HttpStatus.OK);
 	}
 
 }

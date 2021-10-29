@@ -466,17 +466,21 @@ class CodelistManager extends React.Component {
     
         if (supposedSelectedPath.canceled === false) {
             let pathToSave = supposedSelectedPath.filePaths;
-            let formData = new FormData();
-            formData.append("codelistName", document.getElementById("nomeProjeto").textContent);
-            formData.append("pathToSave", pathToSave);
-    
-            let response = await serverRequester.doPost(
+
+            let parameters = {
+                codelistName: document.getElementById("nomeProjeto").textContent
+            }
+
+            let response = await serverRequester.doGet(
                 "/codelist/export",
-                formData,
+                parameters,
                 "multipart/form-data"
             );
 
+            console.log(response);
+
             if (response.status === 200) {
+                console.log(response);
                 notification(
                     "success",
                     "Uhu! 🤩",

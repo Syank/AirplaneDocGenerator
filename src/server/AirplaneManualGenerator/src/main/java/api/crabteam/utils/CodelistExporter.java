@@ -1,7 +1,11 @@
 package api.crabteam.utils;
 
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -214,11 +218,10 @@ public class CodelistExporter {
 	 * Método que realmente gera o arquivo da codelist
 	 * @param codelistName -> nome da codelist a salvar
 	 * @param codelistLines -> linhas da codelist a salvar
-	 * @param pathToSave -> caminho em que a codelist será salva
 	 * @throws IOException
 	 * @author Bárbara Port
 	 */
-	private static void createCodelistSheet (String codelistName, List<Linha> codelistLines, String pathToSave) throws IOException {
+	private static byte[] createCodelistSheet (String codelistName, List<Linha> codelistLines) throws IOException {
 		
 		Workbook workbook = new XSSFWorkbook();
 		Sheet sheet = workbook.createSheet(codelistName);
@@ -228,22 +231,23 @@ public class CodelistExporter {
 		createCodelistLines(sheet, codelistLines);
 		createRemarksColumnsAndLines(sheet, getCodelistColumns().length, codelistLines);
 		
-		String fileLocation = pathToSave.concat("\\").concat(codelistName).concat(".xlsx");
-		FileOutputStream outputStream = new FileOutputStream(fileLocation);
-		workbook.write(outputStream);
+		ByteArrayOutputStream outputFile = new ByteArrayOutputStream();
+		workbook.write(outputFile);
 		workbook.close();
-		outputStream.close();
+		outputFile.close();
+		byte[] fileBytes = outputFile.toByteArray();
+		
+		return fileBytes;
 	}
 
 	/**
 	 * Método mais "legível" para gerar a codelist em outras partes do projeto
 	 * @param codelistName -> nome da codelist a salvar
 	 * @param codelistLines -> linhas da codelist a salvar
-	 * @param pathToSave -> caminho em que a codelist será salva
 	 * @throws IOException
 	 * @author Bárbara Port
 	 */
-	public static void generateCodelistFile (String codelistName, List<Linha> codelistLines, String pathToSave) throws IOException {
-		createCodelistSheet(codelistName, codelistLines, pathToSave);
+	public static byte[] generateCodelistFile (String codelistName, List<Linha> codelistLines) throws IOException {
+		return createCodelistSheet(codelistName, codelistLines);
 	}
 }
