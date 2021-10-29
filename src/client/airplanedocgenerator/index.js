@@ -1,4 +1,5 @@
 const { app, BrowserWindow, ipcMain, dialog} = require("electron");
+const fs = require('fs');
 
 var mainWindow;
 
@@ -45,5 +46,13 @@ ipcMain.on("showDialog", function () {
         properties:["openDirectory"]
     }
     global.pathToSaveFile = dialog.showOpenDialog(options);
+});
+
+ipcMain.on("download", function (event, data) {
+    let base64File = data[0];
+    let path = data[1][0]
+    let codelistName = data[2];
+    const fileBuffer = Buffer.from(base64File.replace("data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64", ""),'base64');
+    fs.writeFileSync(path + "\\" + codelistName + ".xlsx", fileBuffer);
 });
 

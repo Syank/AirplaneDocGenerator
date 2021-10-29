@@ -466,9 +466,9 @@ class CodelistManager extends React.Component {
     
         if (supposedSelectedPath.canceled === false) {
             let pathToSave = supposedSelectedPath.filePaths;
-
+            let codelist = document.getElementById("nomeProjeto").textContent;
             let parameters = {
-                codelistName: document.getElementById("nomeProjeto").textContent
+                codelistName: codelist
             }
 
             let response = await serverRequester.doGet(
@@ -477,10 +477,9 @@ class CodelistManager extends React.Component {
                 "multipart/form-data"
             );
 
-            console.log(response);
-
             if (response.status === 200) {
-                console.log(response);
+                let base64File = response.responseJson["file"];
+                await window.electron.windowControll.downloadFile(base64File, pathToSave, codelist);
                 notification(
                     "success",
                     "Uhu! 🤩",
