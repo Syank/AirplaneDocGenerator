@@ -239,6 +239,10 @@ public class CodelistBuilder {
 		for (int i = tableOffset; i <= columnsCount; i++) {
 			Cell cell = headersRow.getCell(i);
 			
+			if(cell == null) {
+				continue;
+			}
+			
 			String cellValue = cell.getStringCellValue();
 			
 			// Ajusta adequadamente a string da coluna de remarks
@@ -277,6 +281,10 @@ public class CodelistBuilder {
 		
 		for (int i = 0; i < rowsNumber; i++) {
 			Row row = projectSheet.getRow(i);
+			
+			if(row == null) {
+				continue;
+			}
 			
 			int columnsNumber = row.getPhysicalNumberOfCells();
 			

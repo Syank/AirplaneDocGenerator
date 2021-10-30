@@ -259,8 +259,6 @@ public class ProjetoController {
 				
 				file.transferTo(destinationFile);
 				
-				String fileName = file.getOriginalFilename().split("[/]")[file.getOriginalFilename().split("[/]").length - 1];
-				
 				if(destinationPath.contains("Rev")) {
 					revisionFiles.add(destinationPath);
 					
