@@ -22,11 +22,11 @@ public class FileVerifications {
 	 */
 	public static String[] fileDestination (Linha linha, String codelistName) {
 		
-		String sectionNumber = linha.getSectionNumber();
-		String sectionName = linha.getSectionName();
-		String blockNumber = linha.getBlockNumber();
-		String blockName = linha.getBlockName();
-		String code = linha.getCode();
+		String sectionNumber = linha.getSectionNumber().trim();
+		String sectionName = linha.getSectionName().trim();
+		String blockNumber = linha.getBlockNumber().trim();
+		String blockName = linha.getBlockName().trim();
+		String code = linha.getCode().trim();
 		String subsectionNumber = linha.getSubsectionNumber();
 		String subsectionName = linha.getSubsectionName();
 		
@@ -43,8 +43,8 @@ public class FileVerifications {
 		
 		// Verifying subsection
 		if (linha.getSubsectionNumber() != null) {
-			subsectionNumber = linha.getSubsectionNumber();
-			subsectionName = linha.getSubsectionName();
+			subsectionNumber = linha.getSubsectionNumber().trim();
+			subsectionName = linha.getSubsectionName().trim();
 			
 			fileName = fileName.concat(subsectionNumber).concat("-");
 			strFilePath = strFilePath
@@ -135,6 +135,54 @@ public class FileVerifications {
 		    
 	    }
 
+	}
+	
+	public static boolean isValidProjectName(String supposedProjectName) {
+	     String partLetter = supposedProjectName.split("-")[0];
+	     String partNumber = supposedProjectName.split("-")[1];
+	     
+	     boolean validPartLetter = isValidPartLetter(partLetter);
+	     boolean validPartNumber = isValidPartNumber(partNumber);
+
+	     if (!validPartLetter || !validPartNumber) {
+	          return false;
+	     }
+
+	     return true;
+	}
+
+	private static boolean isValidPartNumber(String supposedPartNumber) {
+	     if (supposedPartNumber.length() != 4) {
+	          return false;
+	     }
+
+	     for (int i = 0; i < supposedPartNumber.length(); i++) {
+	          char letter = supposedPartNumber.charAt(i);
+
+	          if (!Character.isDigit(letter)) {
+	               return false;
+	          }
+	          
+	     }
+
+	     return true;
+	}
+
+	private static boolean isValidPartLetter(String supposedPartLetter) {
+	     if (supposedPartLetter.length() != 3) {
+	          return false;
+	     }
+
+	     for (int i = 0; i < supposedPartLetter.length(); i++) {
+	          char letter = supposedPartLetter.charAt(i);
+
+	          if (!Character.isLetter(letter)) {
+	               return false;
+	          }
+	          
+	     }
+
+	     return true;
 	}
 
 }

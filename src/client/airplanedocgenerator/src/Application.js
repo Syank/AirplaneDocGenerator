@@ -7,6 +7,7 @@ import NewProjectScreen from "./views/NewProjectScreen";
 import ServerRequester from "./utils/ServerRequester";
 import SelectProjectScreen from "./views/SelectProjectScreen";
 import ProjectAdministrationScreen from "./views/ProjectAdministrationScreen";
+import UploadScreen from "./views/UploadScreen";
 
 
 
@@ -74,6 +75,10 @@ class Application extends React.Component {
                 pageToDisplay = this.getProjectAdministrationScreen();
 
                 break;
+            case "importProjectScreen":
+                pageToDisplay = this.getUploadScreen();
+
+                break;
             default:
                 pageToDisplay = this.getLoginScreen();
 
@@ -97,6 +102,14 @@ class Application extends React.Component {
         );
 
         return screen;
+    }
+
+    getUploadScreen(){
+        let screen = (
+            <UploadScreen navigation={this.setPageToRender}></UploadScreen>
+        );
+
+        return screen
     }
 
     /**

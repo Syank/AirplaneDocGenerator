@@ -25,7 +25,7 @@ export function notification(nStatus, nTitle, nMessage) {
  * @param {String} cMessage Mensagem para exibir ao usuário na confirmação
  * @param {String} cIcon Tipos: https://sweetalert2.github.io/#icons
  */
-export async function withConfirmation(cTitle, cMessage, cIcon) {
+export async function withConfirmation(cTitle, cMessage, cIcon, confirmButtonText = "Ok!", cancelButtonText = "Cancelar") {
      const { value: confirmation } =  await Swal.fire({
           title: cTitle,
           text: cMessage,
@@ -33,8 +33,8 @@ export async function withConfirmation(cTitle, cMessage, cIcon) {
           showCancelButton: true,
           confirmButtonColor: '#56EA6D',
           cancelButtonColor: '#d33',
-          cancelButtonText: "Cancelar",
-          confirmButtonText: "OK!"
+          cancelButtonText: cancelButtonText,
+          confirmButtonText: confirmButtonText
      });
 
      return confirmation;
