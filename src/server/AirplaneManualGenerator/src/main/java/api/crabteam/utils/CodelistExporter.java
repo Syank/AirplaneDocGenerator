@@ -38,6 +38,7 @@ public class CodelistExporter {
 	/**
 	 * Método que pega todas as colunas da codelist a partir de um enum. Mesmo que o enum nude, o código ainda funcionará devidamente
 	 * @return CodelistColumn[] com cada uma das colunas
+	 * @author Bárbara Port
 	 */
 	private static CodelistColumn[] getCodelistColumns () {
 		return CodelistColumn.getValues();
@@ -65,7 +66,7 @@ public class CodelistExporter {
 		cellStyle.setBottomBorderColor(borderColor);
 		cellStyle.setRightBorderColor(borderColor);
 		cellStyle.setLeftBorderColor(borderColor);
-		if (cell.getRowIndex() == 0) {
+		if (cell.getRowIndex() == 1) {
 			// cell background color
 			short backgroundColor = IndexedColors.LAVENDER.getIndex();
 			cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
@@ -97,13 +98,13 @@ public class CodelistExporter {
 	 * @author Bárbara Port
 	 */
 	private static void createRemarksColumnsAndLines (Sheet sheet, int start, List<Linha> codelistLines) {
-		Row header = sheet.getRow(0);
-		int control = start;
+		Row header = sheet.getRow(1);
+		int control = start + 1;
 		for (Map.Entry<String, String> entry : codelistRemarks.entrySet()) {
 			String title = entry.getKey().concat(" - ").concat(entry.getValue());
 			createCell(header, control, title);
-			for (int l = 1; l <= codelistLines.size(); l++) {
-				int index = l - 1;
+			for (int l = 2; l < codelistLines.size() + 2; l++) {
+				int index = l - 2;
 				List<Remark> lineRemarks = codelistLines.get(index).getRemarks();
 				for (Remark remark : lineRemarks) {
 					if (remark.getTraco().equals(entry.getKey())) {
@@ -126,7 +127,7 @@ public class CodelistExporter {
 	 */
 	private static Row createRow (Sheet sheet, int index) {
 		Row row = sheet.createRow(index);
-		short height = index == 0 ? (short) 1000 : (short) 350;
+		short height = index == 1 ? (short) 1000 : (short) 350;
 		row.setHeight(height);
 		return row;
 	}
@@ -137,10 +138,11 @@ public class CodelistExporter {
 	 * @author Bárbara Port
 	 */
 	private static void createCodelistHeader (Sheet sheet) {
-		Row header = createRow(sheet, 0);
+		Row header = createRow(sheet, 1);
 		CodelistColumn[] codelistColumns = getCodelistColumns();
-		for (int i = 0; i < codelistColumns.length; i++) {
-			createCell(header, i, codelistColumns[i].columnType);
+		for (int i = 1; i <= codelistColumns.length; i++) {
+			int c = i - 1;
+			createCell(header, i, codelistColumns[c].columnType);
 		}
 	}
 	
@@ -170,13 +172,13 @@ public class CodelistExporter {
 	 * @author Bárbara Port
 	 */
 	private static void createCodelistLines (Sheet sheet, List<Linha> codelistLines) {
-		for (int l = 1; l <= codelistLines.size(); l++) {
-			int i = l - 1;
+		for (int l = 2; l <= codelistLines.size() + 1; l++) {
+			int i = l - 2;
 			Row line = createRow(sheet, l);
 			CodelistColumn[] codelistColumns = getCodelistColumns();
 			String cellContent = "";
-			for (int c = 0; c < codelistColumns.length; c++) {
-				String cellType = codelistColumns[c].columnType;
+			for (int c = 1; c < codelistColumns.length + 1; c++) {
+				String cellType = codelistColumns[c - 1].columnType;
 				switch (cellType) {
 				case "Nº SEÇÃO":
 					cellContent = codelistLines.get(i).getSectionNumber();
