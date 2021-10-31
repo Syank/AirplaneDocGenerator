@@ -1,4 +1,5 @@
-const { app, BrowserWindow, ipcMain } = require("electron");
+const { app, BrowserWindow, ipcMain, dialog} = require("electron");
+const fs = require('fs');
 
 var mainWindow;
 
@@ -10,6 +11,7 @@ app.on("ready", () => {
         minWidth: 880,
         frame: true,
         webPreferences: {
+            enableRemoteModule: true,
             nodeIntegration: false,
             worldSafeExecuteJavaScript: true,
             contextIsolation: true,
@@ -37,5 +39,20 @@ ipcMain.on("maximize", function () {
 
 ipcMain.on("unmaximize", function () {
     mainWindow.unmaximize();
+});
+
+ipcMain.on("showDialog", function () {
+    let options = {
+        properties:["openDirectory"]
+    }
+    global.pathToSaveFile = dialog.showOpenDialog(options);
+});
+
+ipcMain.on("download", function (event, data) {
+    let base64File = data[0];
+    let path = data[1][0]
+    let codelistName = data[2];
+    const fileBuffer = Buffer.from(base64File.replace("data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64", ""),'base64');
+    fs.writeFileSync(path + "\\" + codelistName + ".xlsx", fileBuffer);
 });
 

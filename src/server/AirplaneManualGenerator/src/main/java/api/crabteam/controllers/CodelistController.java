@@ -1,8 +1,11 @@
 package api.crabteam.controllers;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.Base64;
 import java.util.List;
 
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +25,7 @@ import api.crabteam.model.enumarations.EnvironmentVariables;
 import api.crabteam.model.repositories.CodelistRepository;
 import api.crabteam.model.repositories.LinhaRepository;
 import api.crabteam.model.repositories.ProjetoRepository;
+import api.crabteam.utils.CodelistExporter;
 import api.crabteam.utils.ProjectHealthCheck;
 import api.crabteam.utils.ProjectSituation;
 import io.swagger.annotations.Api;
@@ -125,6 +129,24 @@ public class CodelistController {
 		
 		return new ResponseEntity<List<?>>(linhas, HttpStatus.OK);
 		
+	}
+	
+	@GetMapping("/export")
+	@ApiOperation("Export a codelist to a Excel file.")
+	@ApiResponses({
+        @ApiResponse(code = 200, message = "Codelist exported successfully."),
+        @ApiResponse(code = 500, message = "Something went wrong.")
+    })
+	public ResponseEntity<?> exportCodelist (@RequestParam (name = "codelistName") String codelistName) throws IOException {
+		List<Linha> codelistLines = codelistRepository.findByName(codelistName).getLinhas();
+	
+		byte[] file = CodelistExporter.generateCodelistFile(codelistName, codelistLines);
+		String base64File = new String(Base64.getEncoder().encode(file));
+		
+		JSONObject fileObject = new JSONObject();
+		fileObject.put("file", base64File);
+	
+		return new ResponseEntity<String>(fileObject.toString(), HttpStatus.OK);
 	}
 
 }

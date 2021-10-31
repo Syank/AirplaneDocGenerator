@@ -1,4 +1,4 @@
-const { ipcRenderer, contextBridge } = require('electron');
+const { ipcRenderer, contextBridge, remote } = require('electron');
 
 contextBridge.exposeInMainWorld('electron', {
     windowControll: {
@@ -13,6 +13,12 @@ contextBridge.exposeInMainWorld('electron', {
         },
         close () {
             closeWindow()
+        },
+        showDialog () {
+            return showOpenDialog()
+        },
+        downloadFile (base64File, supposedSelectedPath, codelistName) {
+            return downloadCodelistFile(base64File, supposedSelectedPath, codelistName)
         }
     }
 });
@@ -31,4 +37,13 @@ function closeWindow() {
 
 function unmaximizeWindow() {
     ipcRenderer.send("unmaximize");
+}
+
+function showOpenDialog() {
+    ipcRenderer.send("showDialog");
+    return remote.getGlobal("pathToSaveFile");
+}
+
+function downloadCodelistFile(base64File, supposedSelectedPath, codelistName) {
+    ipcRenderer.send("download", [base64File, supposedSelectedPath, codelistName]);
 }

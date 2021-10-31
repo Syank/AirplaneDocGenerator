@@ -742,12 +742,34 @@ class CodelistManager extends React.Component {
         }
     }
 
-    exportCodelist() {
-        notification(
-            "info",
-            "Aguarde um pouco! 🤓",
-            "Essa funcionalidade estará disponível em breve!"
-        );
+    async exportCodelist(event) {
+        let serverRequester = new ServerRequester("http://localhost:8080");
+
+        let supposedSelectedPath = await window.electron.windowControll.showDialog();
+    
+        if (supposedSelectedPath.canceled === false) {
+            let pathToSave = supposedSelectedPath.filePaths;
+            let codelist = document.getElementById("nomeProjeto").textContent;
+            let parameters = {
+                codelistName: codelist
+            }
+
+            let response = await serverRequester.doGet(
+                "/codelist/export",
+                parameters,
+                "multipart/form-data"
+            );
+
+            if (response.status === 200) {
+                let base64File = response.responseJson["file"];
+                await window.electron.windowControll.downloadFile(base64File, pathToSave, codelist);
+                notification(
+                    "success",
+                    "Uhu! 🤩",
+                    "Codelist exportada! Verifique a pasta " + pathToSave + "!"
+                );
+            }
+        }
     }
 
     toggleAddNewLine() {

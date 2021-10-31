@@ -142,8 +142,26 @@ public class CodelistBuilder {
 								for (int k = j + 1; k <= columnsNumber ; k++) {
 									Cell remarkCell = row.getCell(k);
 	
-									double remarkCellValue = remarkCell.getNumericCellValue();
-	
+									CellType remarkCellType = remarkCell.getCellType();
+									
+									double remarkCellValue;
+									
+									if(remarkCellType == CellType.STRING) {
+										String value = remarkCell.getStringCellValue();
+										
+										if(value.isEmpty()) {
+											remarkCellValue = 0;
+											
+										}else {
+											remarkCellValue = Double.parseDouble(value);
+											
+										}
+										
+									}else {
+										remarkCellValue = remarkCell.getNumericCellValue();
+										
+									}
+									
 									if(remarkCellValue != 0) {
 										String remarkNickNameColumn = (String) columnsTypes.get(k);
 	
@@ -221,6 +239,10 @@ public class CodelistBuilder {
 		for (int i = tableOffset; i <= columnsCount; i++) {
 			Cell cell = headersRow.getCell(i);
 			
+			if(cell == null) {
+				continue;
+			}
+			
 			String cellValue = cell.getStringCellValue();
 			
 			// Ajusta adequadamente a string da coluna de remarks
@@ -259,6 +281,10 @@ public class CodelistBuilder {
 		
 		for (int i = 0; i < rowsNumber; i++) {
 			Row row = projectSheet.getRow(i);
+			
+			if(row == null) {
+				continue;
+			}
 			
 			int columnsNumber = row.getPhysicalNumberOfCells();
 			
