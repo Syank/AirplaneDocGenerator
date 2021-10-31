@@ -1,4 +1,4 @@
-package api.crabteam.model;
+package api.crabteam.model.entities;
 
 import javax.persistence.Column;
 import javax.persistence.Convert;

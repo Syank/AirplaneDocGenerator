@@ -3,7 +3,7 @@ import React from "react";
 import Button from "../assets/components/Button";
 import Tooltip from "../assets/components/Tooltip";
 
-import { getBackgroundImage } from "../utils/pagesUtils";
+import { getBackgroundImage, isValidProjectName } from "../utils/pagesUtils";
 import { notification } from "../assets/components/Notifications";
 
 import ServerRequester from "../utils/ServerRequester";
@@ -13,6 +13,14 @@ import ServerRequester from "../utils/ServerRequester";
  * @author Bárbara Port
  */
 class NewProjectScreen extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.isValidPartLetter = this.isValidPartLetter.bind(this);
+        this.isValidPartNumber = this.isValidPartNumber.bind(this);
+        this.sendFormData = this.sendFormData.bind(this);
+    }
+
     /**
      * Criar um novo projeto
      *
@@ -24,29 +32,104 @@ class NewProjectScreen extends React.Component {
 
         let serverRequester = new ServerRequester("http://localhost:8080");
 
-        //let fileInput = document.getElementById("codelist-file");
+        let fileInput = document.getElementById("codelist-file");
         let nameInput = document.getElementById("project-name");
 
         let projectName = nameInput.value;
+        let file = fileInput.files[0];
 
-        let newProjectForm = {
-            nome: projectName,
-        };
+        let formData = new FormData();
+        formData.append("nome", projectName);
+        formData.append("descricao", "Projeto sem descrição. A descrição pode ser alterada na página de gerenciamento do projeto.");
+        formData.append("codelistFile", file);
 
-        let response = await serverRequester.doPost(
-            "/project/create",
-            newProjectForm
-        );
+        let validName = isValidProjectName(projectName);
 
-        if (response["responseJson"] === true) {
-            notification("success", "Oba!", "Projeto criado com sucesso!");
-        } else {
+        if(!validName){
             notification(
                 "error",
-                "Ops...",
-                "Não foi possível criar o projeto. Tente novamente."
+                "Nome de projeto inválido! 😵",
+                "O formato do nome de projetos devem iguais ao seguinte exemplo: ABC-1234"
             );
+            
+        }else{
+            let response = await serverRequester.doPost(
+                "/project/create",
+                formData,
+                "multipart/form-data"
+            );
+    
+            if (response["responseJson"] === true) {
+                notification(
+                    "success",
+                    "Oba! 😄",
+                    "Projeto criado com sucesso!"
+                );
+            } else {
+                notification(
+                    "error",
+                    "Ops...",
+                    "Não foi possível criar o projeto. Tente novamente."
+                );
+
+            }
+
         }
+
+    }
+
+    /**
+     * Verifica se a parte de números do nome de um projeto contêm apenas números
+     *
+     * @param {String} supposedPartNumber String da parte de números do nome de um projeto
+     * @author Rafael Furtado
+     */
+    isValidPartNumber(supposedPartNumber) {
+        if (
+            supposedPartNumber === undefined ||
+            supposedPartNumber.length !== 4 ||
+            supposedPartNumber.includes(".")
+        ) {
+            return false;
+        }
+
+        let isNumber = +supposedPartNumber;
+
+        if (isNaN(isNumber)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Verifica se a parte de letras de um nome de projeto contêm apenas letras
+     *
+     * @param {String} supposedPartLetter String da parte de letras do nome do projeto
+     * @author Rafael Furtado
+     */
+    isValidPartLetter(supposedPartLetter) {
+        if (
+            supposedPartLetter === undefined ||
+            !isNaN(supposedPartLetter) ||
+            supposedPartLetter.length !== 3
+        ) {
+            return false;
+        }
+
+        let regex = /[a-zA-Z]/;
+
+        let letters = supposedPartLetter.split("");
+
+        for (let i = 0; i < letters.length; i++) {
+            const letter = letters[i];
+
+            if (!regex.test(letter)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**
@@ -61,6 +144,7 @@ class NewProjectScreen extends React.Component {
             let labelFileName = document.getElementById("codelist-file-name");
             labelFileName.textContent = fileName;
         }
+        
     }
 
     /**
@@ -109,8 +193,7 @@ class NewProjectScreen extends React.Component {
                                 <label
                                     htmlFor="codelist-file"
                                     id="codelist-file-name"
-                                    className="w-68 p-1 px-4 rounded-lg bg-inputFileColor text-white cursor-pointer hover:bg-blue-300 active:bg-blue-300"
-                                >
+                                    className="w-68 p-1 px-4 rounded-lg bg-inputFileColor text-white cursor-pointer hover:bg-blue-300 active:bg-blue-300">
                                     Selecionar Codelist em sua máquina
                                 </label>
                                 <input
@@ -120,6 +203,10 @@ class NewProjectScreen extends React.Component {
                                     className="hidden"
                                     accept=".xls,.xlsx"
                                 ></input>
+                                <Tooltip
+                                    id="codelistImport"
+                                    text="O arquivo da codelist deve ser da extensão .xlsx (arquivo do Excel) e uma de suas abas de planilhas deve ter exatamente o mesmo nome declarado no campo de nome acima"
+                                />
 
                                 <p className="text-xs ml-12 mr-12 mt-4">
                                     A escolha de um Codelist no momento da

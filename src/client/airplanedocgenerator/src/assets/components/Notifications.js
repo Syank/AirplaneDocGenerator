@@ -1,5 +1,7 @@
 import Swal from 'sweetalert2';
 
+
+
 /**
  * Função que notificará o usuário de acordo com os parâmetros passados
  * @param {String} status Tipos: https://sweetalert2.github.io/#icons
@@ -13,6 +15,7 @@ export function notification(nStatus, nTitle, nMessage) {
           icon: nStatus,
           title: nTitle,
           text: nMessage,
+          confirmButtonColor: '#56EA6D',
      })
 }
 
@@ -21,36 +24,50 @@ export function notification(nStatus, nTitle, nMessage) {
  * @param {String} cTitle Título quando está confirmando
  * @param {String} cMessage Mensagem para exibir ao usuário na confirmação
  * @param {String} cIcon Tipos: https://sweetalert2.github.io/#icons
- * @param {String} sOption O que fazer após clicar no OK?
  */
-export function withConfirmation(cTitle, cMessage, cIcon, sOption) {
-     Swal.fire({
+export async function withConfirmation(cTitle, cMessage, cIcon, confirmButtonText = "Ok!", cancelButtonText = "Cancelar") {
+     const { value: confirmation } =  await Swal.fire({
           title: cTitle,
           text: cMessage,
           icon: cIcon,
           showCancelButton: true,
-          confirmButtonColor: '#3085d6',
+          confirmButtonColor: '#56EA6D',
           cancelButtonColor: '#d33',
-          cancelButtonText: "Cancelar",
-          confirmButtonText: "OK!"
-     }).then((result) => {
-          if (result.isConfirmed) {
-               switch (sOption) {
-                    case "example":
-                         notification("success", "Uhu!", "Exemplo exibido!");
-                         break;
-                    
-                    default:
-                         break;
-               }
-          }
-     })
+          cancelButtonText: cancelButtonText,
+          confirmButtonText: confirmButtonText
+     });
+
+     return confirmation;
 }
-/**
- *  withConfirmation (
-          "Criar o projeto?",
-          "Quer mesmo criar o projeto?",
-          "warning",
-          "example"
-     );
- */
+
+export async function addFile(lineId) {
+     const { value: uploadedFile } = await Swal.fire({
+          title: 'Escolha um arquivo!',
+          input: 'file',
+          inputAttributes: {
+               autocapitalize: 'off',
+               'accept': 'application/pdf',
+          },
+          showCancelButton: true,
+          confirmButtonText: 'Pronto!',
+          confirmButtonColor: '#56EA6D'
+     })
+
+     return uploadedFile;
+}
+
+export async function addCodelist(projectName) {
+     const { value: uploadedFile } = await Swal.fire({
+          title: 'Escolha um arquivo!',
+          input: 'file',
+          inputAttributes: {
+               autocapitalize: 'off',
+               'accept': '.xls,.xlsx',
+          },
+          showCancelButton: true,
+          confirmButtonText: 'Pronto!',
+          confirmButtonColor: '#56EA6D'
+     })
+
+     return uploadedFile;
+}

@@ -6,6 +6,8 @@ import LoginScreen from "./views/LoginScreen";
 import NewProjectScreen from "./views/NewProjectScreen";
 import ServerRequester from "./utils/ServerRequester";
 import SelectProjectScreen from "./views/SelectProjectScreen";
+import ProjectAdministrationScreen from "./views/ProjectAdministrationScreen";
+import UploadScreen from "./views/UploadScreen";
 
 
 
@@ -27,7 +29,8 @@ class Application extends React.Component {
         this.previousPageMap = {
             "creation-screen": "home",
             "new-project-screen": "creation-screen",
-            "selectProject": "home"
+            "selectProject": "home",
+            "projectAdministration": "selectProject"
         };
 
         this.setPageToRender = this.setPageToRender.bind(this);
@@ -68,6 +71,14 @@ class Application extends React.Component {
                 pageToDisplay = this.getSelectProjectScreen();
                 
                 break;
+            case "projectAdministration":
+                pageToDisplay = this.getProjectAdministrationScreen();
+
+                break;
+            case "importProjectScreen":
+                pageToDisplay = this.getUploadScreen();
+
+                break;
             default:
                 pageToDisplay = this.getLoginScreen();
 
@@ -79,7 +90,23 @@ class Application extends React.Component {
 
     getSelectProjectScreen(){
         let screen = (
-            <SelectProjectScreen></SelectProjectScreen>
+            <SelectProjectScreen navigation={this.setPageToRender}></SelectProjectScreen>
+        );
+
+        return screen
+    }
+
+    getProjectAdministrationScreen(){
+        let screen = (
+            <ProjectAdministrationScreen navigation={this.setPageToRender}></ProjectAdministrationScreen>
+        );
+
+        return screen;
+    }
+
+    getUploadScreen(){
+        let screen = (
+            <UploadScreen navigation={this.setPageToRender}></UploadScreen>
         );
 
         return screen
@@ -204,14 +231,7 @@ class Application extends React.Component {
     async logoutUser(){
         let serverRequester = new ServerRequester("http://localhost:8080");
 
-        let response = await serverRequester.doGet("/authentication/logout");
-
-        if(response["responseJson"] === true){
-            console.log("Redirecionando para login");
-
-        }else{
-            console.log("O servidor está offline 😥\nVocê será redirecionado para a página de login");
-        }
+        await serverRequester.doGet("/authentication/logout");
 
         this.setState({userLogged: false, isUserAdmin: false, pageToRender: "login"})
 

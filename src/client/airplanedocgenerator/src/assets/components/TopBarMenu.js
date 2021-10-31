@@ -25,6 +25,7 @@ class TopBarMenu extends React.Component{
      * @author Rafael Furtado
      */
     loggout(){
+        this.props.toggleMenu();
         this.props.loggoutFunction();
 
     }
@@ -35,6 +36,7 @@ class TopBarMenu extends React.Component{
      * @author Rafael Furtado
      */
     openRegisterUserMenu(){
+        this.props.toggleMenu();
         this.props.setShowRegisterUser(true);
 
     }

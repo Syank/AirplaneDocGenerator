@@ -39,6 +39,7 @@ class SelectProjectScreen extends React.Component {
         this.nextPage = this.nextPage.bind(this);
         this.previousPage = this.previousPage.bind(this);
         this.search = this.search.bind(this);
+        this.goToProjectView = this.goToProjectView.bind(this);
 
     }
 
@@ -244,8 +245,14 @@ class SelectProjectScreen extends React.Component {
 
         let searchList = this.getSearchList(valueToSearch);
 
-        this.setState({search: valueToSearch, projectsList: searchList, page: 1});
-
+        if (searchList.length === 0){
+            notification("info", "Nenhum resultado 😮", "Nenhum projeto foi encontrado para essa pesquisa");
+        
+            return searchList;
+        }
+        else{
+            this.setState({search: valueToSearch, projectsList: searchList, page: 1});
+        }
     }
 
     /**
@@ -320,7 +327,17 @@ class SelectProjectScreen extends React.Component {
      * @author Rafael Furtado
      */
     goToProjectView(){
-        notification("info", "Um momento! 🤔", "Este recurso ainda não está disponível no momento");
+        let projectName = this.state["selectedProject"]["nome"];
+        
+        if(projectName !== "Selecione um manual"){
+            window.sessionStorage.setItem("selectedProject", projectName);
+
+            this.props.navigation("projectAdministration");
+
+        }else{
+            notification("info", "Um momento! 😉", "Selecione um projeto antes de navegar para sua página de administração");
+            
+        }
 
     }
 
@@ -345,10 +362,15 @@ class SelectProjectScreen extends React.Component {
      * 
      * @returns Retorna a lista de manuais que serão exibidas para a página em questão
      */
-    getProjectsToShow(){
+    getProjectsToShow() {
         let page = this.state["page"] - 1;
 
         let projectsToShow = this.state["projectsList"][page];
+
+        if (projectsToShow === undefined) {
+            projectsToShow = [];
+
+        }
 
         return projectsToShow;
     }

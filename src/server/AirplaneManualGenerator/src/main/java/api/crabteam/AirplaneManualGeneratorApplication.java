@@ -5,9 +5,9 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import api.crabteam.model.Administrador;
-import api.crabteam.model.Projeto;
-import api.crabteam.model.Usuario;
+import api.crabteam.model.entities.Administrador;
+import api.crabteam.model.entities.Usuario;
+import api.crabteam.model.enumarations.EnvironmentVariables;
 import api.crabteam.model.repositories.ProjetoRepository;
 import api.crabteam.model.repositories.UsuarioRepository;
 
@@ -27,7 +27,13 @@ public class AirplaneManualGeneratorApplication implements CommandLineRunner {
 	
 	@Override
 	public void run(String... args) throws Exception {
-		Usuario user = userRep.findByEmail("admin@root.crabteam");
+		
+		// Verifica se a variável de apontamento para a pasta de uploads foi configurada
+		if(EnvironmentVariables.PROJECTS_FOLDER.getValue() == null) {
+			throw new Exception("A variável de ambiente para o apontamento da pasta de uploads não foi encontrada");
+		}
+		
+		Usuario user = userRep.findByEmail("a");
 		
 		if(user == null) {
 			Administrador admin = new Administrador("System Admin", "a", "a");
@@ -35,23 +41,7 @@ public class AirplaneManualGeneratorApplication implements CommandLineRunner {
 			userRep.save(admin);
 			
 		}
-		
-		Projeto projeto1 = new Projeto("ABO-1234", "Um projeto qualquer apenas para teste");
-		Projeto projeto2 = new Projeto("AOC-2851", "Um projeto qualquer apenas para teste");
-		Projeto projeto3 = new Projeto("ATC-7412", "Um projeto qualquer apenas para teste");
-		Projeto projeto4 = new Projeto("ACC-5233", "Um projeto qualquer apenas para teste");
-		Projeto projeto5 = new Projeto("BCC-1235", "Um projeto qualquer apenas para teste");
-		Projeto projeto6 = new Projeto("ADC-2686", "Um projeto qualquer apenas para teste");
-		Projeto projeto7 = new Projeto("ZDC-1987", "Um projeto qualquer apenas para teste");
-		
-		projRep.save(projeto1);
-		projRep.save(projeto2);
-		projRep.save(projeto3);
-		projRep.save(projeto4);
-		projRep.save(projeto5);
-		projRep.save(projeto6);
-		projRep.save(projeto7);
-		
+
 	}
 
 }
