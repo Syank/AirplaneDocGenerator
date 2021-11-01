@@ -18,6 +18,7 @@ import api.crabteam.model.entities.Revisao;
 import api.crabteam.model.repositories.LinhaRepository;
 import api.crabteam.model.repositories.ProjetoRepository;
 import api.crabteam.utils.FileVerifications;
+import api.crabteam.utils.LEPBuilder;
 
 
 
@@ -83,6 +84,9 @@ public class RevisionController {
 			Projeto revProject = projetoRepository.findById(projectId).get();
 			
 			revProject.addRevision(newRevision);
+			
+			LEPBuilder lepBuilder = new LEPBuilder(revProject);
+			lepBuilder.generateLep();
 			
 			projetoRepository.save(revProject);
 			
