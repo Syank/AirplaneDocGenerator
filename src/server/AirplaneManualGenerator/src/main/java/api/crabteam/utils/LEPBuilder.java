@@ -1,12 +1,16 @@
 package api.crabteam.utils;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 import com.itextpdf.text.Document;
 import com.itextpdf.text.pdf.CMYKColor;
 import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfWriter;
 
+import api.crabteam.model.entities.Linha;
 import api.crabteam.model.entities.Projeto;
 import api.crabteam.model.entities.Revisao;
 import api.crabteam.model.enumarations.EnvironmentVariables;
@@ -30,9 +34,24 @@ public class LEPBuilder {
 	}
 	
 	public void generateLep() throws Exception {
-		String fileName = getFileName();
+		ArrayList<Linha> lines = getProjectRemarks();
 		
-		PDFFile pdfFile = PDFBuilder.createNewPdfDocument(this.outputFolder, fileName);
+		for (int i = 0; i < lines.size(); i++) {
+			Linha line = lines.get(i);
+			
+			generateLep(line);
+			
+		}
+		
+	}
+	
+	private void generateLep(Linha line) throws Exception {
+		String fileName = getFileName(line);
+		String outputFolder = getOutputFolder(line);
+		
+		line.setFilePath(outputFolder + fileName);
+		
+		PDFFile pdfFile = PDFBuilder.createNewPdfDocument(outputFolder, fileName);
 		
 		Document pdfDoc = pdfFile.getPdfDocument();
 		PdfWriter writer = pdfFile.getWriter();
@@ -40,15 +59,54 @@ public class LEPBuilder {
 		pdfDoc.open();
 		
 		drawHeader(writer);
-		drawFooter(writer);
+		writeRevisionsSummary(writer);
+		drawFooter(writer, line);
 		
 		pdfDoc.close();
 		
 	}
 	
-	private void drawFooter(PdfWriter writer) throws Exception {
+	private void writeRevisionsSummary(PdfWriter writer) throws Exception {
+		String title = "LIST OF EFFECTIVE PAGES";
+		
+		PdfContentByte canvas = writer.getDirectContent();
+		
+        PDFCoordinates revisionTextTitlePosition = new PDFCoordinates((PDFBuilder.PDF_WIDTH / 2) - 100, PDFBuilder.PDF_HEIGHT - 150);
+        PDFEditor.writeText(canvas, revisionTextTitlePosition, title, 16, true);
+        
+        Set<Revisao> revisions = this.project.getRevisions();
+        
+        int textX = (PDFBuilder.PDF_WIDTH / 2) - 100;
+        int textY = PDFBuilder.PDF_HEIGHT - 150;
+        
+        int lineHeight = 20;
+        
+        for	(Revisao revision : revisions) {
+        	String revisionVersion = "REVISION ................. " + revision.getVersion() + " .................. date";
+        	
+        	PDFCoordinates revisionTextPosition = new PDFCoordinates(textX, textY - lineHeight);
+            PDFEditor.writeText(canvas, revisionTextPosition, revisionVersion, 14);
+            
+            lineHeight += 20;
+            
+		}
+        
+	}
+
+	private String getOutputFolder(Linha line) {
+		String path = FileVerifications.fileDestination(line, this.project.getNome())[0];
+		
+		int actualRevision = this.project.getLastRevision().getVersion();
+		
+		path = path.replace("Master", "Rev\\Rev" + actualRevision + "\\");
+		
+		return path;
+	}
+
+	private void drawFooter(PdfWriter writer, Linha line) throws Exception {
         String projectName = this.project.getNome();
         String revisionText = getRevisionFooterText();
+        String codeText = "code " + line.getCode();
         
         PdfContentByte canvas = writer.getDirectContent();
         
@@ -63,6 +121,9 @@ public class LEPBuilder {
         
         PDFCoordinates revisionTextPosition = new PDFCoordinates(45, 40);
         PDFEditor.writeText(canvas, revisionTextPosition, revisionText, 11);
+        
+        PDFCoordinates codeTextPosition = new PDFCoordinates((PDFBuilder.PDF_WIDTH / 2) - 20, 40);
+        PDFEditor.writeText(canvas, codeTextPosition, codeText, 12);
         
         canvas.closePathStroke();
 		
@@ -98,10 +159,30 @@ public class LEPBuilder {
 		
 	}
 
-	private String getFileName() {
-		String fileName = this.project.getNome() + ".pdf";
+	private String getFileName(Linha line) {
+		String fileName = FileVerifications.fileDestination(line, this.project.getNome())[1];
 		
 		return fileName;
+	}
+	
+	private ArrayList<Linha> getProjectRemarks(){
+		ArrayList<Linha> projectRemarks = new ArrayList<Linha>();
+		
+		List<Linha> lines = this.project.getCodelist().getLinhas();
+		
+		for (int i = 0; i < lines.size(); i++) {
+			Linha line = lines.get(i);
+			
+			String lineBlock = line.getBlockName();
+			
+			if(lineBlock.equals("LEP")) {
+				projectRemarks.add(line);
+				
+			}
+			
+		}
+		
+		return projectRemarks;
 	}
 
 	private void createLepDirectory() {

@@ -17,6 +17,9 @@ public class PDFBuilder {
 	public static PDFFile createNewPdfDocument(String outputFolderPath, String pdfFileName) throws Exception {
 		Document pdfDoc = new Document(PageSize.A4);
 		
+		File directory = new File(outputFolderPath);
+		directory.mkdirs();
+		
 		File pdfFile = new File(outputFolderPath + "\\" + pdfFileName);
 		pdfFile.createNewFile();
 		
