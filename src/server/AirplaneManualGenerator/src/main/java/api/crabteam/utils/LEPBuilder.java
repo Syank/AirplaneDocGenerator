@@ -62,15 +62,26 @@ public class LEPBuilder {
 
 		pdfDoc.open();
 		
-		drawHeader(writer);
-		writeRevisionsSummary(writer);
-		drawFooter(writer, line);
+		writeRevisionsSummary(pdfDoc, writer, line);
 		
 		pdfDoc.close();
 		
 	}
 	
-	private void writeRevisionsSummary(PdfWriter writer) throws Exception {
+	private void newPage(Document pdfDoc, PdfWriter writer, Linha line) throws Exception {
+		pdfDoc.newPage();
+		
+		this.page++;
+		
+		drawHeader(writer);
+		drawFooter(writer, line);
+		
+	}
+	
+	private void writeRevisionsSummary(Document pdfDoc, PdfWriter writer, Linha line) throws Exception {
+		drawHeader(writer);
+		drawFooter(writer, line);
+		
 		String title = "LIST OF EFFECTIVE PAGES";
 		
 		PdfContentByte canvas = writer.getDirectContent();
@@ -85,16 +96,23 @@ public class LEPBuilder {
         
         int lineHeight = 20;
         int revisionCount = 0;
+        int revisionsInPage = 0;
         
         for	(Revisao revision : revisions) {
+        	if(revisionsInPage == 25) {
+        		newPage(pdfDoc, writer, line);
+        		
+        		revisionsInPage = 0;
+        		lineHeight = 20;
+        		
+        	}
+        	
         	int posX = textX;
         	
         	if(revisionCount >= 10) {
         		posX -= 5;
         		
         	}
-        	
-        	
         	
         	String formatedDate = getFormatedCreationDate(revision);
         	
@@ -105,6 +123,7 @@ public class LEPBuilder {
             
             lineHeight += 20;
             revisionCount++;
+            revisionsInPage++;
             
 		}
         
