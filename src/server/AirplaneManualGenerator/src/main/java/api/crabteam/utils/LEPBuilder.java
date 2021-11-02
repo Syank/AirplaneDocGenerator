@@ -78,6 +78,22 @@ public class LEPBuilder {
 		
 	}
 	
+	private void addIntentionallyBlankPage(Document pdfDoc, PdfWriter writer, Linha line) throws Exception {
+		pdfDoc.newPage();
+		
+		this.page++;
+		
+		drawHeader(writer);
+		
+		PdfContentByte canvas = writer.getDirectContent();
+		
+        PDFCoordinates blankTextPosition = new PDFCoordinates((PDFBuilder.PDF_WIDTH / 2) - 65, PDFBuilder.PDF_HEIGHT / 2);
+        PDFEditor.writeText(canvas, blankTextPosition, "INTENTIONALLY BLANK");
+		
+		drawFooter(writer, line);
+		
+	}
+	
 	private void writeRevisionsSummary(Document pdfDoc, PdfWriter writer, Linha line) throws Exception {
 		drawHeader(writer);
 		drawFooter(writer, line);
@@ -126,6 +142,8 @@ public class LEPBuilder {
             revisionsInPage++;
             
 		}
+        
+        addIntentionallyBlankPage(pdfDoc, writer, line);
         
 	}
 
