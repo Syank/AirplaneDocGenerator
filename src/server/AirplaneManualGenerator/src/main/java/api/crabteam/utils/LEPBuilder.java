@@ -1,8 +1,11 @@
 package api.crabteam.utils;
 
 import java.io.File;
+import java.time.LocalDateTime;
+import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 
 import com.itextpdf.text.Document;
@@ -19,6 +22,7 @@ public class LEPBuilder {
 	
 	private Projeto project;
 	private String outputFolder;
+	private int page = 1;
 	
 	private static final CMYKColor BLACK = new CMYKColor(0, 0, 0, 255);
 
@@ -76,21 +80,51 @@ public class LEPBuilder {
         
         Set<Revisao> revisions = this.project.getRevisions();
         
-        int textX = (PDFBuilder.PDF_WIDTH / 2) - 100;
+        int textX = (PDFBuilder.PDF_WIDTH / 2) - 145;
         int textY = PDFBuilder.PDF_HEIGHT - 150;
         
         int lineHeight = 20;
+        int revisionCount = 0;
         
         for	(Revisao revision : revisions) {
-        	String revisionVersion = "REVISION ................. " + revision.getVersion() + " .................. date";
+        	int posX = textX;
         	
-        	PDFCoordinates revisionTextPosition = new PDFCoordinates(textX, textY - lineHeight);
+        	if(revisionCount >= 10) {
+        		posX -= 5;
+        		
+        	}
+        	
+        	
+        	
+        	String formatedDate = getFormatedCreationDate(revision);
+        	
+        	String revisionVersion = "REVISION ................. " + revision.getVersion() + " .................. " + formatedDate;
+        	
+        	PDFCoordinates revisionTextPosition = new PDFCoordinates(posX, textY - lineHeight);
             PDFEditor.writeText(canvas, revisionTextPosition, revisionVersion, 14);
             
             lineHeight += 20;
+            revisionCount++;
             
 		}
         
+	}
+
+	private String getFormatedCreationDate(Revisao revision) {
+		LocalDateTime date = revision.getCreationDate();
+		
+		if(date == null) {
+			date = LocalDateTime.now();
+			
+		}
+		
+		int day = date.getDayOfMonth();
+		String month = date.getMonth().getDisplayName(TextStyle.SHORT, Locale.US).toUpperCase();
+		int year = date.getYear();
+		
+		String formatedDate = month + " " + day + ", " + year;
+		
+		return formatedDate;
 	}
 
 	private String getOutputFolder(Linha line) {
@@ -124,6 +158,9 @@ public class LEPBuilder {
         
         PDFCoordinates codeTextPosition = new PDFCoordinates((PDFBuilder.PDF_WIDTH / 2) - 20, 40);
         PDFEditor.writeText(canvas, codeTextPosition, codeText, 12);
+        
+        PDFCoordinates pageTextCoord = new PDFCoordinates(PDFBuilder.PDF_WIDTH  - 95, 40);
+        PDFEditor.writeText(canvas, pageTextCoord, "Page " + page, 16);
         
         canvas.closePathStroke();
 		
