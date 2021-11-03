@@ -63,6 +63,7 @@ public class LEPBuilder {
 		pdfDoc.open();
 		
 		writeRevisionsSummary(pdfDoc, writer, line);
+		drawRevisionTableHeader(pdfDoc, writer, line);
 		
 		pdfDoc.close();
 		
@@ -92,6 +93,35 @@ public class LEPBuilder {
 		
 		drawFooter(writer, line);
 		
+	}
+	
+	private void drawRevisionTableHeader(Document pdfDoc, PdfWriter writer, Linha line) throws Exception {
+		newPage(pdfDoc, writer, line);
+		
+        PdfContentByte canvas = writer.getDirectContent();
+        
+        canvas.setColorStroke(BLACK);
+		
+        PDFCoordinates bottomLine1 = new PDFCoordinates(40, 740);
+        PDFCoordinates bottomLine2 = new PDFCoordinates(PDFBuilder.PDF_WIDTH - 40, 740);
+        
+        PDFEditor.drawLine(canvas, bottomLine1, bottomLine2);
+        
+        PDFCoordinates bottomLine11 = new PDFCoordinates(40, 720);
+        PDFCoordinates bottomLine12 = new PDFCoordinates(PDFBuilder.PDF_WIDTH - 40, 720);
+        
+        PDFEditor.drawLine(canvas, bottomLine11, bottomLine12);
+        
+        PDFCoordinates textCoordinates1 = new PDFCoordinates(60, 725);
+        PDFCoordinates textCoordinates2 = new PDFCoordinates(140, 725);
+        PDFCoordinates textCoordinates3 = new PDFCoordinates(230, 725);
+        PDFCoordinates textCoordinates4 = new PDFCoordinates(400, 725);
+        
+        PDFEditor.writeText(canvas, textCoordinates1, "Block");
+        PDFEditor.writeText(canvas, textCoordinates2, "Code");
+        PDFEditor.writeText(canvas, textCoordinates3, "Page");
+        PDFEditor.writeText(canvas, textCoordinates4, "Change");
+        
 	}
 	
 	private void writeRevisionsSummary(Document pdfDoc, PdfWriter writer, Linha line) throws Exception {
@@ -195,6 +225,9 @@ public class LEPBuilder {
         
         PDFCoordinates codeTextPosition = new PDFCoordinates((PDFBuilder.PDF_WIDTH / 2) - 20, 40);
         PDFEditor.writeText(canvas, codeTextPosition, codeText, 12);
+        
+        PDFCoordinates lepTextPosition = new PDFCoordinates((PDFBuilder.PDF_WIDTH / 2) - 20, 65);
+        PDFEditor.writeText(canvas, lepTextPosition, "0-LEP", 16, true);
         
         PDFCoordinates pageTextCoord = new PDFCoordinates(PDFBuilder.PDF_WIDTH  - 95, 40);
         PDFEditor.writeText(canvas, pageTextCoord, "Page " + page, 16);

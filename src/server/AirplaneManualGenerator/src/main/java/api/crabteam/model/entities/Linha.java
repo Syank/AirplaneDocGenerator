@@ -47,7 +47,7 @@ public class Linha {
 	private String filePath;
 	
 	@Column
-	private int actualRevision = 0;
+	private Integer actualRevision = 0;
 	
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	@LazyCollection(LazyCollectionOption.FALSE)
