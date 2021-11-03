@@ -109,25 +109,27 @@ public class FileVerifications {
 	 * @author Bárbara Port
 	 */
 	public static ByteArrayOutputStream getSubfolders (File projectPath, ByteArrayOutputStream bos, ZipOutputStream zos) throws IOException {
-	    for (File content : projectPath.listFiles()) {
-	       if (content.isDirectory()) {
-	           getSubfolders(content, bos, zos);
-	       }
-	       else {
-	    	   String file = content.getAbsolutePath();
-	    	   byte[] buffer = file.getBytes();
-	    	   FileInputStream fis = new FileInputStream(content);
-	    	   BufferedInputStream bis = new BufferedInputStream(fis);
+		for (File content : projectPath.listFiles()) {
+			String file = content.getAbsolutePath();
+			if (content.isDirectory()) {
+				zos.putNextEntry(new ZipEntry(file.concat("\\")));
+				zos.closeEntry();
+				getSubfolders(content, bos, zos);
+			}
+			else {
+				byte[] buffer = file.getBytes();
+				FileInputStream fis = new FileInputStream(content);
+				BufferedInputStream bis = new BufferedInputStream(fis);
 
-	    	   zos.putNextEntry(new ZipEntry(file));
-	    	   int length = 0;
-	    	   while ((length = bis.read(buffer)) > 0) {
-	    		   zos.write(buffer, 0, length);
-	    	   }
-	    	   bis.close();
-	       }
-	    }
-	    return bos;
+				zos.putNextEntry(new ZipEntry(file));
+				int length = 0;
+				while ((length = bis.read(buffer)) > 0) {
+					zos.write(buffer, 0, length);
+				}
+				bis.close();
+			}
+		}
+		return bos;
 	}
 	
 	/**
