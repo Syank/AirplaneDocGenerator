@@ -277,7 +277,9 @@ public class ProjetoController {
 				File destinationFile = new File(destination[0] + expectedFileName);
 				
 				if(destinationFile.exists()) {
-					line.setFilePath(destinationFile.getAbsolutePath());
+					String absolutePath = destinationFile.getAbsolutePath();
+					
+					line.setFilePath(absolutePath);
 					
 				}
 				
@@ -309,9 +311,7 @@ public class ProjetoController {
 			
 			actualRevision++;
 			
-			String revisionToCheck = "Rev" + actualRevision;
-			
-			while(revisionsMap.containsKey(revisionToCheck)) {
+			for (String revisionToCheck : revisionsMap.keySet()) {
 				ArrayList<String> revisionFilesPaths = revisionsMap.get(revisionToCheck);
 				
 				for (int i = 0; i < revisionFilesPaths.size(); i++) {
@@ -321,6 +321,10 @@ public class ProjetoController {
 					
 					if(line != null) {
 						line.setFilePath(path);
+						
+						int revision = Integer.parseInt(revisionToCheck.substring(revisionToCheck.length() - 1));
+						
+						line.setActualRevision(revision);
 						
 					}
 					
@@ -333,8 +337,6 @@ public class ProjetoController {
 				revisions.add(rev);
 				
 				actualRevision++;
-				
-				revisionToCheck = "Rev" + actualRevision;
 				
 			}
 			

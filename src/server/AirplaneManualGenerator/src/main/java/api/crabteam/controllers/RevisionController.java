@@ -67,6 +67,8 @@ public class RevisionController {
 					
 					linha.setId(lineId);
 					linha.setFilePath(destinationAbsolutePath.getAbsolutePath());
+					linha.setActualRevision(lastRevisionVersion + 1);
+					
 					lineRepository.save(linha);
 					
 				}catch (Exception e) {
