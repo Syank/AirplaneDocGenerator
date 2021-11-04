@@ -5,6 +5,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.zip.ZipOutputStream;
 
+import org.apache.commons.io.FileUtils;
+import org.zeroturnaround.zip.ZipUtil;
+
 import api.crabteam.model.enumarations.EnvironmentVariables;
 
 /**
@@ -44,6 +47,16 @@ public class ProjectExporter {
 	 */
 	public static byte[] exportProject (String projectName) throws IOException {
         String folderToZip = EnvironmentVariables.PROJECTS_FOLDER.getValue().concat("\\").concat(projectName);
-        return zipFolder(folderToZip, projectName);
+        
+        File projectFolder = new File(folderToZip);
+        File outputZip = new File(EnvironmentVariables.PROJECTS_FOLDER.getValue() + "\\" + projectName + ".zip");
+        
+        ZipUtil.pack(projectFolder, outputZip);
+        
+        byte[] fileBytes = FileUtils.readFileToByteArray(outputZip);
+        
+        outputZip.delete();
+        
+        return fileBytes;
 	}
 }

@@ -370,7 +370,6 @@ public class ProjetoController {
         @ApiResponse(code = 500, message = "Somenthing went wrong.")
     })
 	public ResponseEntity<?> exportProject (@RequestParam (name = "projectName") String projectName) throws IOException {
-		
 		List<Linha> codelistLines = projetoRepository.findByName(projectName).getCodelist().getLinhas();
 		CodelistExporter.updateCodelistFile(projectName, codelistLines);
 		
@@ -381,6 +380,5 @@ public class ProjetoController {
 		fileObject.put("file", base64File);
 	
 		return new ResponseEntity<String>(fileObject.toString(), HttpStatus.OK);
-		
 	}
 }
