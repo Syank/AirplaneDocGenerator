@@ -17,8 +17,8 @@ contextBridge.exposeInMainWorld('electron', {
         showDialog () {
             return showOpenDialog()
         },
-        downloadFile (base64File, supposedSelectedPath, codelistName) {
-            return downloadCodelistFile(base64File, supposedSelectedPath, codelistName)
+        downloadFile (base64File, supposedSelectedPath, codelistName, fileExtension) {
+            return downloadCodelistFile(base64File, supposedSelectedPath, codelistName, fileExtension)
         }
     }
 });
@@ -44,6 +44,6 @@ function showOpenDialog() {
     return remote.getGlobal("pathToSaveFile");
 }
 
-function downloadCodelistFile(base64File, supposedSelectedPath, codelistName) {
-    ipcRenderer.send("download", [base64File, supposedSelectedPath, codelistName]);
+function downloadCodelistFile(base64File, supposedSelectedPath, codelistName, fileExtension) {
+    ipcRenderer.send("download", [base64File, supposedSelectedPath, codelistName, fileExtension]);
 }
