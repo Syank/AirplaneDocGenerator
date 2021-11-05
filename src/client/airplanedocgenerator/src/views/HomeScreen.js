@@ -26,7 +26,7 @@ class HomeScreen extends React.Component {
             newProject:
                 "Crie um novo projeto de manual a partir da importação de um já existente ou siga os passos do guia e crie um do zero",
             editProject:
-                "Selecione um manual da lista de administre suas informações, crie revisões e edite suas partes",
+                "Selecione um manual da lista e administre suas informações, crie revisões e edite suas partes",
             printProject:
                 "Selecione um manual da lista e gere os PDFs de suas versões DELTA e FULL",
         };

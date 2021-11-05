@@ -48,18 +48,26 @@ class UploadScreen extends React.Component {
 
 
         let response = await serverRequester.doPost("/project/import",  formData, "multipart/form-data");
-
-        if (response["responseJson"] === true) {
+        let responseCode = response.status;
+        if (responseCode === 200) {
             notification(
                 "success",
                 "Oba! 😄",
                 "Upload realizado com sucesso!"
             );
-        } else {
+        }
+        else if (responseCode === 400) {
+            notification(
+                "warning",
+                "Não foi possível importar o projeto 🤕",
+                "Já existe um projeto com esse nome. Verifique e tente novamente"
+            );
+        }
+        else {
             notification(
                 "error",
                 "Algo deu errado 🤕",
-                "Ocorreu um problema ao tentar fazer a importação do projeto"
+                "Ocorreu um problema interno ao tentar fazer a importação do projeto"
             );
 
         }
