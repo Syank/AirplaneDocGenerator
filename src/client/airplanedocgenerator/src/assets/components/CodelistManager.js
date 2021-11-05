@@ -762,7 +762,7 @@ class CodelistManager extends React.Component {
 
             if (response.status === 200) {
                 let base64File = response.responseJson["file"];
-                await window.electron.windowControll.downloadFile(base64File, pathToSave, codelist);
+                await window.electron.windowControll.downloadFile(base64File, pathToSave, codelist, ".xlsx");
                 notification(
                     "success",
                     "Uhu! 🤩",

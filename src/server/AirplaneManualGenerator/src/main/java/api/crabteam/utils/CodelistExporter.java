@@ -1,6 +1,7 @@
 package api.crabteam.utils;
 
 import java.io.ByteArrayOutputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,6 +23,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import api.crabteam.model.entities.Linha;
 import api.crabteam.model.entities.Remark;
 import api.crabteam.model.enumarations.CodelistColumn;
+import api.crabteam.model.enumarations.EnvironmentVariables;
 
 /**
  * Classe que possui métodos para gerar o arquivo do Excel de uma codelist
@@ -213,6 +215,19 @@ public class CodelistExporter {
 	}
 	
 	/**
+	 * Método que constrói o conteúdo do arquivo da codelist
+	 * @param sheet -> o arquivo do excel a ser alterado
+	 * @param codelistLines -> linhas da codelist
+	 * @author Bárbara Port
+	 */
+	private static void buildCodelistFile (Sheet sheet, List<Linha> codelistLines) {
+		sheet.setDefaultColumnWidth(12);
+		createCodelistHeader(sheet);
+		createCodelistLines(sheet, codelistLines);
+		createRemarksColumnsAndLines(sheet, getCodelistColumns().length, codelistLines);
+	}
+	
+	/**
 	 * Método que realmente gera o arquivo da codelist
 	 * @param codelistName -> nome da codelist a salvar
 	 * @param codelistLines -> linhas da codelist a salvar
@@ -224,10 +239,7 @@ public class CodelistExporter {
 		Workbook workbook = new XSSFWorkbook();
 		Sheet sheet = workbook.createSheet(codelistName);
 		
-		sheet.setDefaultColumnWidth(12);
-		createCodelistHeader(sheet);
-		createCodelistLines(sheet, codelistLines);
-		createRemarksColumnsAndLines(sheet, getCodelistColumns().length, codelistLines);
+		buildCodelistFile(sheet, codelistLines);
 		
 		ByteArrayOutputStream outputFile = new ByteArrayOutputStream();
 		workbook.write(outputFile);
@@ -247,5 +259,27 @@ public class CodelistExporter {
 	 */
 	public static byte[] generateCodelistFile (String codelistName, List<Linha> codelistLines) throws IOException {
 		return createCodelistSheet(codelistName, codelistLines);
+	}
+	
+	/**
+	 * Método que atualiza o arquivo da codelist no servidor (no momento de exportar o projeto)
+	 * @param codelistName -> o nome da codelist a ser alterada
+	 * @param codelistLines -> as linhas da codelist a ser alterada
+	 * @throws IOException
+	 * @author Bárbara Port
+	 */
+	public static void updateCodelistFile (String codelistName, List<Linha> codelistLines) throws IOException {
+		String pathToSave = EnvironmentVariables.PROJECTS_FOLDER.getValue();
+		
+		Workbook workbook = new XSSFWorkbook();
+		Sheet sheet = workbook.createSheet(codelistName);
+		
+		buildCodelistFile(sheet, codelistLines);
+		
+		String fileLocation = pathToSave.concat("\\").concat(codelistName).concat("\\").concat(codelistName).concat(".xlsx");
+		FileOutputStream outputStream = new FileOutputStream(fileLocation);
+		workbook.write(outputStream);
+		workbook.close();
+		outputStream.close();
 	}
 }
