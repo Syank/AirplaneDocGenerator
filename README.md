@@ -27,7 +27,7 @@
               <section id="funcionamento">
                      <h3>:running_woman: AirplaneDocGenerator em funcionamento :computer::computer_mouse:</h3>
                      <p align="center">
-                            <img src="https://github.com/Syank/AirplaneDocGenerator/blob/main/doc/gifs/sprint2/Apresentacao-Sprint-2.gif">
+                            <img src="https://github.com/Syank/AirplaneDocGenerator/blob/main/doc/gifs/sprint3/Apresenta%C3%A7%C3%A3o%20Sprint%203%20GIF.gif">
                      </p>
               </section>
               <section id="funcionalidades">
