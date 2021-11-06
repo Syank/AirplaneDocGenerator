@@ -39,10 +39,10 @@
                      <p align="justify">Será possível criar uma <i>codelist</i> ou realizar o <i>upload</i> dela no momento de criação de um manual ou até mesmo após. A partir da existência da <i>codelist</i>, será possível alterá-la.</p>
                      <img src="https://raw.githubusercontent.com/Syank/AirplaneDocGenerator/main/doc/cards/sprint%202/card02.png" width="550px" height="300px">
                      <h4>Terceira entrega :clock8:</h4>
-                     <p align="justify">Será disponibilizada a criação, importação e exportação de um projeto de manual, a geração de revisões para um projeto de manual e a formação da Lista de Páginas Efetivas (LEP).</p>
+                     <p align="justify">Será disponibilizada a importação e a exportação de um projeto de manual, além da criação de revisões de um projeto de manual.</p>
                      <img src="https://raw.githubusercontent.com/Syank/AirplaneDocGenerator/main/doc/cards/sprint%203/card03.png" width="550px" height="300px">
                      <h4>Quarta entrega :clock12:</h4>
-                     <p align="justify">Por fim, será plausível a geração do manual em cada uma das versões existentes, Delta ou Full, de acordo com o escolhido.</p>
+                     <p align="justify">Por fim, será plausível a geração da Lista de Páginas Efetivas (LEP) e a geração do manual em cada uma das versões existentes, Delta ou Full, de acordo com o escolhido.</p>
                      <img src="https://raw.githubusercontent.com/Syank/AirplaneDocGenerator/main/doc/cards/sprint%204/card04.png" width="550px" height="300px">
               </section>
               <section id="cronograma">
@@ -71,10 +71,10 @@
                             </tr>
                             <tr>
                                    <td><p align="center">Entrega 3</p></td>
-                                   <td><p align="justify">A definir.</p></td>
+                                   <td><p align="justify">O usuário poderá exportar a codelist do manual, poderá importar e exportar um projeto de manual e, também, poderá criar revisões.</p></td>
                                    <td><p align="center">07/11</p></td>
-                                   <td><p align="center"><a href="">Visualizar</a></p></td>
-                                   <td><p align="center"><a href="">Baixar</a></p></td>
+                                   <td><p align="center"><a href="https://github.com/Syank/AirplaneDocGenerator/tree/sprint-3">Visualizar</a></p></td>
+                                   <td><p align="center"><a href="https://github.com/Syank/AirplaneDocGenerator/releases/tag/v1.3">Baixar</a></p></td>
                             </tr>
                             <tr>
                                    <td><p align="center">Entrega 4</p></td>
@@ -93,7 +93,6 @@
                             <li><a href="https://www.linkedin.com/in/alberto-de-mattos-piedade-neto-2b758035/">Alberto de Mattos Piedade Neto</a> (<i>Development Team</i>)
                             <li><a href="https://www.linkedin.com/in/anna-yukimi-yamada-6ba23b149/">Anna Yukimi Yamada</a> (<i>Development Team</i>)
                             <li><a href="https://www.linkedin.com/in/carolina-margiotti-703897193/">Carolina Margiotti de Abreu</a> (<i>Development Team</i>)
-                            <li><a href="https://www.linkedin.com/in/francisco-cardoso-1954651b2/">Francisco Norberto Cardoso Neto</a> (<i>Development Team</i>)
                      </ul>
               </section>
        </body>
