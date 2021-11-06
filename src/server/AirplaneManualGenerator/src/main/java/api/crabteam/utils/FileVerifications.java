@@ -47,7 +47,7 @@ public class FileVerifications {
 							.concat("/");
 		
 		// Verifying subsection
-		if (!subsectionNumber.isEmpty() && !subsectionNumber.isBlank()) {
+		if (subsectionNumber != null && !subsectionNumber.isEmpty() && !subsectionNumber.isBlank()) {
 			subsectionNumber = linha.getSubsectionNumber().trim();
 			subsectionName = linha.getSubsectionName().trim();
 			
