@@ -29,6 +29,7 @@
                      <p align="center">
                             <img src="https://github.com/Syank/AirplaneDocGenerator/blob/main/doc/gifs/sprint3/Apresenta%C3%A7%C3%A3o%20Sprint%203%20GIF.gif">
                      </p>
+                     <p align="center">Fizemos um manual de uso para o nosso projeto. Visualize-o <a href="https://github.com/Syank/AirplaneDocGenerator/wiki">aqui</a>!</p>
               </section>
               <section id="funcionalidades">
                      <h3>:hourglass_flowing_sand: Funcionalidades de cada entrega</h3>
