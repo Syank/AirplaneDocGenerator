@@ -32,10 +32,10 @@
               <section id="entrega">
                      <h2 align="center">:rainbow::spiral_calendar: Terceira entrega :star:</h3>
                      <h3>:question: O que fizemos?</h2>
-                     <p align="justify">Na terceira entrega, desenvolvemos a funcionalidade de criar revisões de um projeto de manual, exportar e importar projetos como um todo (com toda a sua estrutura de pastas, revisões etc.) e, também, a possibilidade de exportar a <i>Codelist</i> do projeto de manual.</p>
+                     <p align="justify">Na terceira entrega desenvolvemos a funcionalidade de criar revisões de um projeto de manual, exportar e importar projetos como um todo (com toda a sua estrutura de pastas, revisões etc.) e, também, a possibilidade de exportar a <i>Codelist</i> do projeto de manual.</p>
                      <img src="https://raw.githubusercontent.com/Syank/AirplaneDocGenerator/main/doc/cards/sprint%203/card03.png" width="550px" height="300px">
                      <h3>:grey_question: Por quê?</h2>
-                     <p align="justify">Muitos projetos de manual encontram-se prontos e, por conta disso, para oferecer maior portabilidade para o nosso cliente, desenvolvemos as funcionalidades de importaçãoe exportação de projetos e, também a exportação da <i>Codelist</i> do projeto de manual. O usuário pode escolher um projeto, com a estrutura válida, e todo o nosso sistema se encarregará de importá-lo para que a sua gerência, de uma forma muito mais intuitiva e rápida, seja permitida. Além disso, as revisões são importantes para a posterior geração da Lista de Páginas Efetivas (LEP), que mostra todas as alterações entre as revisões de um projeto de manual. Dessa forma, o usuário, em poucos cliques, otimizará muito tempo e evitará erros!</p>
+                     <p align="justify">Muitos projetos de manual encontram-se prontos e, por conta disso, para oferecer maior portabilidade ao nosso cliente, desenvolvemos as funcionalidades de importação e exportação de projetos e, também, a exportação da <i>Codelist</i> do projeto de manual. O usuário pode escolher um projeto, que tenha uma estrutura válida, e todo o nosso sistema se encarregará de importá-lo para que a sua gerência, muito mais intuitiva e rápida, seja permitida. Além disso, as revisões são importantes para a posterior geração da Lista de Páginas Efetivas (LEP), que mostra todas as alterações entre as revisões de um projeto de manual. Dessa forma, o usuário, em poucos cliques, otimizará muito tempo e evitará erros!</p>
               </section>
               <section id="funcionamento">
                      <h2 align="center">:desktop_computer::computer_mouse: AirplaneDocGenerator em funcionamento :checkered_flag:</h3>
@@ -66,7 +66,7 @@
               </section>
               <section id="burndown">
                      <h2 align="center"><i>Burndown</i> :date::chart_with_downwards_trend:</h3>
-                     <p align="justify">Tínhamos planejado, também, para a terceira sprint, entregar a geração da LEP, mas como alguns imprevistos ocorreram, o seu entendimento foi um pouco mais complicado. Corremos atrás do prejuízo e como conclusão entregaremos essa funcionalidade na 4ª sprint.</p>
+                     <p align="justify">Tínhamos planejado, também, para a terceira sprint, entregar a geração da LEP, mas como alguns imprevistos ocorreram, o entendimento dessa funcionalidade foi um pouco mais trabalhoso e quando entendemos como fazer, já estávamos nos últimos dias da <i>sprint</i>. Como conclusão, entregaremos essa funcionalidade na 4ª sprint, pois priorizamos a qualidade.</p>
 		     <p align="center"><img src="https://raw.githubusercontent.com/Syank/AirplaneDocGenerator/main/doc/burndown/sprint%203/burndown-s3.png"></p>
               </section>
               <section id="equipe">
