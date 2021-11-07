@@ -40,7 +40,7 @@
                      <p align="justify">Será possível criar uma <i>codelist</i> ou realizar o <i>upload</i> dela no momento de criação de um manual ou até mesmo após. A partir da existência da <i>codelist</i>, será possível alterá-la.</p>
                      <img src="https://raw.githubusercontent.com/Syank/AirplaneDocGenerator/main/doc/cards/sprint%202/card02.png" width="550px" height="300px">
                      <h4>Terceira entrega :clock8:</h4>
-                     <p align="justify">Será disponibilizada a importação e a exportação de um projeto de manual, além da criação de revisões de um projeto de manual.</p>
+                     <p align="justify">Será disponibilizada a importação e a exportação de um projeto de manual, além da criação de revisões para ele.</p>
                      <img src="https://raw.githubusercontent.com/Syank/AirplaneDocGenerator/main/doc/cards/sprint%203/card03.png" width="550px" height="300px">
                      <h4>Quarta entrega :clock12:</h4>
                      <p align="justify">Por fim, será plausível a geração da Lista de Páginas Efetivas (LEP) e a geração do manual em cada uma das versões existentes, Delta ou Full, de acordo com o escolhido.</p>
