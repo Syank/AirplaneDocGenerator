@@ -442,6 +442,15 @@ class SelectProjectScreen extends React.Component {
 
             if (response.status === 200) {
                 notification("success", "Ufa! 😎", "O projeto foi deletado!");
+
+                let projectsList = this.state["projectsList"][0];
+                for (let i = 0; i < projectsList.length; i++) {
+                    if (projectsList[i].nome === projectName) {
+                        projectsList.splice(i, 1);
+                    }
+                }
+                this.setState({projectsLists: projectsList});
+
             }
             else {
                 notification("error", "Ops...", "Não foi possível apagar o projeto. Tente novamente. 🤕");
