@@ -29,6 +29,7 @@ class Application extends React.Component {
         this.previousPageMap = {
             "creation-screen": "home",
             "new-project-screen": "creation-screen",
+            "importProjectScreen": "creation-screen",
             "selectProject": "home",
             "projectAdministration": "selectProject"
         };
