@@ -35,6 +35,7 @@ import api.crabteam.model.entities.builders.CodelistBuilder;
 import api.crabteam.model.entities.builders.ProjetoBuilder;
 import api.crabteam.model.enumarations.EnvironmentVariables;
 import api.crabteam.model.repositories.CodelistRepository;
+import api.crabteam.model.repositories.LinhaRepository;
 import api.crabteam.model.repositories.ProjetoRepository;
 import api.crabteam.utils.CodelistExporter;
 import api.crabteam.utils.FileUtils;
@@ -58,6 +59,9 @@ public class ProjetoController {
 	
 	@Autowired
 	public CodelistRepository codelistRepository;
+	
+	@Autowired
+	public LinhaRepository linhaRepository;
 	
 	@Autowired
 	public ProjetoBuilder builder;
@@ -395,6 +399,14 @@ public class ProjetoController {
 	public ResponseEntity<?> deleteProject (@RequestParam(name = "projectName") String projectName) {
 		try {
 			projetoRepository.deleteByName(projectName);
+			
+			Codelist codelist = codelistRepository.findByName(projectName); 
+			codelistRepository.deleteAllCodelistLines(codelist.getId());
+			List<Linha> linhasCodelist = codelist.getLinhas();
+			for (Linha linha : linhasCodelist) {
+				linhaRepository.deleteById(linha.getId());
+			}
+			
 			codelistRepository.deleteByName(projectName);
 			
 			String projectFolder = EnvironmentVariables.PROJECTS_FOLDER.getValue().concat("\\").concat(projectName);
