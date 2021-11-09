@@ -222,5 +222,15 @@ public class FileVerifications {
 
 	     return true;
 	}
+	
+	/**
+	 * Deleta a pasta indicada, sem verificar o conteúdo
+	 * @param folder a pasta a ser deletada
+	 * @throws IOException
+	 * @author Bárbara Port
+	 */
+	public static void deleteEntireFolder (String folder) throws IOException {
+		org.apache.commons.io.FileUtils.deleteDirectory(new File(folder));
+	}
 
 }

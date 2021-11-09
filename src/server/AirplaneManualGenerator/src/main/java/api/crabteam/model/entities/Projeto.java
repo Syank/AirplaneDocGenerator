@@ -18,6 +18,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.OrderBy;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import api.crabteam.utils.ProjectHealthCheck;
 import api.crabteam.utils.ProjectSituation;
 
@@ -51,6 +54,7 @@ public class Projeto {
 	private ProjectSituation situation;
 	
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	@OrderBy("creation_date, version")
 	@JoinColumn(name = "revision_id", referencedColumnName = "id")
 	private Set<Revisao> revisions = new HashSet<Revisao>();

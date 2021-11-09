@@ -34,6 +34,8 @@ import api.crabteam.model.entities.Revisao;
 import api.crabteam.model.entities.builders.CodelistBuilder;
 import api.crabteam.model.entities.builders.ProjetoBuilder;
 import api.crabteam.model.enumarations.EnvironmentVariables;
+import api.crabteam.model.repositories.CodelistRepository;
+import api.crabteam.model.repositories.LinhaRepository;
 import api.crabteam.model.repositories.ProjetoRepository;
 import api.crabteam.utils.CodelistExporter;
 import api.crabteam.utils.FileUtils;
@@ -54,6 +56,12 @@ public class ProjetoController {
 
 	@Autowired
 	public ProjetoRepository projetoRepository;
+	
+	@Autowired
+	public CodelistRepository codelistRepository;
+	
+	@Autowired
+	public LinhaRepository linhaRepository;
 	
 	@Autowired
 	public ProjetoBuilder builder;
@@ -380,5 +388,35 @@ public class ProjetoController {
 		fileObject.put("file", base64File);
 	
 		return new ResponseEntity<String>(fileObject.toString(), HttpStatus.OK);
+	}
+	
+	@PostMapping("/delete")
+    @ApiOperation("Deletes a entire project.")
+	@ApiResponses({
+        @ApiResponse(code = 200, message = "Project succesfully deleted."),
+        @ApiResponse(code = 400, message = "Somenthing went wrong.")
+    })
+	public ResponseEntity<?> deleteProject (@RequestParam(name = "projectName") String projectName) {
+		try {
+			projetoRepository.deleteByName(projectName);
+			
+			Codelist codelist = codelistRepository.findByName(projectName); 
+			codelistRepository.deleteAllCodelistLines(codelist.getId());
+			List<Linha> linhasCodelist = codelist.getLinhas();
+			for (Linha linha : linhasCodelist) {
+				linhaRepository.deleteById(linha.getId());
+			}
+			
+			codelistRepository.deleteByName(projectName);
+			
+			String projectFolder = EnvironmentVariables.PROJECTS_FOLDER.getValue().concat("\\").concat(projectName);
+			FileVerifications.deleteEntireFolder(projectFolder);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<Boolean>(false, HttpStatus.BAD_REQUEST);
+		}
+		
+		return new ResponseEntity<Boolean>(true, HttpStatus.OK);
 	}
 }

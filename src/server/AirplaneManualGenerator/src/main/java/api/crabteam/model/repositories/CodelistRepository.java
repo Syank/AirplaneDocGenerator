@@ -22,4 +22,8 @@ public interface CodelistRepository extends JpaRepository<Codelist, Integer> {
 	@Query(value = "delete from codelist_linhas cl where cl.codelist_id = ?1", nativeQuery = true)
 	void deleteAllCodelistLines(Integer id);
 	
+	@Transactional
+	@Modifying
+	@Query("delete from codelist c where c.nome = ?1")
+	void deleteByName(String name);
 }
