@@ -92,9 +92,14 @@
 		    <artifactId>itextpdf</artifactId>
 		    <version>5.5.13.2</version>
 		</dependency>
-		
-		
-		
+
+		<!-- https://mvnrepository.com/artifact/org.zeroturnaround/zt-zip -->
+		<dependency>
+		    <groupId>org.zeroturnaround</groupId>
+		    <artifactId>zt-zip</artifactId>
+		    <version>1.14</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>

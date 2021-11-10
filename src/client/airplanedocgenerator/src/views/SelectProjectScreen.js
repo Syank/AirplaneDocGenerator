@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import Button from "../assets/components/Button";
 import CardHeader from "../assets/components/CardHeader";
-import { notification } from "../assets/components/Notifications";
+import { notification, withConfirmation } from "../assets/components/Notifications";
 import SelectProjectItem from "../assets/components/SelectProjectItem";
 import { getBackgroundImage } from "../utils/pagesUtils";
 import ServerRequester from "../utils/ServerRequester";
@@ -425,9 +425,37 @@ class SelectProjectScreen extends React.Component {
      * @param {String} name Nome do manual a ser deletado
      * @author Rafael Furtado
      */
-    deleteProject(name){
-        notification("info", "Um momento! 🤔", "Este recurso ainda não está disponível no momento")
+    async deleteProject(projectName){
+        let confirmation = await withConfirmation("Tem certeza que quer excluir o projeto " + projectName + "?",
+                                                  "Ao confirmar, não será possível reverter a ação!",
+                                                  "warning",
+                                                  "Tenho certeza!",
+                                                  "Ops! Não quero");
+        
+        if (confirmation === true) {
 
+            let formData = new FormData();
+            formData.append("projectName", projectName);
+
+            let serverRequester = new ServerRequester("http://localhost:8080");
+            let response = await serverRequester.doPost("/project/delete", formData, "multipart/form-data");
+
+            if (response.status === 200) {
+                notification("success", "Ufa! 😎", "O projeto foi deletado!");
+
+                let projectsList = this.state["projectsList"][0];
+                for (let i = 0; i < projectsList.length; i++) {
+                    if (projectsList[i].nome === projectName) {
+                        projectsList.splice(i, 1);
+                    }
+                }
+                this.setState({projectsLists: projectsList});
+
+            }
+            else {
+                notification("error", "Ops...", "Não foi possível apagar o projeto. Tente novamente. 🤕");
+            }
+        }
     }
 
     /**

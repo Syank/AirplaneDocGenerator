@@ -32,7 +32,7 @@ class UploadScreen extends React.Component {
                 files.push(file);
 
             }
-            
+
         }
 
         let formData = new FormData();
@@ -46,23 +46,31 @@ class UploadScreen extends React.Component {
 
         }
 
-        
-        let response = await serverRequester.doPost("/project/import",  formData, "multipart/form-data");
 
-        if (response["responseJson"] === true) {
+        let response = await serverRequester.doPost("/project/import",  formData, "multipart/form-data");
+        let responseCode = response.status;
+        if (responseCode === 200) {
             notification(
                 "success",
                 "Oba! 😄",
                 "Upload realizado com sucesso!"
             );
-        } else {
+        }
+        else if (responseCode === 400) {
+            notification(
+                "warning",
+                "Não foi possível importar o projeto 🤕",
+                "Já existe um projeto com esse nome. Verifique e tente novamente"
+            );
+        }
+        else {
             notification(
                 "error",
                 "Algo deu errado 🤕",
-                "Ocorreu um problema ao tentar fazer a importação do projeto"
+                "Ocorreu um problema interno ao tentar fazer a importação do projeto"
             );
 
-        } 
+        }
 
     }
 
@@ -80,12 +88,13 @@ class UploadScreen extends React.Component {
         }
     }
     setDirectoryName() {
-        let files = document.getElementById("directory-location").files;
+        let file = document.getElementById("directory-location").files[0];
 
-        if (files.length !== 0) {
-            let fileName = files[0].name;
-            let labelFileName = document.getElementById("directory-name");
-            labelFileName.textContent = fileName;
+        if (file !== undefined) {
+            let paths = file.webkitRelativePath.split("/");
+            let folderName = paths[0];
+            let labelFolder = document.getElementById("directory-name");
+            labelFolder.textContent = folderName;
         }
     }
 
@@ -124,11 +133,10 @@ class UploadScreen extends React.Component {
                                 type="file"
                                 id="directory-location"
                                 onChange={this.setDirectoryName}
-                                className="hidden" webkitdirectory="true"
-                                accept=".pdf"
+                                className="hidden" webkitdirectory="true" directory="true"
                             ></input>
                         </div>
-                        <div className="m-8 p-5">
+                        <div className="m-8 p-5 text-center">
                             <label className="text-lg">Codelist: </label>
                             <label
                                 htmlFor="codelist-file"
@@ -146,7 +154,7 @@ class UploadScreen extends React.Component {
                             ></input>
 
                             <p className="text-xs ml-12 mr-12 mt-4 text-center">
-                                Os campos nesta página são obrogatórios para realizar um upload
+                                Os campos nesta página são obrigatórios para realizar um upload
                             </p>
                         </div>
                         <div className="mt-12 text-center">

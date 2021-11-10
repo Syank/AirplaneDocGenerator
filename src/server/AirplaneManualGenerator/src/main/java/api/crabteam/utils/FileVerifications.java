@@ -1,7 +1,12 @@
 package api.crabteam.utils;
 
+import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import api.crabteam.model.entities.Linha;
 import api.crabteam.model.enumarations.EnvironmentVariables;
@@ -42,7 +47,7 @@ public class FileVerifications {
 							.concat("/");
 		
 		// Verifying subsection
-		if (linha.getSubsectionNumber() != null) {
+		if (subsectionNumber != null && !subsectionNumber.isEmpty() && !subsectionNumber.isBlank()) {
 			subsectionNumber = linha.getSubsectionNumber().trim();
 			subsectionName = linha.getSubsectionName().trim();
 			
@@ -67,7 +72,7 @@ public class FileVerifications {
 	}
 	
 	/**
-	 * Método recursivo que verifica as subpastas e arquivos do diretório do projeto de manual
+	 * Método recursivo que verifica as subpastas e arquivos do diretório do projeto de manual para que sejam renomeados
 	 * @param projectPath (pasta do projeto de manual que desejo efetuar as mudanças)
 	 * @param newProjectName (novo nome desse projeto de manual)
 	 * @throws IOException
@@ -92,6 +97,39 @@ public class FileVerifications {
 	    	   content.renameTo(new File(content.getParent().concat("\\").concat(newFileName)));
 	       }
 	    }
+	}
+	
+	/**
+	 * Método responsável por verificar as subpastas da pasta do projeto para que tudo esteja no arquivo zipado. É uma sobrecarga do método de renomear os subarquivos. Verifique os parâmetros.
+	 * @param projectPath pasta em que o projeto está localizado
+	 * @param bos ByteArrayOutputStream que é o buffer que armazena o arquivo
+	 * @param zos ZipOutputStream que é o utilitário para escrever todas as entradas (que são subpastas, subarquivos etc.) do arquivo zipado
+	 * @return ByteArrayOutputStream o buffer, para que posteriormente seja fechado e tenha a conversão para byte[]
+	 * @throws IOException
+	 * @author Bárbara Port
+	 */
+	public static ByteArrayOutputStream getSubfolders (File projectPath, ByteArrayOutputStream bos, ZipOutputStream zos) throws IOException {
+		for (File content : projectPath.listFiles()) {
+			String file = content.getAbsolutePath();
+			if (content.isDirectory()) {
+				zos.putNextEntry(new ZipEntry(file.concat("\\")));
+				zos.closeEntry();
+				getSubfolders(content, bos, zos);
+			}
+			else {
+				byte[] buffer = file.getBytes();
+				FileInputStream fis = new FileInputStream(content);
+				BufferedInputStream bis = new BufferedInputStream(fis);
+
+				zos.putNextEntry(new ZipEntry(file));
+				int length = 0;
+				while ((length = bis.read(buffer)) > 0) {
+					zos.write(buffer, 0, length);
+				}
+				bis.close();
+			}
+		}
+		return bos;
 	}
 	
 	/**
@@ -183,6 +221,16 @@ public class FileVerifications {
 	     }
 
 	     return true;
+	}
+	
+	/**
+	 * Deleta a pasta indicada, sem verificar o conteúdo
+	 * @param folder a pasta a ser deletada
+	 * @throws IOException
+	 * @author Bárbara Port
+	 */
+	public static void deleteEntireFolder (String folder) throws IOException {
+		org.apache.commons.io.FileUtils.deleteDirectory(new File(folder));
 	}
 
 }

@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 
@@ -11,6 +12,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,9 +34,13 @@ import api.crabteam.model.entities.Revisao;
 import api.crabteam.model.entities.builders.CodelistBuilder;
 import api.crabteam.model.entities.builders.ProjetoBuilder;
 import api.crabteam.model.enumarations.EnvironmentVariables;
+import api.crabteam.model.repositories.CodelistRepository;
+import api.crabteam.model.repositories.LinhaRepository;
 import api.crabteam.model.repositories.ProjetoRepository;
+import api.crabteam.utils.CodelistExporter;
 import api.crabteam.utils.FileUtils;
 import api.crabteam.utils.FileVerifications;
+import api.crabteam.utils.ProjectExporter;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -50,6 +56,12 @@ public class ProjetoController {
 
 	@Autowired
 	public ProjetoRepository projetoRepository;
+	
+	@Autowired
+	public CodelistRepository codelistRepository;
+	
+	@Autowired
+	public LinhaRepository linhaRepository;
 	
 	@Autowired
 	public ProjetoBuilder builder;
@@ -361,4 +373,52 @@ public class ProjetoController {
 		return new ResponseEntity<Boolean>(true, HttpStatus.OK);
 	}
 	
+	@GetMapping("/export")
+    @ApiOperation("Exports all files from a project.")
+	@ApiResponses({
+        @ApiResponse(code = 200, message = "Project succesfully exported."),
+        @ApiResponse(code = 500, message = "Somenthing went wrong.")
+    })
+	public ResponseEntity<?> exportProject (@RequestParam (name = "projectName") String projectName) throws IOException {
+		List<Linha> codelistLines = projetoRepository.findByName(projectName).getCodelist().getLinhas();
+		CodelistExporter.updateCodelistFile(projectName, codelistLines);
+		
+		byte[] file = ProjectExporter.exportProject(projectName);
+		
+		String base64File = new String(Base64.getEncoder().encode(file));
+		JSONObject fileObject = new JSONObject();
+		fileObject.put("file", base64File);
+	
+		return new ResponseEntity<String>(fileObject.toString(), HttpStatus.OK);
+	}
+	
+	@PostMapping("/delete")
+    @ApiOperation("Deletes a entire project.")
+	@ApiResponses({
+        @ApiResponse(code = 200, message = "Project succesfully deleted."),
+        @ApiResponse(code = 400, message = "Somenthing went wrong.")
+    })
+	public ResponseEntity<?> deleteProject (@RequestParam(name = "projectName") String projectName) {
+		try {
+			projetoRepository.deleteByName(projectName);
+			
+			Codelist codelist = codelistRepository.findByName(projectName); 
+			codelistRepository.deleteAllCodelistLines(codelist.getId());
+			List<Linha> linhasCodelist = codelist.getLinhas();
+			for (Linha linha : linhasCodelist) {
+				linhaRepository.deleteById(linha.getId());
+			}
+			
+			codelistRepository.deleteByName(projectName);
+			
+			String projectFolder = EnvironmentVariables.PROJECTS_FOLDER.getValue().concat("\\").concat(projectName);
+			FileVerifications.deleteEntireFolder(projectFolder);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<Boolean>(false, HttpStatus.BAD_REQUEST);
+		}
+		
+		return new ResponseEntity<Boolean>(true, HttpStatus.OK);
+	}
 }
