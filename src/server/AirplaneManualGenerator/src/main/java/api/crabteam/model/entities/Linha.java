@@ -46,10 +46,16 @@ public class Linha {
 	@Column
 	private String filePath;
 	
+	@Column
+	private Integer actualRevision = 0;
+	
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	@LazyCollection(LazyCollectionOption.FALSE)
 	private List<Remark> remarks = new ArrayList<Remark>();
 
+
+	
+	
 	public int getId() {
 		return id;
 	}
@@ -132,6 +138,14 @@ public class Linha {
 
 	public void setSubsectionName(String subsectionName) {
 		this.subsectionName = subsectionName;
+	}
+
+	public int getActualRevision() {
+		return actualRevision;
+	}
+
+	public void setActualRevision(int actualRevision) {
+		this.actualRevision = actualRevision;
 	}
 
 }

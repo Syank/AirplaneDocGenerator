@@ -18,6 +18,7 @@ import api.crabteam.model.entities.Revisao;
 import api.crabteam.model.repositories.LinhaRepository;
 import api.crabteam.model.repositories.ProjetoRepository;
 import api.crabteam.utils.FileVerifications;
+import api.crabteam.utils.LEPBuilder;
 
 
 
@@ -66,6 +67,8 @@ public class RevisionController {
 					
 					linha.setId(lineId);
 					linha.setFilePath(destinationAbsolutePath.getAbsolutePath());
+					linha.setActualRevision(lastRevisionVersion + 1);
+					
 					lineRepository.save(linha);
 					
 				}catch (Exception e) {
@@ -84,12 +87,15 @@ public class RevisionController {
 			
 			revProject.addRevision(newRevision);
 			
+			//LEPBuilder lepBuilder = new LEPBuilder(revProject);
+			//lepBuilder.generateLep();
+			
 			projetoRepository.save(revProject);
 			
 		}catch (Exception e) {
 			e.printStackTrace();
 			
-			return new ResponseEntity<String>("Ocorreu um problema registrar a revisão", HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<String>("Ocorreu um problema ao registrar a revisão", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
 		return new ResponseEntity<Boolean>(true, HttpStatus.OK);
