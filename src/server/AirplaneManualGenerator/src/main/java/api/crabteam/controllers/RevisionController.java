@@ -87,8 +87,8 @@ public class RevisionController {
 			
 			revProject.addRevision(newRevision);
 			
-			LEPBuilder lepBuilder = new LEPBuilder(revProject);
-			lepBuilder.generateLep();
+			//LEPBuilder lepBuilder = new LEPBuilder(revProject);
+			//lepBuilder.generateLep();
 			
 			projetoRepository.save(revProject);
 			

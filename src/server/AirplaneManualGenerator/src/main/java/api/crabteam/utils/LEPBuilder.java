@@ -63,12 +63,19 @@ public class LEPBuilder {
 		pdfDoc.open();
 		
 		writeRevisionsSummary(pdfDoc, writer, line);
-		drawRevisionTableHeader(pdfDoc, writer, line);
+		drawRevisionTable(pdfDoc, writer, line);
 		
 		pdfDoc.close();
 		
 	}
 	
+	private void drawRevisionTable(Document pdfDoc, PdfWriter writer, Linha line) throws Exception {
+		
+		
+		drawRevisionTableHeader(pdfDoc, writer, line);
+		
+	}
+
 	private void newPage(Document pdfDoc, PdfWriter writer, Linha line) throws Exception {
 		pdfDoc.newPage();
 		
@@ -112,10 +119,10 @@ public class LEPBuilder {
         
         PDFEditor.drawLine(canvas, bottomLine11, bottomLine12);
         
-        PDFCoordinates textCoordinates1 = new PDFCoordinates(60, 725);
-        PDFCoordinates textCoordinates2 = new PDFCoordinates(140, 725);
-        PDFCoordinates textCoordinates3 = new PDFCoordinates(230, 725);
-        PDFCoordinates textCoordinates4 = new PDFCoordinates(400, 725);
+        PDFCoordinates textCoordinates1 = new PDFCoordinates(70, 725);
+        PDFCoordinates textCoordinates2 = new PDFCoordinates(150, 725);
+        PDFCoordinates textCoordinates3 = new PDFCoordinates(240, 725);
+        PDFCoordinates textCoordinates4 = new PDFCoordinates(410, 725);
         
         PDFEditor.writeText(canvas, textCoordinates1, "Block");
         PDFEditor.writeText(canvas, textCoordinates2, "Code");
