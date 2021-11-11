@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.google.common.io.Files;
+
 import api.crabteam.model.entities.Linha;
 import api.crabteam.model.entities.Projeto;
 import api.crabteam.model.entities.Revisao;
@@ -59,14 +61,18 @@ public class RevisionController {
 					String fileName = fileInfos[1];
 					
 					// Troca o destino de Master para Rev
-					strFilePath = strFilePath.replace("Master", "Rev\\Rev" + actualRevision + "\\");
-
-					File destinationAbsolutePath = new File(strFilePath);
-					destinationAbsolutePath.mkdirs();
-					lineFile.transferTo(new File(strFilePath.concat(fileName)));
+					String revStrFilePath = strFilePath.replace("Master", "Rev\\Rev" + actualRevision + "\\");
+					File RevDestinationAbsolutePath = new File(revStrFilePath);
+					RevDestinationAbsolutePath.mkdirs();
+					lineFile.transferTo(new File(revStrFilePath.concat(fileName)));
+					
+					// Salva uma cópia na Master
+					File masterDestinationAbsolutePath = new File(strFilePath);
+					masterDestinationAbsolutePath.mkdirs();
+					Files.copy(new File(revStrFilePath.concat(fileName)), new File(strFilePath.concat("\\" + fileName)));
 					
 					linha.setId(lineId);
-					linha.setFilePath(destinationAbsolutePath.getAbsolutePath());
+					linha.setFilePath(RevDestinationAbsolutePath.getAbsolutePath());
 					linha.setActualRevision(lastRevisionVersion + 1);
 					
 					lineRepository.save(linha);
