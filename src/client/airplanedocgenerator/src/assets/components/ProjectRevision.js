@@ -72,8 +72,6 @@ class ProjectRevision extends React.Component {
 
         }
 
-        console.log(revisionsData);
-
         return lines;
     }
 
