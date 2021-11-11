@@ -33,7 +33,7 @@ class Application extends React.Component {
             "importProjectScreen": "creation-screen",
             "selectProject": "home",
             "projectAdministration": "selectProject",
-            "manualGeneration": "home"
+            "generationScreen": "home"
         };
 
         this.setPageToRender = this.setPageToRender.bind(this);

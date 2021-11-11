@@ -370,7 +370,7 @@ class ManualGenerationScreen extends React.Component {
             notification("warning", "Um momento! 🤨", "Primeiro selecione um projeto e depois uma de suas variações");
 
         }else{
-            // A notificação abaixo é apenas para teste
+            // A notificação abaixo é apenas para teste, retirar e colocar a requisição
             notification("success", "Sucesso! 🤗", "A variação " + variation + " do projeto de ID " + projectId + " foi selecionado!");
 
         }
