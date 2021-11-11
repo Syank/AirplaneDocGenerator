@@ -30,6 +30,7 @@ import api.crabteam.controllers.requestsBody.NewProject;
 import api.crabteam.model.entities.Codelist;
 import api.crabteam.model.entities.Linha;
 import api.crabteam.model.entities.Projeto;
+import api.crabteam.model.entities.Remark;
 import api.crabteam.model.entities.Revisao;
 import api.crabteam.model.entities.builders.CodelistBuilder;
 import api.crabteam.model.entities.builders.ProjetoBuilder;
@@ -37,7 +38,9 @@ import api.crabteam.model.enumarations.EnvironmentVariables;
 import api.crabteam.model.repositories.CodelistRepository;
 import api.crabteam.model.repositories.LinhaRepository;
 import api.crabteam.model.repositories.ProjetoRepository;
+import api.crabteam.model.repositories.RemarkRepository;
 import api.crabteam.utils.CodelistExporter;
+import api.crabteam.utils.DeltaManualHelper;
 import api.crabteam.utils.FileUtils;
 import api.crabteam.utils.FileVerifications;
 import api.crabteam.utils.ProjectExporter;
@@ -62,6 +65,9 @@ public class ProjetoController {
 	
 	@Autowired
 	public LinhaRepository linhaRepository;
+	
+	@Autowired
+	public RemarkRepository remarkRepository;
 	
 	@Autowired
 	public ProjetoBuilder builder;
@@ -418,6 +424,16 @@ public class ProjetoController {
 			e.printStackTrace();
 			return new ResponseEntity<Boolean>(false, HttpStatus.BAD_REQUEST);
 		}
+		
+		return new ResponseEntity<Boolean>(true, HttpStatus.OK);
+	}
+	
+	@PostMapping("/generateDelta")
+	public ResponseEntity<?> generateDeltaManual (@RequestParam(name = "projectId") int projectId, @RequestParam(name = "variation") String variation) {
+		Projeto project = projetoRepository.findById(projectId).get();
+		
+		Remark remark = remarkRepository.findAllRemarks(variation).get(0);
+		DeltaManualHelper.generateDeltaManual(project, remark);
 		
 		return new ResponseEntity<Boolean>(true, HttpStatus.OK);
 	}

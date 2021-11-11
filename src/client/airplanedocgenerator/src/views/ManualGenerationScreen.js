@@ -377,7 +377,7 @@ class ManualGenerationScreen extends React.Component {
 
     }
 
-    generateDelta(){
+    async generateDelta(){
         let selectedProject = this.state["selectedProject"];
 
         let projectId = selectedProject["id"];
@@ -386,10 +386,19 @@ class ManualGenerationScreen extends React.Component {
         if(projectId === undefined || variation === undefined){
             notification("warning", "Um momento! 🤨", "Primeiro selecione um projeto e depois uma de suas variações");
 
-        }else{
-            // A notificação abaixo é apenas para teste
+        }
+        else{
+
             notification("success", "Sucesso! 🤗", "A variação " + variation + " do projeto de ID " + projectId + " foi selecionado!");
-            
+
+            let formData = new FormData();
+            formData.append("projectId", projectId);
+            formData.append("variation", variation);
+
+            let serverRequester = new ServerRequester("http://localhost:8080");
+            let response = await serverRequester.doPost("/project/generateDelta", formData, "multipart/form-data");
+            console.log(variation);
+            //console.log(response);
         }
 
     }

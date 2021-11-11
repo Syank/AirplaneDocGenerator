@@ -27,14 +27,14 @@ public class DeltaManualHelper {
 	}
 	
 	private static void arrangePages (Projeto project, List<Linha> lines, Remark remark) {
-		int selectedRemarkID = remark.getId();
+		String selectedRemarkID = remark.getTraco();
 		String projectName = project.getNome();
 		String sFilePath = "";
 		for (Linha line : lines) {
 			List<Remark> lineRemarks = line.getRemarks();
 			for (Remark r : lineRemarks) {
-				int actualRemarkID = r.getId();
-				if (selectedRemarkID == actualRemarkID) {
+				String actualRemarkID = r.getTraco();
+				if (selectedRemarkID.equals(actualRemarkID)) {
 					String[] result = FileVerifications.fileDestination(line, projectName);
 					sFilePath = result[0] + result[1];
 					switch (line.getBlockNumber()) {
@@ -59,5 +59,11 @@ public class DeltaManualHelper {
 	public static void generateDeltaManual (Projeto project, Remark remark) {
 		List<Linha> lastRevisionLines = getLastRevisionLines(project);
 		arrangePages(project, lastRevisionLines, remark);
+		System.err.println(deltaLetter);
+		System.err.println(deltaCover);
+		System.err.println(deltaLEP);
+		for (String page : remainingPages) {
+			System.err.println(page);
+		}
 	}
 }
