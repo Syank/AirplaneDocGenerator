@@ -8,6 +8,7 @@ import ServerRequester from "./utils/ServerRequester";
 import SelectProjectScreen from "./views/SelectProjectScreen";
 import ProjectAdministrationScreen from "./views/ProjectAdministrationScreen";
 import UploadScreen from "./views/UploadScreen";
+import ManualGenerationScreen from "./views/ManualGenerationScreen";
 
 
 
@@ -31,7 +32,8 @@ class Application extends React.Component {
             "new-project-screen": "creation-screen",
             "importProjectScreen": "creation-screen",
             "selectProject": "home",
-            "projectAdministration": "selectProject"
+            "projectAdministration": "selectProject",
+            "manualGeneration": "home"
         };
 
         this.setPageToRender = this.setPageToRender.bind(this);
@@ -80,6 +82,10 @@ class Application extends React.Component {
                 pageToDisplay = this.getUploadScreen();
 
                 break;
+            case "generationScreen":
+                pageToDisplay = this.getGenerationScreen();
+
+                break;
             default:
                 pageToDisplay = this.getLoginScreen();
 
@@ -111,6 +117,14 @@ class Application extends React.Component {
         );
 
         return screen
+    }
+
+    getGenerationScreen(){
+        let screen = (
+            <ManualGenerationScreen navigation={this.setPageToRender}/>
+        );
+
+        return screen;
     }
 
     /**
