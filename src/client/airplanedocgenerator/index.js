@@ -15,7 +15,7 @@ app.on("ready", () => {
             nodeIntegration: false,
             worldSafeExecuteJavaScript: true,
             contextIsolation: true,
-            preload: __dirname + "/src/preload.js", // use a preload script
+            preload: __dirname + "/src/preload.js",
         },
     });
 

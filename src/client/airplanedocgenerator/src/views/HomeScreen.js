@@ -37,10 +37,10 @@ class HomeScreen extends React.Component {
             printProject: "Gerar",
         };
 
-        this.goToCreateNewProjectPage =
-            this.goToCreateNewProjectPage.bind(this);
-        
+        this.goToCreateNewProjectPage = this.goToCreateNewProjectPage.bind(this);
         this.goToSelectProjectPage = this.goToSelectProjectPage.bind(this);
+        this.goToPrintProjectPage = this.goToPrintProjectPage.bind(this);
+
     }
 
     /**
@@ -88,7 +88,7 @@ class HomeScreen extends React.Component {
      * @author Rafael Furtado
      */
     goToPrintProjectPage() {
-        notification("info", "Aguarde um pouco!", "Essa funcionalidade estará disponível em breve!");
+        this.props.navigation("generationScreen");
         
     }
 
