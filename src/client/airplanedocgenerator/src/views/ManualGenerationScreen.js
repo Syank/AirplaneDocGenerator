@@ -364,24 +364,42 @@ class ManualGenerationScreen extends React.Component {
         let selectedProject = this.state["selectedProject"];
 
         let projectId = selectedProject["id"];
+        let projectName = selectedProject["nome"];
         let variation = this.state["selectedVariation"];
         
-        if(projectId === undefined || variation === undefined){
+        if (projectId === undefined || variation === undefined){
             notification("warning", "Um momento! 🤨", "Primeiro selecione um projeto e depois uma de suas variações");
         }
-        else{
-            let formData = new FormData();
-            formData.append("projectId", projectId);
-            formData.append("variation", variation);
+        else {
+            let allFilePaths = true;
+            let codelistLines = selectedProject["codelist"]["linhas"];
+            codelistLines.forEach(line => {
+                line["remarks"].forEach(remark => {
+                    if (remark["traco"] === variation) {
+                        if (line["filePath"] == null) {
+                            allFilePaths = false;
+                        }
+                    }
+                });
+            });
 
-            let serverRequester = new ServerRequester("http://localhost:8080");
-            let response = await serverRequester.doPost("/project/generateFull", formData, "multipart/form-data");
-            
-            if (response.status === 200) {
-                notification("success", "Sucesso! 🤗", "A versão Full na variação " + variation + " do projeto " + projectId + " foi gerada!");
+            if (allFilePaths) {
+                let formData = new FormData();
+                formData.append("projectId", projectId);
+                formData.append("variation", variation);
+    
+                let serverRequester = new ServerRequester("http://localhost:8080");
+                let response = await serverRequester.doPost("/project/generateFull", formData, "multipart/form-data");
+                
+                if (response.status === 200) {
+                    notification("success", "Sucesso! 🤗", "A versão Full na variação " + variation + " do projeto " + projectName + " foi gerada!");
+                }
+                else {
+                    notification("error", "Ops... 😑", "Não foi possível gerar a versão Full. Tente novamente.");
+                }
             }
             else {
-                notification("error", "Ops... 😑", "Não foi possível gerar a versão Full. Se todas as linhas da variação possuem um arquivo e tente novamente.");
+                notification("warning", "Arquivos em falta! 🥶", "Nem todas as linhas da variação " + variation + " no projeto " + projectName + " possuem um arquivo associado. Verifique e tente novamente.");
             }
         }
 
@@ -391,6 +409,7 @@ class ManualGenerationScreen extends React.Component {
         let selectedProject = this.state["selectedProject"];
 
         let projectId = selectedProject["id"];
+        let projectName = selectedProject["nome"];
         let variation = this.state["selectedVariation"];
         
         if(projectId === undefined || variation === undefined){
@@ -405,7 +424,7 @@ class ManualGenerationScreen extends React.Component {
             let response = await serverRequester.doPost("/project/generateDelta", formData, "multipart/form-data");
             
             if (response.status === 200) {
-                notification("success", "Sucesso! 🤗", "A versão Delta na variação " + variation + " do projeto " + projectId + " foi gerada!");
+                notification("success", "Sucesso! 🤗", "A versão Delta na variação " + variation + " do projeto " + projectName + " foi gerada!");
             }
             else {
                 notification("error", "Ops... 😑", "Não foi possível gerar a versão Delta. Verifique a última revisão e tente novamente.");
