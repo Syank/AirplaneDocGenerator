@@ -431,11 +431,22 @@ public class ProjetoController {
 	}
 	
 	@PostMapping("/generateDelta")
+    @ApiOperation("Generates the Delta version of a manual.")
+	@ApiResponses({
+        @ApiResponse(code = 200, message = "The Delta manual was successfully generated."),
+        @ApiResponse(code = 500, message = "Somenthing went wrong.")
+    })
 	public ResponseEntity<?> generateDeltaManual (@RequestParam(name = "projectId") int projectId, @RequestParam(name = "variation") String variation) throws DocumentException, IOException {
-		Projeto project = projetoRepository.findById(projectId).get();
-		Remark remark = remarkRepository.findAllRemarks(variation).get(0);
-		DeltaManualHelper.generateDeltaManual(project, remark);
-		
-		return new ResponseEntity<Boolean>(true, HttpStatus.OK);
+		try {
+			Projeto project = projetoRepository.findById(projectId).get();
+			Remark remark = remarkRepository.findAllRemarks(variation).get(0);
+			DeltaManualHelper.generateDeltaManual(project, remark);
+			
+			return new ResponseEntity<Boolean>(true, HttpStatus.OK);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<Boolean>(false, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
 }

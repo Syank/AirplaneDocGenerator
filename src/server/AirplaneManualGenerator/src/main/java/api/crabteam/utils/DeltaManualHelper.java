@@ -17,13 +17,32 @@ import api.crabteam.model.entities.Remark;
 import api.crabteam.model.entities.Revisao;
 import api.crabteam.model.enumarations.EnvironmentVariables;
 
+/**
+ * Classe responsável por conter os métodos necessários para a geração do manual na versão Delta
+ * @author Bárbara Port
+ *
+ */
 public class DeltaManualHelper {
 	
+	/**
+	 * Método que procura a última revisão de um projeto
+	 * @param project projeto a ter a sua última revisão verificada
+	 * @return o objeto que representa a última revisão
+	 * @author Bárbara Port
+	 */
 	private static Revisao getLastRevision (Projeto project) {
 		Revisao revision = project.getLastRevision();
 		return revision;
 	}
 	
+	/**
+	 * Método que organiza e separa as partes do manual
+	 * @param project o projeto ao qual o manual pertence
+	 * @param projectLines as linhas do projeto
+	 * @param remark o remark escolhido para gerar o Delta
+	 * @return o objeto com os caminhos dos arquivos para a geração do manual
+	 * @author Bárbara Port
+	 */
 	private static ManualsHelper arrangePages (Projeto project, List<Linha> projectLines, Remark remark) {
 		String selectedRemarkID = remark.getTraco();
 		String projectName = project.getNome();
@@ -63,6 +82,14 @@ public class DeltaManualHelper {
 		return new ManualsHelper(deltaLetter, deltaCover, deltaLEP, remainingPages);
 	}
 	
+	/**
+	 * Método que concatena um arquivo ao arquivo PDF da versão Delta do manual
+	 * @param copy arquivo final do manual Delta
+	 * @param file caminho do arquivo a ser concatenado
+	 * @throws DocumentException
+	 * @throws IOException
+	 * @author Bárbara Port
+	 */
 	private static void addFileToPDF (PdfCopy copy, String file) throws DocumentException, IOException {
 		URL urlFile = new URL("file:\\".concat(file));
         PdfReader reader = new PdfReader(urlFile);
@@ -71,6 +98,15 @@ public class DeltaManualHelper {
         reader.close();
 	}
 	
+	/**
+	 * Método que seleciona os arquivos a serem colocados no PDF do manual Delta
+	 * @param manual objeto com as informações organizadas sobre cada parte essencial do manual
+	 * @param projectName nome do projeto ao qual o manual pertence
+	 * @param manualFileName nome do arquivo do manual, sem a extensão
+	 * @throws DocumentException
+	 * @throws IOException
+	 * @author Bárbara Port
+	 */
 	private static void mergePdfFiles (ManualsHelper manual, String projectName, String manualFileName) throws DocumentException, IOException {
         String pdfFileName = EnvironmentVariables.PROJECTS_FOLDER.getValue()
         					 .concat("\\")
@@ -92,8 +128,15 @@ public class DeltaManualHelper {
         document.close();
 	}
 	
+	/**
+	 * Método que executa todos os outros métodos para gerar o manual
+	 * @param project o projeto a ter o manual gerado
+	 * @param remark o remark escolhido
+	 * @throws DocumentException
+	 * @throws IOException
+	 * @author Bárbara Port
+	 */
 	public static void generateDeltaManual (Projeto project, Remark remark) throws DocumentException, IOException {
-		
 		List<Linha> projectLines = project.getCodelist().getLinhas();
 		ManualsHelper manual = arrangePages(project, projectLines, remark);
 		String manualFileName = project.getNome()

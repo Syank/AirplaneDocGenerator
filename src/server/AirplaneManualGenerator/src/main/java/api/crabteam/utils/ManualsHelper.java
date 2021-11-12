@@ -2,6 +2,11 @@ package api.crabteam.utils;
 
 import java.util.List;
 
+/**
+ * Classe responsável por armazenar a estrutura que os manuais terão
+ * @author Bárbara Port
+ *
+ */
 public class ManualsHelper {
 	
 	private String deltaLetter;
@@ -47,6 +52,5 @@ public class ManualsHelper {
 	public void setRemainingPages(List<String> remainingPages) {
 		this.remainingPages = remainingPages;
 	}
-
 	
 }
