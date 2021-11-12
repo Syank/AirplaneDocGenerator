@@ -42,10 +42,11 @@ import api.crabteam.model.repositories.LinhaRepository;
 import api.crabteam.model.repositories.ProjetoRepository;
 import api.crabteam.model.repositories.RemarkRepository;
 import api.crabteam.utils.CodelistExporter;
-import api.crabteam.utils.DeltaManualHelper;
 import api.crabteam.utils.FileUtils;
 import api.crabteam.utils.FileVerifications;
 import api.crabteam.utils.ProjectExporter;
+import api.crabteam.utils.manualVersionsHelpers.DeltaManualHelper;
+import api.crabteam.utils.manualVersionsHelpers.FullManualHelper;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -442,6 +443,25 @@ public class ProjetoController {
 			Remark remark = remarkRepository.findAllRemarks(variation).get(0);
 			DeltaManualHelper.generateDeltaManual(project, remark);
 			
+			return new ResponseEntity<Boolean>(true, HttpStatus.OK);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<Boolean>(false, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+	@PostMapping("/generateFull")
+    @ApiOperation("Generates the Full version of a manual.")
+	@ApiResponses({
+        @ApiResponse(code = 200, message = "The Full manual was successfully generated."),
+        @ApiResponse(code = 500, message = "Somenthing went wrong.")
+    })
+	public ResponseEntity<?> generateFullManual (@RequestParam(name = "projectId") int projectId, @RequestParam(name = "variation") String variation) {
+		try {
+			Projeto project = projetoRepository.findById(projectId).get();
+			Remark remark = remarkRepository.findAllRemarks(variation).get(0);
+			FullManualHelper.generateFullManual(project, remark);
 			return new ResponseEntity<Boolean>(true, HttpStatus.OK);
 		}
 		catch (Exception e) {

@@ -1,4 +1,4 @@
-package api.crabteam.utils;
+package api.crabteam.utils.manualVersionsHelpers;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -16,6 +16,7 @@ import api.crabteam.model.entities.Projeto;
 import api.crabteam.model.entities.Remark;
 import api.crabteam.model.entities.Revisao;
 import api.crabteam.model.enumarations.EnvironmentVariables;
+import api.crabteam.utils.FileVerifications;
 
 /**
  * Classe responsável por conter os métodos necessários para a geração do manual na versão Delta
@@ -30,7 +31,7 @@ public class DeltaManualHelper {
 	 * @return o objeto que representa a última revisão
 	 * @author Bárbara Port
 	 */
-	private static Revisao getLastRevision (Projeto project) {
+	protected static Revisao getLastRevision (Projeto project) {
 		Revisao revision = project.getLastRevision();
 		return revision;
 	}

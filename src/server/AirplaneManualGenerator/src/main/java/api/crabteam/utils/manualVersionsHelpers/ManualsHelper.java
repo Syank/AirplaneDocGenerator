@@ -1,4 +1,4 @@
-package api.crabteam.utils;
+package api.crabteam.utils.manualVersionsHelpers;
 
 import java.util.List;
 

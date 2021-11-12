@@ -360,7 +360,7 @@ class ManualGenerationScreen extends React.Component {
 
     }
 
-    generateFull(){
+    async generateFull(){
         let selectedProject = this.state["selectedProject"];
 
         let projectId = selectedProject["id"];
@@ -368,11 +368,21 @@ class ManualGenerationScreen extends React.Component {
         
         if(projectId === undefined || variation === undefined){
             notification("warning", "Um momento! 🤨", "Primeiro selecione um projeto e depois uma de suas variações");
+        }
+        else{
+            let formData = new FormData();
+            formData.append("projectId", projectId);
+            formData.append("variation", variation);
 
-        }else{
-            // A notificação abaixo é apenas para teste, retirar e colocar a requisição
-            notification("success", "Sucesso! 🤗", "A variação " + variation + " do projeto de ID " + projectId + " foi selecionado!");
-
+            let serverRequester = new ServerRequester("http://localhost:8080");
+            let response = await serverRequester.doPost("/project/generateFull", formData, "multipart/form-data");
+            
+            if (response.status === 200) {
+                notification("success", "Sucesso! 🤗", "A versão Full na variação " + variation + " do projeto " + projectId + " foi gerada!");
+            }
+            else {
+                notification("error", "Ops... 😑", "Não foi possível gerar a versão Full. Se todas as linhas da variação possuem um arquivo e tente novamente.");
+            }
         }
 
     }
@@ -385,22 +395,22 @@ class ManualGenerationScreen extends React.Component {
         
         if(projectId === undefined || variation === undefined){
             notification("warning", "Um momento! 🤨", "Primeiro selecione um projeto e depois uma de suas variações");
-
         }
-        else{
-
-            notification("success", "Sucesso! 🤗", "A variação " + variation + " do projeto de ID " + projectId + " foi selecionado!");
-
+        else {
             let formData = new FormData();
             formData.append("projectId", projectId);
             formData.append("variation", variation);
 
             let serverRequester = new ServerRequester("http://localhost:8080");
             let response = await serverRequester.doPost("/project/generateDelta", formData, "multipart/form-data");
-            console.log(variation);
-            //console.log(response);
+            
+            if (response.status === 200) {
+                notification("success", "Sucesso! 🤗", "A versão Delta na variação " + variation + " do projeto " + projectId + " foi gerada!");
+            }
+            else {
+                notification("error", "Ops... 😑", "Não foi possível gerar a versão Delta. Verifique a última revisão e tente novamente.");
+            }
         }
-
     }
 
     getPaginationElement(){
