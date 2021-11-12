@@ -1,6 +1,5 @@
 package api.crabteam.utils;
 
-import java.io.File;
 import java.time.LocalDateTime;
 import java.time.format.TextStyle;
 import java.util.ArrayList;
@@ -11,10 +10,15 @@ import java.util.Set;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.pdf.CMYKColor;
 import com.itextpdf.text.pdf.PdfContentByte;
+import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.PdfWriter;
+import com.itextpdf.text.pdf.parser.PdfReaderContentParser;
+import com.itextpdf.text.pdf.parser.SimpleTextExtractionStrategy;
+import com.itextpdf.text.pdf.parser.TextExtractionStrategy;
 
 import api.crabteam.model.entities.Linha;
 import api.crabteam.model.entities.Projeto;
+import api.crabteam.model.entities.Remark;
 import api.crabteam.model.entities.Revisao;
 import api.crabteam.model.enumarations.EnvironmentVariables;
 
@@ -32,8 +36,6 @@ public class LEPBuilder {
 		String projectName = this.project.getNome();
 		
 		this.outputFolder = EnvironmentVariables.PROJECTS_FOLDER.getValue() + "\\" + projectName + "\\LEP";
-		
-		createLepDirectory();
 		
 	}
 	
@@ -70,10 +72,67 @@ public class LEPBuilder {
 	}
 	
 	private void drawRevisionTable(Document pdfDoc, PdfWriter writer, Linha line) throws Exception {
-		
-		
 		drawRevisionTableHeader(pdfDoc, writer, line);
+		drawRevisionTableContent(line);
+
 		
+	}
+	
+	private void drawRevisionTableContent(Linha line) throws Exception {
+		List<Linha> linhas = this.project.getCodelist().getLinhas();
+
+		
+		
+		for (int i = 0; i < linhas.size(); i++) {
+			Linha linha = linhas.get(i);
+
+			String filePath = linha.getFilePath();
+
+			if (filePath != null && sameRemark(line, linha) && !linha.getBlockName().equals("LEP")) {
+				String file = getFileName(linha);
+
+				PdfReader reader = new PdfReader(filePath + "\\" + file);
+				PdfReaderContentParser textParser = new PdfReaderContentParser(reader);
+				TextExtractionStrategy strategy;
+
+				ArrayList<String> fileLines = new ArrayList<String>();
+
+				for (int j = 1; j <= reader.getNumberOfPages(); j++) {
+					strategy = textParser.processContent(j, new SimpleTextExtractionStrategy());
+					
+					fileLines.add(strategy.getResultantText());
+
+				}
+
+				reader.close();
+				
+				
+
+			}
+
+		}
+		
+	}
+	
+	private boolean sameRemark(Linha line1, Linha line2) {
+		List<Remark> remark1 = line1.getRemarks();
+		List<Remark> remark2 = line2.getRemarks();
+		
+		for (int i = 0; i < remark1.size(); i++) {
+			Remark remark = remark1.get(i);
+			
+			String traco = remark.getTraco();
+			
+			for (int j = 0; j < remark2.size(); j++) {
+				if(remark2.get(i).getTraco().equals(traco)) {
+					return true;
+				}
+				
+			}
+			
+		}
+		
+		return false;
 	}
 
 	private void newPage(Document pdfDoc, PdfWriter writer, Linha line) throws Exception {
@@ -299,11 +358,4 @@ public class LEPBuilder {
 		return projectRemarks;
 	}
 
-	private void createLepDirectory() {
-		File directory = new File(this.outputFolder);
-		
-		directory.mkdirs();
-		
-	}
-	
 }
