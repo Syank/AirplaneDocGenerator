@@ -24,6 +24,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.itextpdf.text.DocumentException;
+
 import api.crabteam.controllers.requestsBody.ChangeProjectDescription;
 import api.crabteam.controllers.requestsBody.ChangeProjectName;
 import api.crabteam.controllers.requestsBody.NewProject;
@@ -429,9 +431,8 @@ public class ProjetoController {
 	}
 	
 	@PostMapping("/generateDelta")
-	public ResponseEntity<?> generateDeltaManual (@RequestParam(name = "projectId") int projectId, @RequestParam(name = "variation") String variation) {
+	public ResponseEntity<?> generateDeltaManual (@RequestParam(name = "projectId") int projectId, @RequestParam(name = "variation") String variation) throws DocumentException, IOException {
 		Projeto project = projetoRepository.findById(projectId).get();
-		
 		Remark remark = remarkRepository.findAllRemarks(variation).get(0);
 		DeltaManualHelper.generateDeltaManual(project, remark);
 		

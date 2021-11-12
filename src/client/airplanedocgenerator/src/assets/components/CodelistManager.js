@@ -494,9 +494,6 @@ class CodelistManager extends React.Component {
             }
 
         }
-
-        console.log(projectName, filesToRevise, revisionDescription);
-
     }
 
     getRevisionLines(){
