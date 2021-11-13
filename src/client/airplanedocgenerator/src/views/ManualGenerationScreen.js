@@ -415,6 +415,8 @@ class ManualGenerationScreen extends React.Component {
     async generateDelta(){
         let selectedProject = this.state["selectedProject"];
 
+        console.log(selectedProject);
+
         let projectId = selectedProject["id"];
         let projectName = selectedProject["nome"];
         let variation = this.state["selectedVariation"];
@@ -423,26 +425,46 @@ class ManualGenerationScreen extends React.Component {
             notification("warning", "Um momento! 🤨", "Primeiro selecione um projeto e depois uma de suas variações");
         }
         else {
-            let formData = new FormData();
-            formData.append("projectId", projectId);
-            formData.append("variation", variation);
+            let lastRevision = selectedProject["lastRevision"].version;
 
-            let serverRequester = new ServerRequester("http://localhost:8080");
-            let response = await serverRequester.doPost("/project/generateDelta", formData, "multipart/form-data");
+            let allFilePaths = true;
+            selectedProject["codelist"]["linhas"].forEach(line => {
+                if (line["actualRevision"] === lastRevision) {
+                    line["remarks"].forEach(remark => {
+                        if (remark["traco"] === variation) {
+                            if (line["filePath"] === null) {
+                                allFilePaths = false;
+                            }
+                        }
+                    });
+                }
+            });
             
-            if (response.status === 200) {
-                let supposedSelectedPath = await window.electron.windowControll.showDialog();
-                if (supposedSelectedPath.canceled === false) {
-                    let pathToSave = supposedSelectedPath.filePaths;
-                    let base64File = response.responseJson["file"];
-                    let fileName = response.responseJson["fileName"];
-
-                    await window.electron.windowControll.downloadFile(base64File, pathToSave, fileName, ".pdf");
-                    notification("success", "Sucesso! 🤗", "A versão Delta na variação " + variation + " do projeto " + projectName + " foi gerada! Verifique a pasta " + pathToSave + "!");
+            if (allFilePaths) {
+                let formData = new FormData();
+                formData.append("projectId", projectId);
+                formData.append("variation", variation);
+    
+                let serverRequester = new ServerRequester("http://localhost:8080");
+                let response = await serverRequester.doPost("/project/generateDelta", formData, "multipart/form-data");
+                
+                if (response.status === 200) {
+                    let supposedSelectedPath = await window.electron.windowControll.showDialog();
+                    if (supposedSelectedPath.canceled === false) {
+                        let pathToSave = supposedSelectedPath.filePaths;
+                        let base64File = response.responseJson["file"];
+                        let fileName = response.responseJson["fileName"];
+    
+                        await window.electron.windowControll.downloadFile(base64File, pathToSave, fileName, ".pdf");
+                        notification("success", "Sucesso! 🤗", "A versão Delta na variação " + variation + " do projeto " + projectName + " foi gerada! Verifique a pasta " + pathToSave + "!");
+                    }
+                }
+                else {
+                    notification("error", "Ops... 😑", "Não foi possível gerar a versão Delta. Verifique a última revisão e tente novamente.");
                 }
             }
             else {
-                notification("error", "Ops... 😑", "Não foi possível gerar a versão Delta. Verifique a última revisão e tente novamente.");
+                notification("warning", "Um momento! 🤯", "Nem todas as linhas da última revisão têm um arquivo! Verifique e tente novamente.");
             }
         }
     }
