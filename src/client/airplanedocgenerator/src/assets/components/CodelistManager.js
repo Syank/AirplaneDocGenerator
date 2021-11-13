@@ -494,9 +494,6 @@ class CodelistManager extends React.Component {
             }
 
         }
-
-        console.log(projectName, filesToRevise, revisionDescription);
-
     }
 
     getRevisionLines(){
@@ -911,42 +908,44 @@ class CodelistManager extends React.Component {
 
         let file = await addFile(justId);
 
-        let serverRequester = new ServerRequester("http://localhost:8080");
+        if (file !== undefined) {
+            let serverRequester = new ServerRequester("http://localhost:8080");
 
-        let formData = new FormData();
-        formData.append("file", file);
-        formData.append("line", justId);
-        formData.append("codelistName", this.state["projectData"]["codelist"]["nome"]);
-
-        let response = await serverRequester.doPost(
-            "/codelistLine/attachFile",
-            formData,
-            "multipart/form-data"
-        );
-
-        if (response.status === 200) {
-            notification(
-                "success",
-                "Sucesso! 😄",
-                "O arquivo foi associado com sucesso!"
+            let formData = new FormData();
+            formData.append("file", file);
+            formData.append("line", justId);
+            formData.append("codelistName", this.state["projectData"]["codelist"]["nome"]);
+    
+            let response = await serverRequester.doPost(
+                "/codelistLine/attachFile",
+                formData,
+                "multipart/form-data"
             );
-
-            let newData = await this.props.reloadData();
-
-            let linesSituation = this.state["linesSituation"];
-
-            linesSituation[justId]["hasFile"] = true;
-
-            this.setState({
-                linesSituation: linesSituation,
-                projectData: newData,
-            });
-        } else if (file !== null && file !== undefined) {
-            notification(
-                "error",
-                "Ops 🙁",
-                "Não foi possível associar o arquivo a essa linha."
-            );
+    
+            if (response.status === 200) {
+                notification(
+                    "success",
+                    "Sucesso! 😄",
+                    "O arquivo foi associado com sucesso!"
+                );
+    
+                let newData = await this.props.reloadData();
+    
+                let linesSituation = this.state["linesSituation"];
+    
+                linesSituation[justId]["hasFile"] = true;
+    
+                this.setState({
+                    linesSituation: linesSituation,
+                    projectData: newData,
+                });
+            } else if (file !== null && file !== undefined) {
+                notification(
+                    "error",
+                    "Ops 🙁",
+                    "Não foi possível associar o arquivo a essa linha."
+                );
+            }
         }
     }
 

@@ -56,7 +56,7 @@ public class Projeto {
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	@OrderBy("creation_date, version")
-	@JoinColumn(name = "revision_id", referencedColumnName = "id")
+	@JoinColumn(name = "projeto_id", referencedColumnName = "id")
 	private Set<Revisao> revisions = new HashSet<Revisao>();
 	
 	public Projeto() {
