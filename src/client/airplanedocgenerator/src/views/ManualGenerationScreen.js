@@ -415,8 +415,6 @@ class ManualGenerationScreen extends React.Component {
     async generateDelta(){
         let selectedProject = this.state["selectedProject"];
 
-        console.log(selectedProject);
-
         let projectId = selectedProject["id"];
         let projectName = selectedProject["nome"];
         let variation = this.state["selectedVariation"];
