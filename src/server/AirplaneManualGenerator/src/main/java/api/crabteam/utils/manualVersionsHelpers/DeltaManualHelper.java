@@ -63,19 +63,17 @@ public class DeltaManualHelper {
 					if (selectedRemarkID.equals(actualRemarkID)) {
 						String[] result = FileVerifications.fileDestination(line, projectName);
 						sFilePath = String.join("\\", result);
-						switch (line.getBlockNumber()) {
-							case "00":
-								deltaLetter = sFilePath;
-								break;
-							case "01":
-								deltaCover = sFilePath;
-								break;
-							case "02":
-								deltaLEP = sFilePath;
-								break;
-							default:
-								remainingPages.add(sFilePath);
-								break;
+						if (line.getBlockName().equals("Letter") && line.getBlockNumber().equals("00")) {
+							deltaLetter = sFilePath;
+						}
+						else if (line.getBlockName().equals("Cover") && line.getBlockNumber().equals("01")) {
+							deltaCover = sFilePath;
+						}
+						else if (line.getBlockName().equals("LEP") && line.getBlockNumber().equals("02")) {
+							deltaLEP = sFilePath;
+						}
+						else {
+							remainingPages.add(sFilePath);
 						}
 					}
 				}
