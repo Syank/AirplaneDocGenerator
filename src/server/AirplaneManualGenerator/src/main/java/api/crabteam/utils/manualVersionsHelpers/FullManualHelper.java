@@ -3,6 +3,8 @@ package api.crabteam.utils.manualVersionsHelpers;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -88,7 +90,7 @@ public class FullManualHelper {
 	 * @throws IOException
 	 * @author Bárbara Port
 	 */
-	private static void mergePdfFiles (ManualsHelper manual, String projectName, String manualFileName) throws DocumentException, IOException {
+	private static byte[] mergePdfFiles (ManualsHelper manual, String projectName, String manualFileName) throws DocumentException, IOException {
         String pdfFileName = EnvironmentVariables.PROJECTS_FOLDER.getValue()
         					 .concat("\\")
         					 .concat(projectName)
@@ -107,6 +109,24 @@ public class FullManualHelper {
         	addFileToPDF(copy, file);
         }
         document.close();
+        return Files.readAllBytes(Paths.get(pdfFileName));
+	}
+	
+	/**
+	 * Método que "monta" o nome do arquivo do manual Full
+	 * @param project o objeto que representa o projeto
+	 * @param remark o objeto que representa o remark
+	 * @return nome do arquivo, sem a extensão
+	 * @author Bárbara Port
+	 */
+	public static String getFullManualFileName (Projeto project, Remark remark) {
+		return project.getNome()
+			   .concat("-")
+			   .concat(remark.getTraco())
+			   .concat("-")
+			   .concat("REV".concat(String.valueOf(DeltaManualHelper.getLastRevision(project).getVersion())))
+			   .concat("-")
+			   .concat("FULL");
 	}
 	
 	/**
@@ -117,15 +137,9 @@ public class FullManualHelper {
 	 * @throws IOException
 	 * @author Bárbara Port
 	 */
-	public static void generateFullManual (Projeto project, Remark remark) throws DocumentException, IOException {
+	public static byte[] generateFullManual (Projeto project, Remark remark) throws DocumentException, IOException {
 		ManualsHelper manual = arrangePages(project, remark);
-		String manualFileName = project.getNome()
-								.concat("-")
-								.concat(remark.getTraco())
-								.concat("-")
-								.concat("REV".concat(String.valueOf(DeltaManualHelper.getLastRevision(project).getVersion())))
-								.concat("-")
-								.concat("FULL");
-		mergePdfFiles(manual, project.getNome(), manualFileName);
+		String manualFileName = getFullManualFileName(project, remark);
+		return mergePdfFiles(manual, project.getNome(), manualFileName);
 	}
 }

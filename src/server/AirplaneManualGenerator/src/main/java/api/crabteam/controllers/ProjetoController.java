@@ -441,9 +441,15 @@ public class ProjetoController {
 		try {
 			Projeto project = projetoRepository.findById(projectId).get();
 			Remark remark = remarkRepository.findAllRemarks(variation).get(0);
-			DeltaManualHelper.generateDeltaManual(project, remark);
+			byte[] file = DeltaManualHelper.generateDeltaManual(project, remark);
+			String fileName = DeltaManualHelper.getDeltaManualFileName(project, remark);
 			
-			return new ResponseEntity<Boolean>(true, HttpStatus.OK);
+			String base64File = new String(Base64.getEncoder().encode(file));
+			JSONObject fileObject = new JSONObject();
+			fileObject.put("file", base64File);
+			fileObject.put("fileName", fileName);
+			
+			return new ResponseEntity<String>(fileObject.toString(), HttpStatus.OK);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -461,8 +467,15 @@ public class ProjetoController {
 		try {
 			Projeto project = projetoRepository.findById(projectId).get();
 			Remark remark = remarkRepository.findAllRemarks(variation).get(0);
-			FullManualHelper.generateFullManual(project, remark);
-			return new ResponseEntity<Boolean>(true, HttpStatus.OK);
+			byte[] file = FullManualHelper.generateFullManual(project, remark);
+			String fileName = FullManualHelper.getFullManualFileName(project, remark);
+			
+			String base64File = new String(Base64.getEncoder().encode(file));
+			JSONObject fileObject = new JSONObject();
+			fileObject.put("file", base64File);
+			fileObject.put("fileName", fileName);
+			
+			return new ResponseEntity<String>(fileObject.toString(), HttpStatus.OK);
 		}
 		catch (Exception e) {
 			e.printStackTrace();

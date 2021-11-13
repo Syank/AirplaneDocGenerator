@@ -392,7 +392,14 @@ class ManualGenerationScreen extends React.Component {
                 let response = await serverRequester.doPost("/project/generateFull", formData, "multipart/form-data");
                 
                 if (response.status === 200) {
-                    notification("success", "Sucesso! 🤗", "A versão Full na variação " + variation + " do projeto " + projectName + " foi gerada!");
+                    let supposedSelectedPath = await window.electron.windowControll.showDialog();
+                    if (supposedSelectedPath.canceled === false) {
+                        let pathToSave = supposedSelectedPath.filePaths;
+                        let base64File = response.responseJson["file"];
+                        let fileName = response.responseJson["fileName"];
+                        await window.electron.windowControll.downloadFile(base64File, pathToSave, fileName, ".pdf");
+                        notification("success", "Sucesso! 🤗", "A versão Full na variação " + variation + " do projeto " + projectName + " foi gerada! Verifique a pasta " + pathToSave + "!");
+                    }
                 }
                 else {
                     notification("error", "Ops... 😑", "Não foi possível gerar a versão Full. Tente novamente.");
@@ -424,7 +431,15 @@ class ManualGenerationScreen extends React.Component {
             let response = await serverRequester.doPost("/project/generateDelta", formData, "multipart/form-data");
             
             if (response.status === 200) {
-                notification("success", "Sucesso! 🤗", "A versão Delta na variação " + variation + " do projeto " + projectName + " foi gerada!");
+                let supposedSelectedPath = await window.electron.windowControll.showDialog();
+                if (supposedSelectedPath.canceled === false) {
+                    let pathToSave = supposedSelectedPath.filePaths;
+                    let base64File = response.responseJson["file"];
+                    let fileName = response.responseJson["fileName"];
+
+                    await window.electron.windowControll.downloadFile(base64File, pathToSave, fileName, ".pdf");
+                    notification("success", "Sucesso! 🤗", "A versão Delta na variação " + variation + " do projeto " + projectName + " foi gerada! Verifique a pasta " + pathToSave + "!");
+                }
             }
             else {
                 notification("error", "Ops... 😑", "Não foi possível gerar a versão Delta. Verifique a última revisão e tente novamente.");

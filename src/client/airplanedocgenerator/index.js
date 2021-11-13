@@ -51,7 +51,7 @@ ipcMain.on("showDialog", function () {
 ipcMain.on("download", function (event, data) {
     let base64File = data[0];
     let path = data[1][0]
-    let codelistName = data[2];
+    let fileName = data[2];
     let fileExtension = data[3];
 
     let fileBuffer;
@@ -62,6 +62,6 @@ ipcMain.on("download", function (event, data) {
         fileBuffer = Buffer.from(base64File, 'base64');
     }
     
-    fs.writeFileSync(path + "\\" + codelistName + fileExtension, fileBuffer);
+    fs.writeFileSync(path + "\\" + fileName + fileExtension, fileBuffer);
 });
 
