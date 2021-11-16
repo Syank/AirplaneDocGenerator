@@ -24,12 +24,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.itextpdf.text.DocumentException;
+
 import api.crabteam.controllers.requestsBody.ChangeProjectDescription;
 import api.crabteam.controllers.requestsBody.ChangeProjectName;
 import api.crabteam.controllers.requestsBody.NewProject;
 import api.crabteam.model.entities.Codelist;
 import api.crabteam.model.entities.Linha;
 import api.crabteam.model.entities.Projeto;
+import api.crabteam.model.entities.Remark;
 import api.crabteam.model.entities.Revisao;
 import api.crabteam.model.entities.builders.CodelistBuilder;
 import api.crabteam.model.entities.builders.ProjetoBuilder;
@@ -37,10 +40,13 @@ import api.crabteam.model.enumarations.EnvironmentVariables;
 import api.crabteam.model.repositories.CodelistRepository;
 import api.crabteam.model.repositories.LinhaRepository;
 import api.crabteam.model.repositories.ProjetoRepository;
+import api.crabteam.model.repositories.RemarkRepository;
 import api.crabteam.utils.CodelistExporter;
 import api.crabteam.utils.FileUtils;
 import api.crabteam.utils.FileVerifications;
 import api.crabteam.utils.ProjectExporter;
+import api.crabteam.utils.manualVersionsHelpers.DeltaManualHelper;
+import api.crabteam.utils.manualVersionsHelpers.FullManualHelper;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -62,6 +68,9 @@ public class ProjetoController {
 	
 	@Autowired
 	public LinhaRepository linhaRepository;
+	
+	@Autowired
+	public RemarkRepository remarkRepository;
 	
 	@Autowired
 	public ProjetoBuilder builder;
@@ -420,5 +429,57 @@ public class ProjetoController {
 		}
 		
 		return new ResponseEntity<Boolean>(true, HttpStatus.OK);
+	}
+	
+	@PostMapping("/generateDelta")
+    @ApiOperation("Generates the Delta version of a manual.")
+	@ApiResponses({
+        @ApiResponse(code = 200, message = "The Delta manual was successfully generated."),
+        @ApiResponse(code = 500, message = "Somenthing went wrong.")
+    })
+	public ResponseEntity<?> generateDeltaManual (@RequestParam(name = "projectId") int projectId, @RequestParam(name = "variation") String variation) throws DocumentException, IOException {
+		try {
+			Projeto project = projetoRepository.findById(projectId).get();
+			Remark remark = remarkRepository.findAllRemarks(variation).get(0);
+			byte[] file = DeltaManualHelper.generateDeltaManual(project, remark);
+			String fileName = DeltaManualHelper.getDeltaManualFileName(project, remark);
+			
+			String base64File = new String(Base64.getEncoder().encode(file));
+			JSONObject fileObject = new JSONObject();
+			fileObject.put("file", base64File);
+			fileObject.put("fileName", fileName);
+			
+			return new ResponseEntity<String>(fileObject.toString(), HttpStatus.OK);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<Boolean>(false, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+	@PostMapping("/generateFull")
+    @ApiOperation("Generates the Full version of a manual.")
+	@ApiResponses({
+        @ApiResponse(code = 200, message = "The Full manual was successfully generated."),
+        @ApiResponse(code = 500, message = "Somenthing went wrong.")
+    })
+	public ResponseEntity<?> generateFullManual (@RequestParam(name = "projectId") int projectId, @RequestParam(name = "variation") String variation) {
+		try {
+			Projeto project = projetoRepository.findById(projectId).get();
+			Remark remark = remarkRepository.findAllRemarks(variation).get(0);
+			byte[] file = FullManualHelper.generateFullManual(project, remark);
+			String fileName = FullManualHelper.getFullManualFileName(project, remark);
+			
+			String base64File = new String(Base64.getEncoder().encode(file));
+			JSONObject fileObject = new JSONObject();
+			fileObject.put("file", base64File);
+			fileObject.put("fileName", fileName);
+			
+			return new ResponseEntity<String>(fileObject.toString(), HttpStatus.OK);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<Boolean>(false, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
 }

@@ -494,9 +494,6 @@ class CodelistManager extends React.Component {
             }
 
         }
-
-        console.log(projectName, filesToRevise, revisionDescription);
-
     }
 
     getRevisionLines(){
@@ -789,18 +786,64 @@ class CodelistManager extends React.Component {
     toggleConfirmRevision(event){
         let confirmRevision = this.state["confirmRevision"];
 
-        if(confirmRevision){
-            let clickTargetId = event.target.id;
+        let selectedCheckboxes = document.querySelectorAll("input[type=checkbox]:checked");
+        let projectLines = this.state["projectData"]["codelist"]["linhas"];
 
-            if (clickTargetId === this.confirmRevisionId) {
-                this.setState({confirmRevision: !confirmRevision, revisionFiles: {}});
-            }
+        let selectedRemarks = [];
+        let selectedLines = [];
+        projectLines.forEach(line => {
+            selectedCheckboxes.forEach(checkbox => {
+                let checkboxId = checkbox.id.split("-").pop();
+                let lineId = line.id.toString();
+                if (checkboxId === lineId) {
+                    line.remarks.forEach(remark => {
+                        let traco = remark.traco;
+                        if (!selectedRemarks.includes(traco)) {
+                            selectedRemarks.push(traco);
+                        }
+                    });
+                    selectedLines.push(line);
+                }
+            });
+        });
 
-        }else{
-            this.setState({confirmRevision: !confirmRevision, revisionFiles: {}});
+        let verificationDict = {
+            "Letter": 0,
+            "Cover": 0,
+            "LEP": 0
+        };
 
+        selectedLines.forEach(selectedLine => {
+            let lineBlockName = selectedLine.blockName;    
+            if (lineBlockName === "Letter" || lineBlockName === "Cover" || lineBlockName === "LEP") {
+                verificationDict[lineBlockName] += 1;
+            } 
+        });
+
+        let totalFilesRegistered = 0;
+        for (let key in verificationDict) {
+            let value = verificationDict[key];
+            totalFilesRegistered += value;
         }
 
+        let realTotalFiles = selectedRemarks.length * 3; // 3 blocos -> letter, cover, lep
+
+        if (totalFilesRegistered === realTotalFiles) {
+            if(confirmRevision){
+                let clickTargetId = event.target.id;
+    
+                if (clickTargetId === this.confirmRevisionId) {
+                    this.setState({confirmRevision: !confirmRevision, revisionFiles: {}});
+                }
+    
+            }else{
+                this.setState({confirmRevision: !confirmRevision, revisionFiles: {}});
+    
+            }
+        }
+        else {
+            notification("info", "Epa! 😵", "Verifique se todas as variações selecionadas possuem os blocos Letter, Cover e LEP selecionados.");
+        }
     }
 
     getManageButtons() {
@@ -911,42 +954,44 @@ class CodelistManager extends React.Component {
 
         let file = await addFile(justId);
 
-        let serverRequester = new ServerRequester("http://localhost:8080");
+        if (file !== undefined) {
+            let serverRequester = new ServerRequester("http://localhost:8080");
 
-        let formData = new FormData();
-        formData.append("file", file);
-        formData.append("line", justId);
-        formData.append("codelistName", this.state["projectData"]["codelist"]["nome"]);
-
-        let response = await serverRequester.doPost(
-            "/codelistLine/attachFile",
-            formData,
-            "multipart/form-data"
-        );
-
-        if (response.status === 200) {
-            notification(
-                "success",
-                "Sucesso! 😄",
-                "O arquivo foi associado com sucesso!"
+            let formData = new FormData();
+            formData.append("file", file);
+            formData.append("line", justId);
+            formData.append("codelistName", this.state["projectData"]["codelist"]["nome"]);
+    
+            let response = await serverRequester.doPost(
+                "/codelistLine/attachFile",
+                formData,
+                "multipart/form-data"
             );
-
-            let newData = await this.props.reloadData();
-
-            let linesSituation = this.state["linesSituation"];
-
-            linesSituation[justId]["hasFile"] = true;
-
-            this.setState({
-                linesSituation: linesSituation,
-                projectData: newData,
-            });
-        } else if (file !== null && file !== undefined) {
-            notification(
-                "error",
-                "Ops 🙁",
-                "Não foi possível associar o arquivo a essa linha."
-            );
+    
+            if (response.status === 200) {
+                notification(
+                    "success",
+                    "Sucesso! 😄",
+                    "O arquivo foi associado com sucesso!"
+                );
+    
+                let newData = await this.props.reloadData();
+    
+                let linesSituation = this.state["linesSituation"];
+    
+                linesSituation[justId]["hasFile"] = true;
+    
+                this.setState({
+                    linesSituation: linesSituation,
+                    projectData: newData,
+                });
+            } else if (file !== null && file !== undefined) {
+                notification(
+                    "error",
+                    "Ops 🙁",
+                    "Não foi possível associar o arquivo a essa linha."
+                );
+            }
         }
     }
 

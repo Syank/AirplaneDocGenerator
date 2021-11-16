@@ -360,38 +360,114 @@ class ManualGenerationScreen extends React.Component {
 
     }
 
-    generateFull(){
+    async generateFull(){
         let selectedProject = this.state["selectedProject"];
 
         let projectId = selectedProject["id"];
+        let projectName = selectedProject["nome"];
         let variation = this.state["selectedVariation"];
         
-        if(projectId === undefined || variation === undefined){
+        if (projectId === undefined || variation === undefined){
             notification("warning", "Um momento! 🤨", "Primeiro selecione um projeto e depois uma de suas variações");
+        }
+        else {
+            let allFilePaths = true;
+            let codelistLines = selectedProject["codelist"]["linhas"];
+            codelistLines.forEach(line => {
+                line["remarks"].forEach(remark => {
+                    if (remark["traco"] === variation) {
+                        if (line["filePath"] == null) {
+                            allFilePaths = false;
+                        }
+                    }
+                });
+            });
 
-        }else{
-            // A notificação abaixo é apenas para teste, retirar e colocar a requisição
-            notification("success", "Sucesso! 🤗", "A variação " + variation + " do projeto de ID " + projectId + " foi selecionado!");
-
+            if (allFilePaths) {
+                let formData = new FormData();
+                formData.append("projectId", projectId);
+                formData.append("variation", variation);
+    
+                let serverRequester = new ServerRequester("http://localhost:8080");
+                let response = await serverRequester.doPost("/project/generateFull", formData, "multipart/form-data");
+                
+                if (response.status === 200) {
+                    let supposedSelectedPath = await window.electron.windowControll.showDialog();
+                    if (supposedSelectedPath.canceled === false) {
+                        let pathToSave = supposedSelectedPath.filePaths;
+                        let base64File = response.responseJson["file"];
+                        let fileName = response.responseJson["fileName"];
+                        await window.electron.windowControll.downloadFile(base64File, pathToSave, fileName, ".pdf");
+                        notification("success", "Sucesso! 🤗", "A versão Full na variação " + variation + " do projeto " + projectName + " foi gerada! Verifique a pasta " + pathToSave + "!");
+                    }
+                }
+                else {
+                    notification("error", "Ops... 😑", "Não foi possível gerar a versão Full. Tente novamente.");
+                }
+            }
+            else {
+                notification("warning", "Arquivos em falta! 🥶", "Nem todas as linhas da variação " + variation + " no projeto " + projectName + " possuem um arquivo associado. Verifique e tente novamente.");
+            }
         }
 
     }
 
-    generateDelta(){
+    async generateDelta(){
         let selectedProject = this.state["selectedProject"];
 
         let projectId = selectedProject["id"];
+        let projectName = selectedProject["nome"];
         let variation = this.state["selectedVariation"];
         
         if(projectId === undefined || variation === undefined){
             notification("warning", "Um momento! 🤨", "Primeiro selecione um projeto e depois uma de suas variações");
-
-        }else{
-            // A notificação abaixo é apenas para teste
-            notification("success", "Sucesso! 🤗", "A variação " + variation + " do projeto de ID " + projectId + " foi selecionado!");
-            
         }
+        else {
+            let lastRevision = selectedProject["lastRevision"].version;
 
+            let allFilePaths = true;
+            selectedProject["codelist"]["linhas"].forEach(line => {
+                if (line["actualRevision"] === lastRevision) {
+                    line["remarks"].forEach(remark => {
+                        if (remark["traco"] === variation) {
+                            if (line["filePath"] === null) {
+                                allFilePaths = false;
+                            }
+                        }
+                        else {
+                            allFilePaths = false;
+                        }
+                    });
+                }
+            });
+            
+            if (allFilePaths) {
+                let formData = new FormData();
+                formData.append("projectId", projectId);
+                formData.append("variation", variation);
+    
+                let serverRequester = new ServerRequester("http://localhost:8080");
+                let response = await serverRequester.doPost("/project/generateDelta", formData, "multipart/form-data");
+                
+                if (response.status === 200) {
+                    let supposedSelectedPath = await window.electron.windowControll.showDialog();
+                    if (supposedSelectedPath.canceled === false) {
+                        let pathToSave = supposedSelectedPath.filePaths;
+                        let base64File = response.responseJson["file"];
+                        let fileName = response.responseJson["fileName"];
+    
+                        await window.electron.windowControll.downloadFile(base64File, pathToSave, fileName, ".pdf");
+                        notification("success", "Sucesso! 🤗", "A versão Delta na variação " + variation + " do projeto " + projectName + " foi gerada! Verifique a pasta " + pathToSave + "!");
+                    }
+                }
+                else {
+                    notification("error", "Ops... 😑", "Não foi possível gerar a versão Delta. Verifique a última revisão e tente novamente.");
+                }
+            }
+            else {
+                notification("warning", "Um momento! 🤯", "Nem todas as linhas da última revisão têm um arquivo! Verifique e tente novamente.");
+            }
+        }
     }
 
     getPaginationElement(){

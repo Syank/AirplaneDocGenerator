@@ -19,10 +19,8 @@ import api.crabteam.model.entities.Projeto;
 import api.crabteam.model.entities.Revisao;
 import api.crabteam.model.repositories.LinhaRepository;
 import api.crabteam.model.repositories.ProjetoRepository;
+import api.crabteam.model.repositories.RevisaoRepository;
 import api.crabteam.utils.FileVerifications;
-import api.crabteam.utils.LEPBuilder;
-
-
 
 @RestController
 @RequestMapping("/revision")
@@ -30,10 +28,12 @@ public class RevisionController {
 	
 	@Autowired
 	public ProjetoRepository projetoRepository;
+	
 	@Autowired
 	public LinhaRepository lineRepository;
 	
-	
+	@Autowired
+	public RevisaoRepository revisaoRepository;
 	
 	@PostMapping(path = "/newRevision", consumes = {"multipart/form-data"})
 	public ResponseEntity<?> newRevision(
@@ -88,7 +88,11 @@ public class RevisionController {
 			Revisao newRevision = new Revisao();
 			newRevision.setDescription(revisionDescription);
 			newRevision.setVersion(lastRevisionVersion + 1);
-
+			
+			// Saving revision lines
+			List<Linha> revisionLines = lineRepository.findAllById(revisedLinesIds);
+			newRevision.setLinhas(revisionLines);
+			// ----------------------------------------			
 			Projeto revProject = projetoRepository.findById(projectId).get();
 			
 			revProject.addRevision(newRevision);
