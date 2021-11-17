@@ -312,6 +312,11 @@ public class LEPBuilder {
 				if(line.getBlockName().equals("LEP") || line.getBlockName().equals("TOC") || line.getBlockName().equalsIgnoreCase("Cover")) {
 					block = line.getSectionNumber() + "-" + line.getBlockName();
 					
+					if(line.getBlockName().equalsIgnoreCase("Cover")) {
+						block = line.getSectionNumber() + "-TITLE";
+						
+					}
+					
 				}
 				
 				String code = line.getCode();
@@ -393,8 +398,8 @@ public class LEPBuilder {
 			String action;
 			
 			if(i > oldData.length()) {
-				modified = "*";
-				action = "new";
+				modified = "";
+				action = "";
 				change = String.valueOf(newPageData.getInt("revision"));
 				
 			}else {
