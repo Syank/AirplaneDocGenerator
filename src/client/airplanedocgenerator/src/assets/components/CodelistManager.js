@@ -5,10 +5,15 @@ import {
     faPen,
     faFileAlt,
     faCheck,
-    faTimes
+    faTimes,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { addCodelist, addFile, notification, withConfirmation } from "../components/Notifications";
+import {
+    addCodelist,
+    addFile,
+    notification,
+    withConfirmation,
+} from "../components/Notifications";
 import ServerRequester from "../../utils/ServerRequester";
 
 /**
@@ -33,12 +38,14 @@ class CodelistManager extends React.Component {
         this.addFileToLine = this.addFileToLine.bind(this);
         this.importCodelist = this.importCodelist.bind(this);
         this.toggleAddNewLine = this.toggleAddNewLine.bind(this);
-        this.closeAddNewLineComponent = this.closeAddNewLineComponent.bind(this);
+        this.closeAddNewLineComponent =
+            this.closeAddNewLineComponent.bind(this);
         this.createNewLine = this.createNewLine.bind(this);
         this.search = this.search.bind(this);
         this.toggleRevision = this.toggleRevision.bind(this);
         this.confirmRevision = this.toggleConfirmRevision.bind(this);
-        this.getConfirmRevisionComponent = this.getConfirmRevisionComponent.bind(this);
+        this.getConfirmRevisionComponent =
+            this.getConfirmRevisionComponent.bind(this);
         this.toggleConfirmRevision = this.toggleConfirmRevision.bind(this);
         this.getLinesToRevision = this.getLinesToRevision.bind(this);
         this.addRevisionFile = this.addRevisionFile.bind(this);
@@ -56,13 +63,12 @@ class CodelistManager extends React.Component {
             searchValue: "",
             revision: false,
             confirmRevision: false,
-            revisionFiles: {}
+            revisionFiles: {},
         };
 
         let linesSituationMap = this.createLinesSituationMap();
 
         this.state["linesSituation"] = linesSituationMap;
-
     }
 
     createLinesSituationMap() {
@@ -87,7 +93,7 @@ class CodelistManager extends React.Component {
 
             map[lineId] = {
                 editing: false,
-                hasFile: hasFile
+                hasFile: hasFile,
             };
         }
 
@@ -102,12 +108,12 @@ class CodelistManager extends React.Component {
         if (searchValue === "" || searchCriteria === undefined) {
             this.setState({
                 searchCriteria: "all",
-                searchValue: ""
+                searchValue: "",
             });
         } else {
             this.setState({
                 searchCriteria: searchCriteria,
-                searchValue: searchValue
+                searchValue: searchValue,
             });
         }
     }
@@ -230,23 +236,31 @@ class CodelistManager extends React.Component {
         return component;
     }
 
-    isValidSubsectionFields(subSectionNumber, subSectionName){
-		// Ambos devem ter um valor, se não, ambos devem não ter um valor
-		if(subSectionNumber !== "" && subSectionName !== "") {
-			return true;
-		}else if(subSectionNumber === "" && subSectionName === "") {
-			return true;
-		}
-		
-		return false;
+    isValidSubsectionFields(subSectionNumber, subSectionName) {
+        // Ambos devem ter um valor, se não, ambos devem não ter um valor
+        if (subSectionNumber !== "" && subSectionName !== "") {
+            return true;
+        } else if (subSectionNumber === "" && subSectionName === "") {
+            return true;
+        }
+
+        return false;
     }
 
     async createNewLine() {
-        let newSectionNumber = document.getElementById("newLineSectionNumber").value;
-        let newSectionName = document.getElementById("newLineSectionName").value;
-        let newSubSectionNumber = document.getElementById("newLineSubsectionNumber").value;
-        let newSubSectionName = document.getElementById("newLineSubsectionName").value;
-        let newBlockNumber = document.getElementById("newLineBlockNumber").value;
+        let newSectionNumber = document.getElementById(
+            "newLineSectionNumber"
+        ).value;
+        let newSectionName =
+            document.getElementById("newLineSectionName").value;
+        let newSubSectionNumber = document.getElementById(
+            "newLineSubsectionNumber"
+        ).value;
+        let newSubSectionName = document.getElementById(
+            "newLineSubsectionName"
+        ).value;
+        let newBlockNumber =
+            document.getElementById("newLineBlockNumber").value;
         let newBlockName = document.getElementById("newLineBlockName").value;
         let newCode = document.getElementById("newLineCode").value;
         let newRemarks = document.getElementById("newLineRemarks").value;
@@ -258,11 +272,17 @@ class CodelistManager extends React.Component {
                 "Um momento! 🤨",
                 "Para criar uma nova linha, é necessário também atribuir um arquivo a ela, por favor, escolha um"
             );
-        } else if(newSectionNumber === "" || newSectionName === "" || newBlockNumber === "" || newBlockName === "" || newCode === ""){
+        } else if (
+            newSectionNumber === "" ||
+            newSectionName === "" ||
+            newBlockNumber === "" ||
+            newBlockName === "" ||
+            newCode === ""
+        ) {
             notification(
                 "error",
                 "Um momento! 🤨",
-                "Para criar uma nova linha, com exceção dos campos \"Subseção\" e \"Nome da subção\", todos os outros são obrigatórios, por favor, os preencha"
+                'Para criar uma nova linha, com exceção dos campos "Subseção" e "Nome da subção", todos os outros são obrigatórios, por favor, os preencha'
             );
         } else if (!this.checkIsValidRemarksText(newRemarks)) {
             notification(
@@ -272,11 +292,18 @@ class CodelistManager extends React.Component {
                     "Onde X são os números do traço. Múltiplos remarks devem ser separados por vírgula, como: " +
                     "-XX (APELIDO), -XX (APELIDO)"
             );
-        }else if (!this.isValidSubsectionFields(newSubSectionNumber, newSubSectionName)){
-            notification("error", "Um momento! 🤨",
-                "Os campos subseção e nome da subseção são opcionais, mas caso um deles seja preenchido, o outro também deverá ser");
-
-        }else {
+        } else if (
+            !this.isValidSubsectionFields(
+                newSubSectionNumber,
+                newSubSectionName
+            )
+        ) {
+            notification(
+                "error",
+                "Um momento! 🤨",
+                "Os campos subseção e nome da subseção são opcionais, mas caso um deles seja preenchido, o outro também deverá ser"
+            );
+        } else {
             let formData = new FormData();
             formData.append("sectionNumber", newSectionNumber);
             formData.append("sectionName", newSectionName);
@@ -285,13 +312,15 @@ class CodelistManager extends React.Component {
             formData.append("code", newCode);
             formData.append("remarksText", newRemarks);
             formData.append("lineFile", file);
-            formData.append("codelistName", this.state["projectData"]["codelist"]["nome"]);
+            formData.append(
+                "codelistName",
+                this.state["projectData"]["codelist"]["nome"]
+            );
 
             // Caso o usuário forneça informações de subseção, adiciona elas ao formulário
-            if(newSubSectionNumber !== ""){
+            if (newSubSectionNumber !== "") {
                 formData.append("subsectionNumber", newSubSectionNumber);
                 formData.append("subsectionName", newSubSectionName);
-
             }
 
             let serverRequester = new ServerRequester("http://localhost:8080");
@@ -344,7 +373,7 @@ class CodelistManager extends React.Component {
         }
     }
 
-    getLinesToRevision(){
+    getLinesToRevision() {
         let component = (
             <table className="w-full table-fixed border-collapse border border-gray-300 text-center">
                 <thead>
@@ -385,28 +414,37 @@ class CodelistManager extends React.Component {
         return component;
     }
 
-    getConfirmRevisionComponent(){
+    getConfirmRevisionComponent() {
         let component = (
-            <div id={this.confirmRevisionId} className="z-20 w-full h-full absolute flex flex-row items-center justify-center backdrop-filter backdrop-blur-blurLogin" onClick={this.toggleConfirmRevision}>
+            <div
+                id={this.confirmRevisionId}
+                className="z-20 w-full h-full absolute flex flex-row items-center justify-center backdrop-filter backdrop-blur-blurLogin"
+                onClick={this.toggleConfirmRevision}
+            >
                 <div className="h-3/4 w-5/6 flex flex-col items-center justify-center bg-white shadow-registerUser">
                     <div className="w-5/6 mt-5 text-center border-b-2 border-opacity-50 border-black">
                         <h1 className="text-2xl	font-bold text-center leading-loose">
                             Finalização da revisão
                         </h1>
                         <p>
-                            Adicione uma descrição para a revisão e atribua às linhas escolhidas 
-                            os novos arquivos desta revisão
+                            Adicione uma descrição para a revisão e atribua às
+                            linhas escolhidas os novos arquivos desta revisão
                         </p>
                     </div>
                     <div className="w-full h-full flex flex-col pl-5 pr-5 items-center overflow-auto">
                         <div className="w-full text-center mt-5 mb-5">
                             <h2 className="font-bold">Descrição da revisão</h2>
-                            <textarea id="revisionDescriptionTextArea" className="w-2/3 h-20 resize-none border-2 border-black border-opacity-60"></textarea>
+                            <textarea
+                                id="revisionDescriptionTextArea"
+                                className="w-2/3 h-20 resize-none border-2 border-black border-opacity-60"
+                            ></textarea>
                         </div>
-                        <div className="mb-10">
-                            {this.getLinesToRevision()}
-                        </div>
-                        <Button type="confirm" text="Finalizar revisão" onClick={this.createRevision}/>
+                        <div className="mb-10">{this.getLinesToRevision()}</div>
+                        <Button
+                            type="confirm"
+                            text="Finalizar revisão"
+                            onClick={this.createRevision}
+                        />
                     </div>
                 </div>
             </div>
@@ -415,15 +453,19 @@ class CodelistManager extends React.Component {
         return component;
     }
 
-    async createRevision(){
+    async createRevision() {
         let filesToRevise = this.state["revisionFiles"];
-        let revisionDescription = document.getElementById("revisionDescriptionTextArea").value;
+        let revisionDescription = document.getElementById(
+            "revisionDescriptionTextArea"
+        ).value;
         let projectName = this.state["projectData"]["nome"];
 
-        let selectedCheckboxes = document.querySelectorAll("input[type=checkbox]:checked");
+        let selectedCheckboxes = document.querySelectorAll(
+            "input[type=checkbox]:checked"
+        );
 
         let revisionLinesOk = true;
-        let linesIds = []
+        let linesIds = [];
 
         for (let i = 0; i < selectedCheckboxes.length; i++) {
             const checkbox = selectedCheckboxes[i];
@@ -431,22 +473,20 @@ class CodelistManager extends React.Component {
             let lineId = checkbox.id.split("-")[3];
             linesIds.push(lineId);
 
-            if(filesToRevise[lineId] === undefined){
+            if (filesToRevise[lineId] === undefined) {
                 revisionLinesOk = false;
 
                 break;
             }
-            
         }
 
         let hasLinesToRevise = true;
 
-        if(selectedCheckboxes.length === 0){
+        if (selectedCheckboxes.length === 0) {
             hasLinesToRevise = false;
-
         }
 
-        if(revisionLinesOk && hasLinesToRevise){
+        if (revisionLinesOk && hasLinesToRevise) {
             let serverRequest = new ServerRequester("http://localhost:8080");
 
             let formData = new FormData();
@@ -458,46 +498,61 @@ class CodelistManager extends React.Component {
 
                 formData.append("revisedLinesIds", lineId);
                 formData.append("revisedLinesFiles", filesToRevise[lineId]);
-                
             }
 
-            let response = await serverRequest.doPost("/revision/newRevision", formData, "multipart/form-data");
+            let response = await serverRequest.doPost(
+                "/revision/newRevision",
+                formData,
+                "multipart/form-data"
+            );
 
-            if(response["responseJson"] === true){
-                notification("success", "Revisão criada com sucesso! 😊", 
-                "A nova revisão foi criada com sucesso, você pode consultá-la na interface de revisões, clicando no botão \"Revisões\" na tela de gerenciamento do projeto");
-                
+            if (response["responseJson"] === true) {
+                notification(
+                    "success",
+                    "Revisão criada com sucesso! 😊",
+                    'A nova revisão foi criada com sucesso, você pode consultá-la na interface de revisões, clicando no botão "Revisões" na tela de gerenciamento do projeto'
+                );
+
                 let newData = await this.props.reloadData();
 
                 this.state["projectData"] = newData;
 
                 let linesSituation = this.createLinesSituationMap();
 
-                this.setState({confirmRevision: false, revision: false, linesSituation: linesSituation});
-
-            }else{
-                notification("error", "Falha ao criar revisão 🤕", 
-                "Ocorreu um erro interno ao criar a revisão, contate os administradores");
-
+                this.setState({
+                    confirmRevision: false,
+                    revision: false,
+                    linesSituation: linesSituation,
+                });
+            } else {
+                notification(
+                    "error",
+                    "Falha ao criar revisão 🤕",
+                    "Ocorreu um erro interno ao criar a revisão, contate os administradores"
+                );
             }
-
-        }else{
-            if(!hasLinesToRevise){
-                notification("error", "Sem linhas para revisão 😤", 
-                "Para criar uma revisão, é necessário que existam linhas selecionadas");
-
-            }else{
-                notification("error", "Linha de revisão sem novo arquivo 😤", 
-                "Para finalizar a criação da revisão, todas as linhas escolhidas devem ter arquivos " +
-                "selecionados para elas");
-                
+        } else {
+            if (!hasLinesToRevise) {
+                notification(
+                    "error",
+                    "Sem linhas para revisão 😤",
+                    "Para criar uma revisão, é necessário que existam linhas selecionadas"
+                );
+            } else {
+                notification(
+                    "error",
+                    "Linha de revisão sem novo arquivo 😤",
+                    "Para finalizar a criação da revisão, todas as linhas escolhidas devem ter arquivos " +
+                        "selecionados para elas"
+                );
             }
-
         }
     }
 
-    getRevisionLines(){
-        let selectedCheckboxes = document.querySelectorAll("input[type=checkbox]:checked");
+    getRevisionLines() {
+        let selectedCheckboxes = document.querySelectorAll(
+            "input[type=checkbox]:checked"
+        );
 
         let linesIds = [];
 
@@ -507,22 +562,19 @@ class CodelistManager extends React.Component {
             let lineId = checkbox.id.split("-")[3];
 
             linesIds.push(lineId);
-            
         }
 
         let projectLines = this.state["projectData"]["codelist"]["linhas"];
         let linesToRender = [];
-        
+
         for (let i = 0; i < projectLines.length; i++) {
             const line = projectLines[i];
-            
+
             let lineId = line["id"].toString();
 
-            if(linesIds.includes(lineId)){
+            if (linesIds.includes(lineId)) {
                 linesToRender.push(line);
-
             }
-
         }
 
         let components = [];
@@ -531,26 +583,30 @@ class CodelistManager extends React.Component {
             const linhaData = linesToRender[i];
 
             let id = linhaData["id"].toString();
-        
+
             let lineId = "revision-line-" + id;
-    
+
             let component;
-    
+
             let remarks = this.getRemarksText(linhaData["remarks"]);
 
             let color;
 
-            if(Object.keys(this.state["revisionFiles"]).includes(id)){
-                color = "#32da1f";  // Verde
-
-            }else{
-                color = "#f43a3a";  // Vermelho
-
+            if (Object.keys(this.state["revisionFiles"]).includes(id)) {
+                color = "#32da1f"; // Verde
+            } else {
+                color = "#f43a3a"; // Vermelho
             }
 
-            let selectFileIcon = <FontAwesomeIcon key={"revision-file-line-" + lineId} icon={faFileAlt}
-                                                  color={color} className="cursor-pointer"
-                                                  onClick={this.addRevisionFile}/>;
+            let selectFileIcon = (
+                <FontAwesomeIcon
+                    key={"revision-file-line-" + lineId}
+                    icon={faFileAlt}
+                    color={color}
+                    className="cursor-pointer"
+                    onClick={this.addRevisionFile}
+                />
+            );
 
             component = (
                 <tr id={"revision-" + lineId} key={"revision-linha-" + lineId}>
@@ -575,26 +631,21 @@ class CodelistManager extends React.Component {
                     <td className="border border-gray-300">
                         {linhaData["code"]}
                     </td>
-                    <td className="border border-gray-300">
-                        {remarks}
-                    </td>
-                    <td className="border border-gray-300">
-                        {selectFileIcon}
-                    </td>
+                    <td className="border border-gray-300">{remarks}</td>
+                    <td className="border border-gray-300">{selectFileIcon}</td>
                 </tr>
             );
 
             components.push(component);
-            
         }
 
         return components;
     }
 
-    async addRevisionFile(event){
+    async addRevisionFile(event) {
         let lineId = event.target.parentElement.parentElement.parentElement.id;
 
-        if(lineId === ""){
+        if (lineId === "") {
             lineId = event.target.parentElement.parentElement.id;
         }
 
@@ -602,26 +653,26 @@ class CodelistManager extends React.Component {
 
         let revisionFile = await addFile();
 
-        if(revisionFile !== undefined && revisionFile !== null){
+        if (revisionFile !== undefined && revisionFile !== null) {
             let confirmedRevisionFiles = this.state["revisionFiles"];
 
             confirmedRevisionFiles[id] = revisionFile;
-    
-            this.setState({revisionFiles: confirmedRevisionFiles});
 
+            this.setState({ revisionFiles: confirmedRevisionFiles });
         }
-
     }
 
     getCodelistManagerComponent() {
         let component = (
-            <div id={this.id} className="z-10 w-full h-full absolute flex flex-row items-center justify-center backdrop-filter backdrop-blur-blurLogin" onClick={this.close}>
+            <div
+                id={this.id}
+                className="z-10 w-full h-full absolute flex flex-row items-center justify-center backdrop-filter backdrop-blur-blurLogin"
+                onClick={this.close}
+            >
                 {this.state["showAddNewLineComponent"] &&
-                    this.getAddNewLineComponent()
-                }
+                    this.getAddNewLineComponent()}
                 {this.state["confirmRevision"] &&
-                    this.getConfirmRevisionComponent()
-                }
+                    this.getConfirmRevisionComponent()}
                 <div className="h-5/6 w-5/6 bg-white">{this.getContent()}</div>
             </div>
         );
@@ -703,38 +754,45 @@ class CodelistManager extends React.Component {
     }
 
     async importCodelist(event) {
-
-        let ok = await withConfirmation("Deseja importar uma nova codelist?",
-                                        "Isso apagará arquivos vinculados a linhas e as renovará.",
-                                        "warning");
+        let ok = await withConfirmation(
+            "Deseja importar uma nova codelist?",
+            "Isso apagará arquivos vinculados a linhas e as renovará.",
+            "warning"
+        );
 
         if (ok) {
             let name = document.getElementById("nomeProjeto").textContent;
 
             let file = await addCodelist(name);
-    
+
             let serverRequester = new ServerRequester("http://localhost:8080");
-    
+
             let formData = new FormData();
             formData.append("newCodelist", file);
             formData.append("projectName", name);
-    
+
             let response = await serverRequester.doPost(
                 "/codelist/upload",
                 formData,
                 "multipart/form-data"
             );
-    
+
             if (response.status === 200) {
-                notification("success", "Sucesso! 😄", "A codelist foi substituída!");
-    
+                notification(
+                    "success",
+                    "Sucesso! 😄",
+                    "A codelist foi substituída!"
+                );
+
                 await this.props.reloadData();
-    
+
                 this.props.hide();
-    
-            }else {
-                notification("error", "Ops 🙁", "Não foi possível alterar a codelist do manual");
-    
+            } else {
+                notification(
+                    "error",
+                    "Ops 🙁",
+                    "Não foi possível alterar a codelist do manual"
+                );
             }
         }
     }
@@ -742,14 +800,15 @@ class CodelistManager extends React.Component {
     async exportCodelist(event) {
         let serverRequester = new ServerRequester("http://localhost:8080");
 
-        let supposedSelectedPath = await window.electron.windowControll.showDialog();
-    
+        let supposedSelectedPath =
+            await window.electron.windowControll.showDialog();
+
         if (supposedSelectedPath.canceled === false) {
             let pathToSave = supposedSelectedPath.filePaths;
             let codelist = document.getElementById("nomeProjeto").textContent;
             let parameters = {
-                codelistName: codelist
-            }
+                codelistName: codelist,
+            };
 
             let response = await serverRequester.doGet(
                 "/codelist/export",
@@ -759,7 +818,12 @@ class CodelistManager extends React.Component {
 
             if (response.status === 200) {
                 let base64File = response.responseJson["file"];
-                await window.electron.windowControll.downloadFile(base64File, pathToSave, codelist, ".xlsx");
+                await window.electron.windowControll.downloadFile(
+                    base64File,
+                    pathToSave,
+                    codelist,
+                    ".xlsx"
+                );
                 notification(
                     "success",
                     "Uhu! 🤩",
@@ -773,31 +837,88 @@ class CodelistManager extends React.Component {
         let showAddNewLineComponent = this.state["showAddNewLineComponent"];
 
         this.setState({ showAddNewLineComponent: !showAddNewLineComponent });
-
     }
 
-    toggleRevision(){
+    toggleRevision() {
         let revisionState = this.state["revision"];
 
-        this.setState({revision: !revisionState, revisionFiles: {}});
-
+        this.setState({ revision: !revisionState, revisionFiles: {} });
     }
 
-    toggleConfirmRevision(event){
+    toggleConfirmRevision(event) {
         let confirmRevision = this.state["confirmRevision"];
 
-        if(confirmRevision){
-            let clickTargetId = event.target.id;
+        let selectedCheckboxes = document.querySelectorAll(
+            "input[type=checkbox]:checked"
+        );
+        let projectLines = this.state["projectData"]["codelist"]["linhas"];
 
-            if (clickTargetId === this.confirmRevisionId) {
-                this.setState({confirmRevision: !confirmRevision, revisionFiles: {}});
+        let selectedRemarks = [];
+        let selectedLines = [];
+        projectLines.forEach((line) => {
+            selectedCheckboxes.forEach((checkbox) => {
+                let checkboxId = checkbox.id.split("-").pop();
+                let lineId = line.id.toString();
+                if (checkboxId === lineId) {
+                    line.remarks.forEach((remark) => {
+                        let traco = remark.traco;
+                        if (!selectedRemarks.includes(traco)) {
+                            selectedRemarks.push(traco);
+                        }
+                    });
+                    selectedLines.push(line);
+                }
+            });
+        });
+
+        let verificationDict = {
+            Letter: 0,
+            Cover: 0,
+            LEP: 0,
+        };
+
+        selectedLines.forEach((selectedLine) => {
+            let lineBlockName = selectedLine.blockName;
+            if (
+                lineBlockName === "Letter" ||
+                lineBlockName === "Cover" ||
+                lineBlockName === "LEP"
+            ) {
+                verificationDict[lineBlockName] += 1;
             }
+        });
 
-        }else{
-            this.setState({confirmRevision: !confirmRevision, revisionFiles: {}});
-
+        let totalFilesRegistered = 0;
+        for (let key in verificationDict) {
+            let value = verificationDict[key];
+            totalFilesRegistered += value;
         }
 
+        let realTotalFiles = selectedRemarks.length * 3; // 3 blocos -> letter, cover, lep
+
+        if (totalFilesRegistered === realTotalFiles) {
+            if (confirmRevision) {
+                let clickTargetId = event.target.id;
+
+                if (clickTargetId === this.confirmRevisionId) {
+                    this.setState({
+                        confirmRevision: !confirmRevision,
+                        revisionFiles: {},
+                    });
+                }
+            } else {
+                this.setState({
+                    confirmRevision: !confirmRevision,
+                    revisionFiles: {},
+                });
+            }
+        } else {
+            notification(
+                "info",
+                "Epa! 😵",
+                "Verifique se todas as variações selecionadas possuem os blocos Letter, Cover e LEP selecionados."
+            );
+        }
     }
 
     getManageButtons() {
@@ -820,14 +941,26 @@ class CodelistManager extends React.Component {
                         onClick={this.importCodelist}
                     ></Button>
                 </div>
-                {!this.state["revision"] ?
-                    <Button text="Criar revisão" onClick={this.toggleRevision} type="confirm"/>
-                        :
+                {!this.state["revision"] ? (
+                    <Button
+                        text="Criar revisão"
+                        onClick={this.toggleRevision}
+                        type="confirm"
+                    />
+                ) : (
                     <div>
-                        <Button text="Confirmar revisão" onClick={this.toggleConfirmRevision} type="confirm"/>
-                        <Button text="Cancelar revisão" onClick={this.toggleRevision} type="cancel"/>
+                        <Button
+                            text="Confirmar revisão"
+                            onClick={this.toggleConfirmRevision}
+                            type="confirm"
+                        />
+                        <Button
+                            text="Cancelar revisão"
+                            onClick={this.toggleRevision}
+                            type="cancel"
+                        />
                     </div>
-                }
+                )}
             </div>
         );
 
@@ -838,14 +971,17 @@ class CodelistManager extends React.Component {
         const searchCriteria = this.state.searchCriteria;
         const searchValue = this.state.searchValue.toLowerCase();
         const remarks = linhaData["remarks"];
+        const tracos = [];
+        remarks.forEach((element) => {
+            tracos.push(element["traco"]);
+        });
+
         if (searchCriteria === "all") {
             if (this.filter === "all") {
                 return true;
             } else {
                 for (let i = 0; i < remarks.length; i++) {
-                    const remark = remarks[i];
-                    const traco = remark["traco"];
-                    if (traco === this.filter) return true;
+                    if (tracos.includes(this.filter)) return true;
                     else return false;
                 }
             }
@@ -858,18 +994,12 @@ class CodelistManager extends React.Component {
             return true;
         } else {
             for (let i = 0; i < remarks.length; i++) {
-                const remark = remarks[i];
-                const traco = remark["traco"];
-                
-                if (traco === this.filter) {
-                    if (valor.includes(searchValue)){
+                if (tracos.includes(this.filter)) {
+                    if (valor.includes(searchValue)) {
                         return true;
                     }
-
                 }
-
             }
-
         }
 
         return false;
@@ -914,27 +1044,30 @@ class CodelistManager extends React.Component {
             let formData = new FormData();
             formData.append("file", file);
             formData.append("line", justId);
-            formData.append("codelistName", this.state["projectData"]["codelist"]["nome"]);
-    
+            formData.append(
+                "codelistName",
+                this.state["projectData"]["codelist"]["nome"]
+            );
+
             let response = await serverRequester.doPost(
                 "/codelistLine/attachFile",
                 formData,
                 "multipart/form-data"
             );
-    
+
             if (response.status === 200) {
                 notification(
                     "success",
                     "Sucesso! 😄",
                     "O arquivo foi associado com sucesso!"
                 );
-    
+
                 let newData = await this.props.reloadData();
-    
+
                 let linesSituation = this.state["linesSituation"];
-    
+
                 linesSituation[justId]["hasFile"] = true;
-    
+
                 this.setState({
                     linesSituation: linesSituation,
                     projectData: newData,
@@ -1062,22 +1195,34 @@ class CodelistManager extends React.Component {
     async updateLine(event) {
         let lineId = this.getLineId(event);
 
-        let sectionNumberInput = document.getElementById("line-sectionNumber-" + lineId);
-        let sectionNameInput = document.getElementById("line-sectionName-" + lineId);
-        let subsectionNumberInput = document.getElementById("line-subsectionNumber-" + lineId);
-        let subsectionNameInput = document.getElementById("line-subsectionName-" + lineId);
-        let blockNumberInput = document.getElementById("line-blockNumber-" + lineId);
-        let blockNameInput = document.getElementById("line-blockName-" + lineId);
+        let sectionNumberInput = document.getElementById(
+            "line-sectionNumber-" + lineId
+        );
+        let sectionNameInput = document.getElementById(
+            "line-sectionName-" + lineId
+        );
+        let subsectionNumberInput = document.getElementById(
+            "line-subsectionNumber-" + lineId
+        );
+        let subsectionNameInput = document.getElementById(
+            "line-subsectionName-" + lineId
+        );
+        let blockNumberInput = document.getElementById(
+            "line-blockNumber-" + lineId
+        );
+        let blockNameInput = document.getElementById(
+            "line-blockName-" + lineId
+        );
         let codeInput = document.getElementById("line-code-" + lineId);
         let remarksInput = document.getElementById("line-remarks-" + lineId);
 
         let newSectionNumber = sectionNumberInput.value;
-        if(newSectionNumber === ""){
+        if (newSectionNumber === "") {
             newSectionNumber = sectionNumberInput.placeholder;
         }
 
         let newSectionName = sectionNameInput.value;
-        if(newSectionName === ""){
+        if (newSectionName === "") {
             newSectionName = sectionNameInput.placeholder;
         }
 
@@ -1085,22 +1230,22 @@ class CodelistManager extends React.Component {
         let newSubSectionName = subsectionNameInput.value;
 
         let newBlockNumber = blockNumberInput.value;
-        if(newBlockNumber === ""){
+        if (newBlockNumber === "") {
             newBlockNumber = blockNumberInput.placeholder;
         }
 
         let newBlockName = blockNameInput.value;
-        if(newBlockName === ""){
+        if (newBlockName === "") {
             newBlockName = blockNameInput.placeholder;
         }
 
         let newCode = codeInput.value;
-        if(newCode === ""){
+        if (newCode === "") {
             newCode = codeInput.placeholder;
         }
 
         let newRemarks = remarksInput.value;
-        if(newRemarks === ""){
+        if (newRemarks === "") {
             newRemarks = remarksInput.placeholder;
         }
 
@@ -1114,10 +1259,17 @@ class CodelistManager extends React.Component {
                     "Onde X são os números do traço. Múltiplos remarks devem ser separados por vírgula, como: " +
                     "-XX (APELIDO), -XX (APELIDO)"
             );
-        } else if(!this.isValidSubsectionFields(newSubSectionNumber, newSubSectionName)){
-            notification("error", "Um momento! 🤨",
-                "Os campos subseção e nome da subseção são opcionais, mas caso um deles seja preenchido, o outro também deverá ser");
-
+        } else if (
+            !this.isValidSubsectionFields(
+                newSubSectionNumber,
+                newSubSectionName
+            )
+        ) {
+            notification(
+                "error",
+                "Um momento! 🤨",
+                "Os campos subseção e nome da subseção são opcionais, mas caso um deles seja preenchido, o outro também deverá ser"
+            );
         } else {
             let updatedLine = {
                 id: lineId,
@@ -1127,13 +1279,12 @@ class CodelistManager extends React.Component {
                 blockName: newBlockName,
                 code: newCode,
                 remarksText: newRemarks,
-                codelistName: this.state["projectData"]["codelist"]["nome"]
-            }
+                codelistName: this.state["projectData"]["codelist"]["nome"],
+            };
 
-            if(newSubSectionNumber !== ""){
+            if (newSubSectionNumber !== "") {
                 updatedLine["subsectionNumber"] = newSubSectionNumber;
                 updatedLine["subsectionName"] = newSubSectionName;
-
             }
 
             let serverRequester = new ServerRequester("http://localhost:8080");
@@ -1220,14 +1371,20 @@ class CodelistManager extends React.Component {
                             <td className="border border-gray-300">
                                 {remarks}
                             </td>
-                            <td id={"actions-line-" + id} className="border border-gray-300">
+                            <td
+                                id={"actions-line-" + id}
+                                className="border border-gray-300"
+                            >
                                 {actions}
                             </td>
-                            {this.state["revision"] &&
+                            {this.state["revision"] && (
                                 <td className="border border-gray-300">
-                                    <input type="checkbox" id={"revision-" + lineId}></input>
+                                    <input
+                                        type="checkbox"
+                                        id={"revision-" + lineId}
+                                    ></input>
                                 </td>
-                            }
+                            )}
                         </tr>
                     );
                 } else {
@@ -1348,11 +1505,11 @@ class CodelistManager extends React.Component {
                         <th className="border border-gray-300 bg-accent text-white">
                             Ações
                         </th>
-                        {this.state["revision"] &&
+                        {this.state["revision"] && (
                             <th className="border border-gray-300 bg-yellow-600 text-white">
                                 Revisar
                             </th>
-                        }
+                        )}
                     </tr>
                 </thead>
                 <tbody>{this.getRows()}</tbody>
@@ -1404,21 +1561,22 @@ class CodelistManager extends React.Component {
         let clickTargetId = event.target.id;
 
         if (clickTargetId === this.id) {
-            if(this.state["revision"]){
-                let confirm = await withConfirmation("Revisão em andamento", "Deseja realmente sair? Isso irá cancelar a revisão em andamento", "warning", "Sair", "Cancelar");
+            if (this.state["revision"]) {
+                let confirm = await withConfirmation(
+                    "Revisão em andamento",
+                    "Deseja realmente sair? Isso irá cancelar a revisão em andamento",
+                    "warning",
+                    "Sair",
+                    "Cancelar"
+                );
 
-                if(confirm){
+                if (confirm) {
                     this.props.hide();
-
                 }
-
-            }else{
+            } else {
                 this.props.hide();
-
             }
-            
         }
-
     }
 
     /**

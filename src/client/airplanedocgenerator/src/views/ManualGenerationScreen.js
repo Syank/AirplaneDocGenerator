@@ -434,6 +434,9 @@ class ManualGenerationScreen extends React.Component {
                                 allFilePaths = false;
                             }
                         }
+                        else {
+                            allFilePaths = false;
+                        }
                     });
                 }
             });
