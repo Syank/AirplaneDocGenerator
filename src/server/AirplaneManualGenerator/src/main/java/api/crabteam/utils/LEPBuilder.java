@@ -162,7 +162,7 @@ public class LEPBuilder {
 			
 			if(sameRemark(line, linha)) {
 				if(linha.getBlockName().equals("LEP")) {
-					lepIndex = i;
+					lepIndex = tableData.size() - 1;
 					
 					lepBlock = line.getSectionNumber() + "-" + line.getBlockName();
 						
