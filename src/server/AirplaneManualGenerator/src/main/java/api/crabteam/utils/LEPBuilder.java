@@ -54,6 +54,9 @@ public class LEPBuilder {
 	}
 	
 	private void generateLep(Linha line) throws Exception {
+		this.tableLinePosition = 700;
+		this.page = 1;
+		
 		String fileName = getFileName(line);
 		String outputFolder = getOutputFolder(line);
 		
@@ -66,14 +69,20 @@ public class LEPBuilder {
 
 		pdfDoc.open();
 		
-		writeRevisionsSummary(pdfDoc, writer, line);
-		drawRevisionTable(pdfDoc, writer, line);
-		
-		pdfDoc.close();
+		try {
+			writeRevisionsSummary(pdfDoc, writer, line);
+			drawRevisionTable(pdfDoc, writer, line);
+				
+		}finally {
+			pdfDoc.close();
+			
+		}
 		
 	}
 	
 	private void drawRevisionTable(Document pdfDoc, PdfWriter writer, Linha line) throws Exception {
+		newPage(pdfDoc, writer, line);
+		
 		drawRevisionTableHeader(pdfDoc, writer, line);
 		drawRevisionTableContent(pdfDoc, writer, line);
 		
@@ -176,7 +185,7 @@ public class LEPBuilder {
 					tableData.add(dataToWrite);
 					
 				}
-					
+				
 			}
 			
 		}
@@ -194,14 +203,14 @@ public class LEPBuilder {
 	
 	private ArrayList<HashMap<String, String>> getLepData(int estimatedPages, String lepCode, String lepBlock) {
 		ArrayList<HashMap<String, String>> lepData = new ArrayList<HashMap<String,String>>();
-		String revision = this.project.getLastRevision().getVersion() > 10 ? "REVISION " + this.project.getLastRevision().getVersion() : "REVISION 0" +  this.project.getLastRevision().getVersion();
+		String revision = this.project.getLastRevision().getVersion() < 10 ? "REVISION 0" + this.project.getLastRevision().getVersion() : "REVISION " +  this.project.getLastRevision().getVersion();
 		
 		for (int i = 0; i < estimatedPages; i++) {
 			HashMap<String, String> pageLine = new HashMap<String, String>();
 			
 			pageLine.put("block", lepBlock);
 			pageLine.put("code", lepCode);
-			pageLine.put("page", String.valueOf(i));
+			pageLine.put("page", String.valueOf(i + 1));
 			pageLine.put("modified", "*");
 			pageLine.put("action", "");
 			pageLine.put("change", revision);
@@ -299,8 +308,8 @@ public class LEPBuilder {
 				JSONObject lineJson = data.getJSONObject(i);
 				
 				String page = String.valueOf(lineJson.getInt("page"));
-				String change = "ORIGINAL";
-				String modified = "*";
+				String change = lineJson.getInt("revision") > 10 ? "REVISION " + lineJson.getInt("revision") : "REVISION 0" +  lineJson.getInt("revision");
+				String modified = "";
 				String block;
 				
 				if(line.getSubsectionNumber() == null) {
@@ -320,7 +329,7 @@ public class LEPBuilder {
 				}
 				
 				String code = line.getCode();
-				String action = "new";
+				String action = "";
 				
 				HashMap<String, String> pageLine = new HashMap<String, String>();
 				
@@ -397,9 +406,9 @@ public class LEPBuilder {
 			String change;
 			String action;
 			
-			if(i > oldData.length()) {
-				modified = "";
-				action = "";
+			if(i > oldData.length() - 1) {
+				modified = "*";
+				action = "new";
 				change = String.valueOf(newPageData.getInt("revision"));
 				
 			}else {
@@ -443,7 +452,7 @@ public class LEPBuilder {
 				
 				JSONObject newPage = new JSONObject();
 				
-				newPage.put("page", j);
+				newPage.put("page", j + 1);
 				newPage.put("modified", modified);
 				newPage.put("action", action);
 				newPage.put("change", change);
@@ -505,8 +514,6 @@ public class LEPBuilder {
 	}
 	
 	private void drawRevisionTableHeader(Document pdfDoc, PdfWriter writer, Linha line) throws Exception {
-		newPage(pdfDoc, writer, line);
-		
         PdfContentByte canvas = writer.getDirectContent();
         
         canvas.setColorStroke(BLACK);
