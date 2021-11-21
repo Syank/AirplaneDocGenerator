@@ -893,10 +893,41 @@ class CodelistManager extends React.Component {
         this.setState({ showAddNewLineComponent: !showAddNewLineComponent });
     }
 
+    canEnableRevision(){
+        let linesSituation = this.state["linesSituation"];
+
+        let keys = Object.keys(linesSituation);
+
+        for (let i = 0; i < keys.length; i++) {
+            const key = keys[i];
+
+            const element = linesSituation[key];
+
+            if(!element["hasFile"]){
+                return false;
+            }
+            
+        }
+
+        return true;
+    }
+
     toggleRevision() {
         let revisionState = this.state["revision"];
 
-        this.setState({ revision: !revisionState, revisionFiles: {} });
+        if(revisionState === false){
+            if(this.canEnableRevision()){
+                this.setState({ revision: !revisionState, revisionFiles: {} });
+
+            }else{
+                notification("warning", "Codelist pendente! 😣", "Existem linhas sem arquivos na Codelist, associe um arquivo antes para iniciar uma revisão")
+            }
+
+        }else{
+            this.setState({ revision: !revisionState, revisionFiles: {} });
+
+        }
+        
     }
 
     toggleConfirmRevision(event) {
