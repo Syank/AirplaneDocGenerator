@@ -42,6 +42,7 @@ class CodelistManager extends React.Component {
             this.closeAddNewLineComponent.bind(this);
         this.createNewLine = this.createNewLine.bind(this);
         this.search = this.search.bind(this);
+        this.clear = this.clear.bind(this);
         this.toggleRevision = this.toggleRevision.bind(this);
         this.confirmRevision = this.toggleConfirmRevision.bind(this);
         this.getConfirmRevisionComponent =
@@ -116,6 +117,21 @@ class CodelistManager extends React.Component {
                 searchValue: searchValue,
             });
         }
+    }
+
+    clear() {
+        document.getElementById("codelistSearch").value = "";
+        const radioButtons = document.querySelectorAll(
+            'input[name="searchCriteria"]'
+        );
+        radioButtons.forEach((element) => {
+            element.checked = false;
+        });
+
+        this.setState({
+            searchCriteria: "all",
+            searchValue: "",
+        });
     }
 
     findSelectedSearchCriteria() {
@@ -691,6 +707,11 @@ class CodelistManager extends React.Component {
                         className="text-center outline-none border-b-2 mr-2"
                     ></input>
                     <FontAwesomeIcon
+                        onClick={this.clear}
+                        icon={faTimes}
+                        className="cursor-pointer mr-3"
+                    ></FontAwesomeIcon>
+                    <FontAwesomeIcon
                         onClick={this.search}
                         icon={faSearch}
                         className="cursor-pointer"
@@ -712,6 +733,41 @@ class CodelistManager extends React.Component {
                         </div>
                         <div>
                             <input
+                                value="sectionName"
+                                type="radio"
+                                id="sectionName"
+                                name="searchCriteria"
+                            ></input>
+                            <label htmlFor="sectionName" className="pl-1">
+                                Nome seção
+                            </label>
+                        </div>
+                        <div>
+                            <input
+                                value="subsectionNumber"
+                                type="radio"
+                                id="subsectionNumber"
+                                name="searchCriteria"
+                            ></input>
+                            <label htmlFor="subsectionNumber" className="pl-1">
+                                Nº subseção
+                            </label>
+                        </div>
+                        <div>
+                            <input
+                                value="subsectionName"
+                                type="radio"
+                                id="subsectionName"
+                                name="searchCriteria"
+                            ></input>
+                            <label htmlFor="subsectionName" className="pl-1">
+                                Nome Subseção
+                            </label>
+                        </div>
+                    </div>
+                    <div className="w-3/6 ml-3">
+                        <div>
+                            <input
                                 value="blockName"
                                 type="radio"
                                 id="blockName"
@@ -721,8 +777,6 @@ class CodelistManager extends React.Component {
                                 Nome do bloco
                             </label>
                         </div>
-                    </div>
-                    <div className="w-3/6">
                         <div>
                             <input
                                 value="blockNumber"
@@ -988,7 +1042,9 @@ class CodelistManager extends React.Component {
         }
 
         //filtro a partir do search
-        let valor = linhaData[searchCriteria].toLowerCase();
+        let valor = linhaData[searchCriteria];
+        if (valor === null || valor === undefined) valor = "";
+        valor = valor.toLowerCase();
 
         if (valor.includes(searchValue) && this.filter === "all") {
             return true;
