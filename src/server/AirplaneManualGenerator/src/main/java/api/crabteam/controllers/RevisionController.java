@@ -3,6 +3,7 @@ package api.crabteam.controllers;
 import java.io.File;
 import java.util.List;
 
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +22,7 @@ import api.crabteam.model.repositories.LinhaRepository;
 import api.crabteam.model.repositories.ProjetoRepository;
 import api.crabteam.model.repositories.RevisaoRepository;
 import api.crabteam.utils.FileVerifications;
+import api.crabteam.utils.LEPBuilder;
 
 @RestController
 @RequestMapping("/revision")
@@ -48,6 +50,7 @@ public class RevisionController {
 		String actualRevision = String.valueOf(lastRevisionVersion + 1);
 		
 		try {
+			JSONObject oldLinesData = new JSONObject();
 			
 			for (int i = 0; i < revisedLinesIds.size(); i++) {
 				int lineId = revisedLinesIds.get(i);
@@ -55,6 +58,12 @@ public class RevisionController {
 				
 				try {
 					Linha linha = lineRepository.findById(lineId).get();
+					
+					JSONObject oldData = new JSONObject();
+					oldData.put("oldFile", linha.getFilePath());
+					oldData.put("lastRevision",linha.getActualRevision());
+					
+					oldLinesData.put(String.valueOf(lineId), oldData);
 					
 					String[] fileInfos = FileVerifications.fileDestination(linha, projectName);
 					String strFilePath = fileInfos[0];
@@ -97,8 +106,8 @@ public class RevisionController {
 			
 			revProject.addRevision(newRevision);
 			
-			//LEPBuilder lepBuilder = new LEPBuilder(revProject);
-			//lepBuilder.generateLep();
+			LEPBuilder lepBuilder = new LEPBuilder(revProject, oldLinesData);
+			lepBuilder.generateLep();
 			
 			projetoRepository.save(revProject);
 			
