@@ -452,7 +452,7 @@ public class LEPBuilder {
 				
 				JSONObject newPage = new JSONObject();
 				
-				newPage.put("page", j + 1);
+				newPage.put("page", j);
 				newPage.put("modified", modified);
 				newPage.put("action", action);
 				newPage.put("change", change);
@@ -476,7 +476,7 @@ public class LEPBuilder {
 			String traco = remark.getTraco();
 			
 			for (int j = 0; j < remark2.size(); j++) {
-				if(remark2.get(i).getTraco().equals(traco)) {
+				if(remark2.get(j).getTraco().equals(traco)) {
 					return true;
 				}
 				
