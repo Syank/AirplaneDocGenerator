@@ -71,8 +71,8 @@ public class RevisionController {
 					
 					// Troca o destino de Master para Rev
 					String revStrFilePath = strFilePath.replace("Master", "Rev\\Rev" + actualRevision + "\\");
-					File RevDestinationAbsolutePath = new File(revStrFilePath);
-					RevDestinationAbsolutePath.mkdirs();
+					File revDestinationAbsolutePath = new File(revStrFilePath);
+					revDestinationAbsolutePath.mkdirs();
 					lineFile.transferTo(new File(revStrFilePath.concat(fileName)));
 					
 					// Salva uma cópia na Master
@@ -81,7 +81,7 @@ public class RevisionController {
 					Files.copy(new File(revStrFilePath.concat(fileName)), new File(strFilePath.concat("\\" + fileName)));
 					
 					linha.setId(lineId);
-					linha.setFilePath(RevDestinationAbsolutePath.getAbsolutePath());
+					linha.setFilePath(revDestinationAbsolutePath.getAbsolutePath());
 					linha.setActualRevision(lastRevisionVersion + 1);
 					
 					lineRepository.save(linha);
