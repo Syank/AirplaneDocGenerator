@@ -79,9 +79,9 @@
                             </tr>
                             <tr>
                                    <td><p align="center">Entrega 4</p></td>
-                                   <td><p align="justify">A definir.</p></td>
+                                   <td><p align="justify">O usuário poderá gerar a Lista de Páginas Efetivas (LEP) e gerar também o manual em suas versões FULL e DELTA.</p></td>
                                    <td><p align="center">28/11</p></td>
-                                   <td><p align="center"><a href="">Visualizar</a></p></td>
+                                   <td><p align="center"><a href="https://github.com/Syank/AirplaneDocGenerator/tree/readme-s4">Visualizar</a></p></td>
                                    <td><p align="center"><a href="">Baixar</a></p></td>
                             </tr>
                      </table>
