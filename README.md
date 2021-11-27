@@ -27,7 +27,7 @@
               <section id="funcionamento">
                      <h3>:running_woman: AirplaneDocGenerator em funcionamento :computer::computer_mouse:</h3>
                      <p align="center">
-                            <img src="https://github.com/Syank/AirplaneDocGenerator/blob/main/doc/gifs/sprint3/Apresenta%C3%A7%C3%A3o%20Sprint%203%20GIF.gif">
+                            <img src="https://github.com/Syank/AirplaneDocGenerator/blob/main/doc/gifs/sprint4/Apresenta%C3%A7%C3%A3o%20Sprint%204%20GIF.gif">
                      </p>
                      <p align="center">Fizemos um manual de uso para o nosso projeto. Visualize-o <a href="https://github.com/Syank/AirplaneDocGenerator/wiki">aqui</a>!</p>
               </section>
@@ -79,10 +79,10 @@
                             </tr>
                             <tr>
                                    <td><p align="center">Entrega 4</p></td>
-                                   <td><p align="justify">A definir.</p></td>
+                                   <td><p align="justify">O usuário poderá gerar a Lista de Páginas Efetivas (LEP) e gerar também o manual em suas versões FULL e DELTA.</p></td>
                                    <td><p align="center">28/11</p></td>
-                                   <td><p align="center"><a href="">Visualizar</a></p></td>
-                                   <td><p align="center"><a href="">Baixar</a></p></td>
+                                   <td><p align="center"><a href="https://github.com/Syank/AirplaneDocGenerator/tree/sprint-4">Visualizar</a></p></td>
+                                   <td><p align="center"><a href="https://github.com/Syank/AirplaneDocGenerator/releases/tag/v1.4">Baixar</a></p></td>
                             </tr>
                      </table>
               </section>
