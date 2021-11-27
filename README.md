@@ -35,7 +35,7 @@
                      <p align="justify">Na quarta, e última, entrega, desenvolvemos as funcionalidades para a elaboração da LEP (<i>List of Effective Pages</i>) e, também, para a geração dos manuais nas versões Full e Delta. Dessa forma, o nosso projeto encontra-se com todos os requisitos que recolhemos com o nosso cliente!</p>
                      <img src="https://raw.githubusercontent.com/Syank/AirplaneDocGenerator/main/doc/cards/sprint%204/card04.png" width="550px" height="300px">
                      <h3>:grey_question: Por quê?</h2>
-                     <p align="justify">As únicas funcionalidades faltantes eram a geração da LEP e dos manuais, pois tudo o que o usuário podia realizar no nosso sistema até a entrega passada era justamente com o objetivo de poder realizar a geração desses documentos. Agora, em poucos, o usuário já pode gerar o manual na versão que desejar! Sendo assim, o nosso software está atendendo as necessidades da empresa parceira, que é automatizar a geração dos manuais.</p>
+                     <p align="justify">As únicas funcionalidades faltantes eram a geração da LEP e dos manuais, pois tudo o que o usuário podia realizar no nosso sistema até a entrega passada era justamente com o objetivo de poder realizar a geração desses documentos. Agora, em poucos cliques, o usuário já pode gerar o manual na versão que desejar! Sendo assim, o nosso software está atendendo as necessidades da empresa parceira, que é automatizar a geração dos manuais.</p>
               </section>
               <section id="funcionamento">
                      <h2 align="center">:desktop_computer::computer_mouse: AirplaneDocGenerator em funcionamento :checkered_flag:</h3>
