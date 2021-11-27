@@ -1,5 +1,6 @@
 package api.crabteam.utils;
 
+import java.io.File;
 import java.time.LocalDateTime;
 import java.time.format.TextStyle;
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ import java.util.Set;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.google.common.io.Files;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.pdf.CMYKColor;
 import com.itextpdf.text.pdf.PdfContentByte;
@@ -60,7 +62,9 @@ public class LEPBuilder {
 		String fileName = getFileName(line);
 		String outputFolder = getOutputFolder(line);
 		
-		line.setFilePath(outputFolder + fileName);
+		String lepFilePath = outputFolder + fileName;
+		
+		line.setFilePath(lepFilePath);
 		
 		PDFFile pdfFile = PDFBuilder.createNewPdfDocument(outputFolder, fileName);
 		
@@ -78,6 +82,9 @@ public class LEPBuilder {
 			
 		}
 		
+		String actualRevision = String.valueOf(this.project.getLastRevision().getVersion());
+		String masterLepFilePath = lepFilePath.replace("Rev\\Rev" + actualRevision, "Master");
+		Files.copy(new File(lepFilePath), new File(masterLepFilePath));
 	}
 	
 	private void drawRevisionTable(Document pdfDoc, PdfWriter writer, Linha line) throws Exception {
@@ -115,7 +122,7 @@ public class LEPBuilder {
 				// Separa as palavras da linha
 				ArrayList<String> lineWords = new ArrayList<String>(Arrays.asList(lineText.split(" ")));
 				
-				if(lineWords.contains("REVISION")) {
+				if(lineWords.contains("REVISION") && lineWords.contains("Page")) {
 					int revision = Integer.parseInt(lineWords.get(lineWords.indexOf("REVISION") + 1));
 					int page = Integer.parseInt(lineWords.get(lineWords.indexOf("Page") + 1));
 					
