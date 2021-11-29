@@ -1,6 +1,5 @@
 package api.crabteam.tests;
 
-import static org.junit.Assert.assertEquals;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.io.IOException;
@@ -10,7 +9,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockHttpSession;
@@ -68,12 +67,24 @@ class AppTests {
 	
 	private void performCreateProjectRequest (MockMultipartFile codelistFile, NewProject newProject) throws JsonProcessingException, Exception {
 		MockHttpSession session = getSessionForTest();
-		MockHttpServletResponse result = (MockHttpServletResponse) mockMvc.perform(MockMvcRequestBuilders.fileUpload("/project/create")
-															              .file(codelistFile)
-															              .param("newProject", asJsonString(newProject))
-															              .session(session))
-															          	  .andExpect(status().is(200));
+		String newProjectAsJsonString = asJsonString(newProject);
+		
+		@SuppressWarnings("unused")
+		MockHttpServletResponse result = (MockHttpServletResponse) mockMvc.perform(
+																				MockMvcRequestBuilders.multipart("/project/create")
+																				.file(codelistFile)
+																	            .contentType(MediaType.APPLICATION_JSON)
+																	            .content(newProjectAsJsonString)
+																	            .session(session)
+																            ).andExpect(status().is(200));
 	}
+	
+//	private static void createProject (String name, String description, String codelistPath) throws IOException {
+//		NewProject np1 = newProjectHelper(name, description);
+//		MockMultipartFile codelistFile = new MockMultipartFile("codelistFile", codelistPath.getBytes());
+//		
+//		performCreateProjectRequest(codelistFile, np1);
+//	}
 	
 	@Test
 	void test() throws Exception {
