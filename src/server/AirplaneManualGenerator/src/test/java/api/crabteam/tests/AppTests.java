@@ -1,6 +1,7 @@
 package api.crabteam.tests;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 import java.io.IOException;
 
@@ -82,7 +83,7 @@ class AppTests {
 		return newProject;
 	}
 
-	private void performCreateProjectRequest(MockMultipartFile codelistFile, NewProject newProject)
+	private MockHttpServletResponse performCreateProjectRequest(MockMultipartFile codelistFile, NewProject newProject)
 			throws JsonProcessingException, Exception {
 		MockHttpSession session = getSessionForTest();
 		String newProjectAsJsonString = asJsonString(newProject);
@@ -90,8 +91,10 @@ class AppTests {
 		@SuppressWarnings("unused")
 		MockHttpServletResponse result = (MockHttpServletResponse) mockMvc
 				.perform(MockMvcRequestBuilders.multipart("/project/create").file(codelistFile)
-						.contentType(MediaType.APPLICATION_JSON).content(newProjectAsJsonString).session(session))
-				.andExpect(status().is(200));
+						.contentType(MediaType.APPLICATION_JSON)
+						.content(newProjectAsJsonString)
+						.session(session));
+		return result;
 	}
 
 	/**
@@ -101,16 +104,20 @@ class AppTests {
 	 * @param codelistPath caminho em que se encontra a codelist
 	 * @throws Exception
 	 * @author Bárbara Port
+	 * @return <b>int</b> status da requisição
 	 */
-	private void createProject(String name, String description, String codelistPath) throws Exception {
+	private int createProject(String name, String description, String codelistPath) throws Exception {
 		NewProject newProject = newProjectHelper(name, description);
 		MockMultipartFile codelistFile = new MockMultipartFile("codelistFile", codelistPath.getBytes());
-		performCreateProjectRequest(codelistFile, newProject);
+		MockHttpServletResponse result = performCreateProjectRequest(codelistFile, newProject);
+		return result.getStatus();
 	}
 
 	@Test
 	void test() throws Exception {
-		createProject("ABC-1234", "Lorem ipsum", "C:\\Users\\port3\\Desktop\\Codelist.xlsx");
+		assertEquals(createProject("ABC-1234", "Lorem ipsum", "C:\\Users\\port3\\Desktop\\Codelist.xlsx"), 200);
+		assertNotEquals(createProject("ABC-4321", "Lorem ipsum, lorem ipsum", "C:\\Users\\port3\\Desktop\\Codelist.xlsx"), 200);
+	
 	}
 
 }
