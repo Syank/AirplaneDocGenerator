@@ -88,12 +88,11 @@ class AppTests {
 		MockHttpSession session = getSessionForTest();
 		String newProjectAsJsonString = asJsonString(newProject);
 
-		@SuppressWarnings("unused")
-		MockHttpServletResponse result = (MockHttpServletResponse) mockMvc
-				.perform(MockMvcRequestBuilders.multipart("/project/create").file(codelistFile)
-						.contentType(MediaType.APPLICATION_JSON)
-						.content(newProjectAsJsonString)
-						.session(session));
+		MockHttpServletResponse result = (MockHttpServletResponse) mockMvc .perform(MockMvcRequestBuilders.multipart("/project/create")
+																			 	.file(codelistFile)
+																				.contentType(MediaType.APPLICATION_JSON)
+																				.content(newProjectAsJsonString)
+																				.session(session));
 		return result;
 	}
 
@@ -112,12 +111,12 @@ class AppTests {
 		MockHttpServletResponse result = performCreateProjectRequest(codelistFile, newProject);
 		return result.getStatus();
 	}
-
+	
 	@Test
 	void test() throws Exception {
 		assertEquals(createProject("ABC-1234", "Lorem ipsum", "C:\\Users\\port3\\Desktop\\Codelist.xlsx"), 200);
 		assertNotEquals(createProject("ABC-4321", "Lorem ipsum, lorem ipsum", "C:\\Users\\port3\\Desktop\\Codelist.xlsx"), 200);
-	
+		
 	}
 
 }
