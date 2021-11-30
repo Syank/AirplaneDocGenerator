@@ -2,6 +2,9 @@ package api.crabteam.tests;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 import java.io.IOException;
 
@@ -82,8 +85,7 @@ class AppTests {
 		return newProject;
 	}
 
-	private MockHttpServletResponse performCreateProjectRequest(MockMultipartFile codelistFile, NewProject newProject)
-			throws JsonProcessingException, Exception {
+	private MockHttpServletResponse performCreateProjectRequest(MockMultipartFile codelistFile, NewProject newProject) throws JsonProcessingException, Exception {
 		MockHttpSession session = getSessionForTest();
 		String newProjectAsJsonString = asJsonString(newProject);
 		
@@ -113,11 +115,34 @@ class AppTests {
 		return result.getStatus();
 	}
 	
+	private int getAllProjects () throws Exception {
+		MockHttpSession session = getSessionForTest();
+		MockHttpServletResponse result = (MockHttpServletResponse) mockMvc.perform(MockMvcRequestBuilders.get("/project/all")
+																				.session(session))
+																			.andDo(print())
+																			.andReturn()
+																			.getResponse();
+		return result.getStatus();
+	}
+	
+	private int findProjectByName (String projectName) throws Exception {
+		MockHttpSession session = getSessionForTest();
+		MockHttpServletResponse result = (MockHttpServletResponse) mockMvc.perform(MockMvcRequestBuilders.get("/project/findByName")
+																				.session(session)
+																				.param("projectName", projectName))
+																			.andDo(print())
+																			.andReturn()
+																			.getResponse();
+		return result.getStatus();
+	}
+	
 	@Test
 	void test() throws Exception {
-		assertEquals(200, createProject("ABC-1234", "Lorem ipsum", "C:\\Users\\port3\\Desktop\\Codelist.xlsx"));
-		assertNotEquals(200, createProject("ABC-4321", "Lorem ipsum, lorem ipsum", "C:\\Users\\port3\\Desktop\\Codelist.xlsx"));
-		
+		//assertEquals(200, createProject("ABC-1234", "Lorem ipsum", "C:\\Users\\port3\\Desktop\\Codelist.xlsx"));
+		//assertNotEquals(200, createProject("ABC-4321", "Lorem ipsum, lorem ipsum", "C:\\Users\\port3\\Desktop\\Codelist.xlsx"));
+		assertNotNull(getAllProjects());
+		assertEquals(200, findProjectByName("ABC-1234"));
+		assertNotEquals(200, findProjectByName("AAA-1234"));
 	}
 
 }
