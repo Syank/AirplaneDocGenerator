@@ -10,7 +10,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockHttpSession;
@@ -87,12 +86,14 @@ class AppTests {
 			throws JsonProcessingException, Exception {
 		MockHttpSession session = getSessionForTest();
 		String newProjectAsJsonString = asJsonString(newProject);
-
-		MockHttpServletResponse result = (MockHttpServletResponse) mockMvc .perform(MockMvcRequestBuilders.multipart("/project/create")
+		
+		MockHttpServletResponse result = (MockHttpServletResponse) mockMvc.perform(MockMvcRequestBuilders.multipart("/project/create")
 																			 	.file(codelistFile)
-																				.contentType(MediaType.APPLICATION_JSON)
 																				.content(newProjectAsJsonString)
-																				.session(session));
+																				.session(session))
+																		   .andReturn()
+																		   .getResponse();
+
 		return result;
 	}
 
@@ -106,16 +107,16 @@ class AppTests {
 	 * @return <b>int</b> status da requisição
 	 */
 	private int createProject(String name, String description, String codelistPath) throws Exception {
-		NewProject newProject = newProjectHelper(name, description);
 		MockMultipartFile codelistFile = new MockMultipartFile("codelistFile", codelistPath.getBytes());
+		NewProject newProject = newProjectHelper(name, description);
 		MockHttpServletResponse result = performCreateProjectRequest(codelistFile, newProject);
 		return result.getStatus();
 	}
 	
 	@Test
 	void test() throws Exception {
-		assertEquals(createProject("ABC-1234", "Lorem ipsum", "C:\\Users\\port3\\Desktop\\Codelist.xlsx"), 200);
-		assertNotEquals(createProject("ABC-4321", "Lorem ipsum, lorem ipsum", "C:\\Users\\port3\\Desktop\\Codelist.xlsx"), 200);
+		assertEquals(200, createProject("ABC-1234", "Lorem ipsum", "C:\\Users\\port3\\Desktop\\Codelist.xlsx"));
+		assertNotEquals(200, createProject("ABC-4321", "Lorem ipsum, lorem ipsum", "C:\\Users\\port3\\Desktop\\Codelist.xlsx"));
 		
 	}
 

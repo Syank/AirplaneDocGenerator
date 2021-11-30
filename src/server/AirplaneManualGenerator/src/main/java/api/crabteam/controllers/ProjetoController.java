@@ -170,7 +170,7 @@ public class ProjetoController {
 	 * @throws IOException 
 	 */
 	@PostMapping("/create")
-	public ResponseEntity<?> createNewProject(@RequestParam(required = false) MultipartFile codelistFile, NewProject newProject) throws IOException {
+	public ResponseEntity<?> createNewProject(@RequestParam(required = false) MultipartFile codelistFile, @RequestBody NewProject newProject) throws IOException {
 		builder.setRepository(projetoRepository);
 		
 		if(codelistFile != null) {
