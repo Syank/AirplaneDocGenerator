@@ -174,7 +174,7 @@ public class ProjetoController {
 		builder.setRepository(projetoRepository);
 		
 		if(codelistFile != null) {
-			newProject.setArquivoCodelist(codelistFile);
+			newProject.setArquivoCodelistFromMultipart(codelistFile);
 			
 		}
 		

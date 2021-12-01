@@ -58,7 +58,7 @@ public class NewProject {
 		this.arquivoCodelist = arquivoCodelist;
 	}
 	
-	public void setArquivoCodelist(MultipartFile arquivoCodelist) throws IOException {
+	public void setArquivoCodelistFromMultipart(MultipartFile arquivoCodelist) throws IOException {
 		this.arquivoCodelist = arquivoCodelist.getBytes();
 	}
 	

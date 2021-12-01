@@ -64,7 +64,7 @@ public class CodelistBuilder {
 		Sheet projectSheet = workbook.getSheet(projectName);
 		
 		if(projectSheet == null) {
-			throw new Exception("Codelist inválida! Não existe uma planilha na Codelist para o nome do projeto: " + projectName);
+			throw new IllegalArgumentException("Codelist inválida! Não existe uma planilha na Codelist para o nome do projeto: " + projectName);
 		}
 		
 		this.codelist = new Codelist();
