@@ -3,6 +3,7 @@ package api.crabteam.tests;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 import java.io.File;
@@ -30,6 +31,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 
 import api.crabteam.controllers.requestsBody.NewProject;
+import api.crabteam.model.entities.Projeto;
+import api.crabteam.model.repositories.ProjetoRepository;
 
 /**
  * Classe responsável pelo testes que faremos para a disciplina Testes de
@@ -43,9 +46,15 @@ import api.crabteam.controllers.requestsBody.NewProject;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 class AppTests {
+	
+	private static final String CODELIST_PATH = "C:\\Users\\rafs9\\Documents\\Faculdade\\Codelist.xlsx";
+	//private static final String CODELIST_PATH = "C:\\Users\\port3\\Desktop\\Codelist.xlsx";
 
 	@Autowired
 	MockMvc mockMvc;
+	
+	@Autowired
+	ProjetoRepository repository;
 
 	/**
 	 * Cria uma nova sessão para o contexto dos testes
@@ -169,14 +178,48 @@ class AppTests {
 		return result.getStatus();
 	}
 	
+	/**
+	 * Testa a altera a descrição de um projeto
+	 * 
+	 * @param projectName - Nome do projeto para alterar a descrição
+	 * @param newDescription - A nova descrição a ser alterada
+	 * @return Retorna <b>true</b> caso a descrição seja alterada, se não, retorna <b>false</b>
+	 * @throws Exception Caso ocorra um problema ao alterar a descrição
+	 * @author Rafael Furtado
+	 */
+	private boolean changeDescription(String projectName, String newDescription) throws Exception {
+		MockHttpSession session = getSessionForTest();
+		
+		mockMvc
+			.perform(MockMvcRequestBuilders.get("/project/changeDescription")
+				.session(session)
+				.param("projectName", projectName)
+				.param("projectDescription", newDescription))
+			.andDo(print())
+			.andReturn()
+			.getResponse();
+		
+		Projeto project = repository.findByName(projectName);
+		
+		String description = project.getDescricao();
+		
+		if(description.equals(newDescription)) {
+			return true;
+		}
+		
+		return false;
+	}
+	
 	@Test
 	void test() throws Exception {
-		assertNotEquals(200, createProject("AAA-1111", "Lorem ipsum, lorem ipsum, lorem ipsum", "C:\\Users\\port3\\Desktop\\Codelist.xlsx"));
-		assertEquals(200, createProject("ABC-1234", "Lorem ipsum", "C:\\Users\\port3\\Desktop\\Codelist.xlsx"));
-		assertEquals(200, createProject("ABC-4321", "Lorem ipsum, lorem ipsum", "C:\\Users\\port3\\Desktop\\Codelist.xlsx"));
+		assertNotEquals(200, createProject("AAA-1111", "Lorem ipsum, lorem ipsum, lorem ipsum", CODELIST_PATH));
+		assertEquals(200, createProject("ABC-1234", "Lorem ipsum", CODELIST_PATH));
+		assertEquals(200, createProject("ABC-4321", "Lorem ipsum, lorem ipsum", CODELIST_PATH));
 		assertNotNull(getAllProjects());
 		assertEquals(200, findProjectByName("ABC-1234"));
 		assertNotEquals(200, findProjectByName("AAA-1111"));
+		assertTrue(changeDescription("ABC-1234", "Nova descrição do projeto"));
+		
 	}
 
 }
