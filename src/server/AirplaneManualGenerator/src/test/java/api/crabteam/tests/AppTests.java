@@ -30,6 +30,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 
+import api.crabteam.controllers.requestsBody.ChangeProjectDescription;
 import api.crabteam.controllers.requestsBody.NewProject;
 import api.crabteam.model.entities.Projeto;
 import api.crabteam.model.repositories.ProjetoRepository;
@@ -47,8 +48,8 @@ import api.crabteam.model.repositories.ProjetoRepository;
 @AutoConfigureMockMvc
 class AppTests {
 	
-	private static final String CODELIST_PATH = "C:\\Users\\rafs9\\Documents\\Faculdade\\Codelist.xlsx";
-	//private static final String CODELIST_PATH = "C:\\Users\\port3\\Desktop\\Codelist.xlsx";
+	//private static final String CODELIST_PATH = "C:\\Users\\rafs9\\Documents\\Faculdade\\Codelist.xlsx";
+	private static final String CODELIST_PATH = "C:\\Users\\port3\\Desktop\\Codelist.xlsx";
 
 	@Autowired
 	MockMvc mockMvc;
@@ -179,6 +180,20 @@ class AppTests {
 	}
 	
 	/**
+	 * Cria um objeto que inclui os dados necessários para a mudança de descrição de um projeto
+	 * @param projectName nome do projeto a ter sua descrição alterada
+	 * @param newDescription nova descrição do projeto
+	 * @return <b>ChangeProjectDescription</b> objeto que possui os valores necessários para a alteração
+	 * @author Bárbara Port
+	 */
+	private ChangeProjectDescription createNewProjectDescription (String projectName, String newDescription) {
+		ChangeProjectDescription newProjectDescription = new ChangeProjectDescription();
+		newProjectDescription.setProjectName(projectName);
+		newProjectDescription.setProjectDescription(newDescription);
+		return newProjectDescription;
+	}
+	
+	/**
 	 * Testa a altera a descrição de um projeto
 	 * 
 	 * @param projectName - Nome do projeto para alterar a descrição
@@ -190,11 +205,16 @@ class AppTests {
 	private boolean changeDescription(String projectName, String newDescription) throws Exception {
 		MockHttpSession session = getSessionForTest();
 		
+		ChangeProjectDescription newProjectDescription = createNewProjectDescription(projectName, newDescription);
+		
+		Gson gson = new Gson();
+		String newDescriptionAsJsonString = gson.toJson(newProjectDescription, ChangeProjectDescription.class);
+		
 		mockMvc
-			.perform(MockMvcRequestBuilders.get("/project/changeDescription")
+			.perform(MockMvcRequestBuilders.post("/project/changeDescription")
 				.session(session)
-				.param("projectName", projectName)
-				.param("projectDescription", newDescription))
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(newDescriptionAsJsonString))
 			.andDo(print())
 			.andReturn()
 			.getResponse();
@@ -212,14 +232,29 @@ class AppTests {
 	
 	@Test
 	void test() throws Exception {
+		System.err.println("Criando um projeto que não possui uma aba no arquivo da codelist");
 		assertNotEquals(200, createProject("AAA-1111", "Lorem ipsum, lorem ipsum, lorem ipsum", CODELIST_PATH));
+		
+		System.err.println("Criando um projeto ok");
 		assertEquals(200, createProject("ABC-1234", "Lorem ipsum", CODELIST_PATH));
+		
+		System.err.println("Criando um projeto ok");
 		assertEquals(200, createProject("ABC-4321", "Lorem ipsum, lorem ipsum", CODELIST_PATH));
+		
+		System.err.println("Listagem de todos os projetos cadastrados");
 		assertNotNull(getAllProjects());
+		
+		System.err.println("Procurando um projeto ok");
 		assertEquals(200, findProjectByName("ABC-1234"));
+		
+		System.err.println("Procurando um projeto que não existe");
 		assertNotEquals(200, findProjectByName("AAA-1111"));
+		
+		System.err.println("Trocando a descrição de um projeto ok");
 		assertTrue(changeDescription("ABC-1234", "Nova descrição do projeto"));
 		
+		System.err.println("Verificando a troca a descrição do projeto ok");
+		assertEquals(200, findProjectByName("ABC-1234"));
 	}
 
 }
