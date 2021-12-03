@@ -31,6 +31,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 
 import api.crabteam.controllers.requestsBody.ChangeProjectDescription;
+import api.crabteam.controllers.requestsBody.ChangeProjectName;
 import api.crabteam.controllers.requestsBody.NewProject;
 import api.crabteam.model.entities.Projeto;
 import api.crabteam.model.repositories.ProjetoRepository;
@@ -230,10 +231,62 @@ class AppTests {
 		return false;
 	}
 	
+	/**
+	 * Método para realizar a requisição para trocar o nome de um projeto
+	 * @param newProjectName objeto que possui as informações do projeto (novo nome e nome antigo)
+	 * @return <b>int</b> que representa o status da requisição
+	 * @throws JsonProcessingException
+	 * @throws Exception
+	 * @author Bárbara Port
+	 */
+	private int performNameChangeRequest(ChangeProjectName newProjectName) throws JsonProcessingException, Exception {
+		MockHttpSession session = getSessionForTest();
+		
+		Gson gson = new Gson();
+		String newProjectNameAsJsonString = gson.toJson(newProjectName, ChangeProjectName.class);
+		
+		MockHttpServletResponse result = (MockHttpServletResponse) mockMvc.perform(MockMvcRequestBuilders.post("/project/changeName")
+																			 	.contentType(MediaType.APPLICATION_JSON)
+																				.content(newProjectNameAsJsonString)
+																				.session(session))
+																		   .andReturn()
+																		   .getResponse();
+
+		return result.getStatus();
+	}
+	
+	/**
+	 * Método que "monta" o objeto que é enviado na requisição de trocar o nome de um projeto
+	 * @param chosenName o novo nome do projeto
+	 * @param oldName o antigo nome do projeto
+	 * @return <b>ChangeProjectName</b> objeto com as informações necessárias para a troca de nome
+	 * @author Bárbara Port
+	 */
+	private ChangeProjectName createProjectNameChanges (String chosenName, String oldName) {
+		ChangeProjectName newName = new ChangeProjectName();
+		newName.setNewName(chosenName);
+		newName.setOldName(oldName);
+		return newName;
+	}
+	
+	/**
+	 * Método que faz todos os passos para trocar o nome de um projeto
+	 * @param chosenName o novo nome do projeto
+	 * @param oldName o antigo nome do projeto
+	 * @return <b>int</b> status da requisição
+	 * @throws JsonProcessingException
+	 * @throws Exception
+	 * @author Bárbara Port
+	 */
+	private int changeName (String chosenName, String oldName) throws JsonProcessingException, Exception {
+		ChangeProjectName newProjectName = createProjectNameChanges(chosenName, oldName);
+		return performNameChangeRequest(newProjectName);
+	}
+	
 	@Test
 	void test() throws Exception {
 		System.err.println("Criando um projeto que não possui uma aba no arquivo da codelist");
-		assertNotEquals(200, createProject("AAA-1111", "Lorem ipsum, lorem ipsum, lorem ipsum", CODELIST_PATH));
+		assertNotEquals(200, createProject("CBA-1111", "Lorem ipsum, lorem ipsum, lorem ipsum", CODELIST_PATH));
 		
 		System.err.println("Criando um projeto ok");
 		assertEquals(200, createProject("ABC-1234", "Lorem ipsum", CODELIST_PATH));
@@ -255,6 +308,9 @@ class AppTests {
 		
 		System.err.println("Verificando a troca a descrição do projeto ok");
 		assertEquals(200, findProjectByName("ABC-1234"));
+		
+		System.err.println("Trocando o nome de um projeto");
+		assertEquals(200, changeName("DEF-1234", "ABC-1234"));
 	}
 
 }
