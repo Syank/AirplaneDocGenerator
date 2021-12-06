@@ -283,6 +283,37 @@ class AppTests {
 		return performNameChangeRequest(newProjectName);
 	}
 	
+	/**
+	 * Método que faz a requisição para excluir um projeto
+	 * @param projectName o nome do projeto
+	 * @return <b>int</b> status da requisição
+	 * @throws Exception
+	 * @author Bárbara Port
+	 */
+	private int performDeleteProjectRequest(String projectName) throws Exception {
+		MockHttpSession session = getSessionForTest();
+
+		MockHttpServletResponse result = (MockHttpServletResponse) mockMvc.perform(
+				MockMvcRequestBuilders.post("/project/delete")
+									  .param("projectName", projectName)
+									  .session(session))
+				.andReturn()
+				.getResponse();
+
+		return result.getStatus();
+	}
+	
+	/**
+	 * Método que exclui um projeto
+	 * @param projectName o nome do projeto a ser excluído
+	 * @return <b>int</b> status da requisição
+	 * @throws Exception
+	 * @author Bárbara Port
+	 */
+	private int deleteProject (String projectName) throws Exception {
+		return performDeleteProjectRequest(projectName);
+	}
+	
 	@Test
 	void test() throws Exception {
 		System.err.println("Criando um projeto que não possui uma aba no arquivo da codelist");
@@ -311,6 +342,12 @@ class AppTests {
 		
 		System.err.println("Trocando o nome de um projeto");
 		assertEquals(200, changeName("DEF-1234", "ABC-1234"));
+		
+		System.err.println("Deletando um projeto que não existe");
+		assertNotEquals(200, deleteProject("ABC-1234"));
+		
+		System.err.println("Deletando um projeto que existe");
+		assertEquals(200, deleteProject("DEF-1234"));
 	}
 
 }
