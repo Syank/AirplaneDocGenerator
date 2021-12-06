@@ -19,8 +19,7 @@
                      <li><a href="#introducao">O que é o AirplaneDocGenerator?</a>
                      <ul>
                             <li><a href="#funcionamento">AirplaneDocGenerator em funcionamento</a>
-                            <li><a href="#funcionalidades">Funcionalidades de cada entrega</a>
-                            <li><a href="#cronograma">Cronograma das entregas</a>
+                            <li><a href="#funcionalidades">Propósito da <i>branch</i></a>
                      </ul>
                      <li><a href="#equipe">Integrantes da equipe</a>
               </ul>
@@ -32,59 +31,8 @@
                      <p align="center">Fizemos um manual de uso para o nosso projeto. Visualize-o <a href="https://github.com/Syank/AirplaneDocGenerator/wiki">aqui</a>!</p>
               </section>
               <section id="funcionalidades">
-                     <h3>:hourglass_flowing_sand: Funcionalidades de cada entrega</h3>
-                     <h4>Primeira entrega :clock12:</h4>
-                     <p align="justify">Usuários poderão acessar o sistema. Haverá a possibilidade de criar um novo projeto e visualizar todos aqueles existentes.</p>
-                     <img src="https://raw.githubusercontent.com/Syank/AirplaneDocGenerator/main/doc/cards/sprint%201/card01.png" width="550px" height="300px">
-                     <h4>Segunda entrega :clock4:</h4>
-                     <p align="justify">Será possível criar uma <i>codelist</i> ou realizar o <i>upload</i> dela no momento de criação de um manual ou até mesmo após. A partir da existência da <i>codelist</i>, será possível alterá-la.</p>
-                     <img src="https://raw.githubusercontent.com/Syank/AirplaneDocGenerator/main/doc/cards/sprint%202/card02.png" width="550px" height="300px">
-                     <h4>Terceira entrega :clock8:</h4>
-                     <p align="justify">Será disponibilizada a importação e a exportação de um projeto de manual, além da criação de revisões para ele.</p>
-                     <img src="https://raw.githubusercontent.com/Syank/AirplaneDocGenerator/main/doc/cards/sprint%203/card03.png" width="550px" height="300px">
-                     <h4>Quarta entrega :clock12:</h4>
-                     <p align="justify">Por fim, será plausível a geração da Lista de Páginas Efetivas (LEP) e a geração do manual em cada uma das versões existentes, Delta ou Full, de acordo com o escolhido.</p>
-                     <img src="https://raw.githubusercontent.com/Syank/AirplaneDocGenerator/main/doc/cards/sprint%204/card04.png" width="550px" height="300px">
-              </section>
-              <section id="cronograma">
-                     <h3>:calendar: Cronograma das entregas</h3>
-                     <table>
-                            <thead>
-                                   <th width=100px>Entrega</th>
-                                   <th width=450px>Descrição</th>
-                                   <th width=70px>Disponibilidade</th>
-                                   <th width=45px>Consultar</th>
-                                   <th width=65px>Código-fonte</th>
-                            </thead>
-                            <tr>
-                                   <td><p align="center">Entrega 1</p></td>
-                                   <td><p align="justify">O usuário poderá acessar o sistema, criar e ver projetos.</p></td>
-                                   <td><p align="center">19/09</p></td>
-                                   <td><p align="center"><a href="https://github.com/Syank/AirplaneDocGenerator/tree/sprint-1">Visualizar</a></p></td>
-                                   <td><p align="center"><a href="https://github.com/Syank/AirplaneDocGenerator/releases/tag/v1.1">Baixar</a></p></td>
-                            </tr>
-                            <tr>
-                                   <td><p align="center">Entrega 2</p></td>
-                                   <td><p align="justify">O usuário poderá importar a codelist e editar as suas linhas.</p></td>
-                                   <td><p align="center">10/10</p></td>
-                                   <td><p align="center"><a href="https://github.com/Syank/AirplaneDocGenerator/tree/sprint-2">Visualizar</a></p></td>
-                                   <td><p align="center"><a href="https://github.com/Syank/AirplaneDocGenerator/releases/tag/v1.2">Baixar</a></p></td>
-                            </tr>
-                            <tr>
-                                   <td><p align="center">Entrega 3</p></td>
-                                   <td><p align="justify">O usuário poderá exportar a codelist do manual, poderá importar e exportar um projeto de manual e, também, poderá criar revisões.</p></td>
-                                   <td><p align="center">07/11</p></td>
-                                   <td><p align="center"><a href="https://github.com/Syank/AirplaneDocGenerator/tree/sprint-3">Visualizar</a></p></td>
-                                   <td><p align="center"><a href="https://github.com/Syank/AirplaneDocGenerator/releases/tag/v1.3">Baixar</a></p></td>
-                            </tr>
-                            <tr>
-                                   <td><p align="center">Entrega 4</p></td>
-                                   <td><p align="justify">O usuário poderá gerar a Lista de Páginas Efetivas (LEP) e gerar também o manual em suas versões FULL e DELTA.</p></td>
-                                   <td><p align="center">28/11</p></td>
-                                   <td><p align="center"><a href="https://github.com/Syank/AirplaneDocGenerator/tree/sprint-4">Visualizar</a></p></td>
-                                   <td><p align="center"><a href="https://github.com/Syank/AirplaneDocGenerator/releases/tag/v1.4">Baixar</a></p></td>
-                            </tr>
-                     </table>
+                     <h2>:thinking: Propósito da <i>branch</i></h2>
+                     <p align="justify">Esta <i>branch</i> possui os testes unitários realizados para a disciplina de Testes de Software, ministrada pelo Professor Gerson Penha. Para visualizá-los, clique <a href="https://github.com/Syank/AirplaneDocGenerator/blob/software-testing/src/server/AirplaneManualGenerator/src/test/java/api/crabteam/tests/AppTests.java">aqui</a>!</p>
               </section>
               <section id="equipe">
                      <h2>Integrantes da equipe :girl::boy:</h2>
